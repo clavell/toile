@@ -7,12 +7,25 @@
 </template>
 
 <style>
+:root {
+  --main-background-colour: #171a1d;
+  --list-background-colour: #AD1448;
+  --entry-background-colour: #C41751;
+  --entry-size:100px;
+  --list-font-colour: white;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: var(--main-background-colour);
+}
+
+body {
+  background-color: var(--main-background-colour);
 }
 
 #nav {
