@@ -45,7 +45,7 @@ export default {
   overflow-y: auto;
   gap: 2px;
   grid-auto-rows: var(--entry-size);
-  scrollbar-color: rgba(255,255,255,.2) var(--list-background-colour);
+  scrollbar-color: rgba(255, 255, 255, 0.2) var(--list-background-colour);
 }
 
 :-webkit-scrollbar-track {

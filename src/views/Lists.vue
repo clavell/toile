@@ -23,6 +23,5 @@ export default {
 .Lists {
   display: flex;
   justify-content: space-evenly;
-
 }
 </style>

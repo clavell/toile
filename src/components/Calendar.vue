@@ -16,59 +16,65 @@
         <div class="half-time"></div>
       </div>
       <div class="cal">
-        <TimeGridUnit v-for="gridarea in gridareas" :key="gridarea" :gridarea="gridarea" />
+        <TimeGridUnit
+          v-for="gridarea in gridareas"
+          :key="gridarea"
+          :gridarea="gridarea"
+        />
+        <CalendarEntry :entrytitle="title"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SidebarTime from "@/components/SidebarTime.vue";
-import TimeGridUnit from "@/components/TimeGridUnit.vue";
+import SidebarTime from '@/components/SidebarTime.vue'
+import TimeGridUnit from '@/components/TimeGridUnit.vue'
+import CalendarEntry from '@/components/CalendarEntry.vue'
 
 export default {
   name: 'Calendar',
-  components:{
+  components: {
     SidebarTime,
-    TimeGridUnit
+    TimeGridUnit,
+    CalendarEntry
   },
   data() {
     var meridiemIndicator = ['AM', 'PM']
     var times = []
     var gridareas = []
-    for(var t=0; t<meridiemIndicator.length; t++){
-      for (var i of Array(11).fill().map((element, index) => index)){
-        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' + 
-        // calendar.innerHTML += '<div class="timesegment"' + 
+    for (var t = 0; t < meridiemIndicator.length; t++) {
+      for (var i of Array(11)
+        .fill()
+        .map((element, index) => index)) {
+        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' +
+        // calendar.innerHTML += '<div class="timesegment"' +
         gridareas.push([
-           (1 + t*48 + i*4) + ' / 1 / ' + (3 + t*48 + i*4) + ' / 2',
-           (3 + t*48 + i*4) + ' / 1 / ' + (5 + t*48 + i*4) + ' / 2'
+          1 + t * 48 + i * 4 + ' / 1 / ' + (3 + t * 48 + i * 4) + ' / 2',
+          3 + t * 48 + i * 4 + ' / 1 / ' + (5 + t * 48 + i * 4) + ' / 2',
         ])
-        times.push((i+1) + ' ' + meridiemIndicator[t])
+        times.push(i + 1 + ' ' + meridiemIndicator[t])
       }
-      if(t === 0){
-          // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' + 
-          // calendar.innerHTML += '<div class="timesegment"' + 
-        gridareas.push([
-          '45 / 1 / 47 / 2',
-          '47 / 1 / 49  / 2'
-        ])
+      if (t === 0) {
+        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' +
+        // calendar.innerHTML += '<div class="timesegment"' +
+        gridareas.push(['45 / 1 / 47 / 2', '47 / 1 / 49  / 2'])
         times.push('12 PM')
-      } 
-      else{
-        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' + 
-        // calendar.innerHTML += '<div class="timesegment"' + 
-        gridareas.push([
-          '93 / 1 / 95 / 2',
-          '95 / 1 / 97 / 2'
-        ])
-
+      } else {
+        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' +
+        // calendar.innerHTML += '<div class="timesegment"' +
+        gridareas.push(['93 / 1 / 95 / 2', '95 / 1 / 97 / 2'])
       }
-  }
-    
+    }
+
     return {
       times: times,
-      gridareas: gridareas
+      gridareas: gridareas,
+    }
+  },
+  computed: {
+    title() {
+      return this.$store.state.commitments[1]
     }
   }
 }
@@ -159,7 +165,7 @@ export default {
   height: calc(
     48 * (var(--timesegment-height) + var(--timesegment-separator-thickness))
   );
-  width:400px;
+  width: 400px;
 }
 
 body {
