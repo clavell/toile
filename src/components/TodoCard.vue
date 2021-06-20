@@ -1,5 +1,5 @@
 <template>
-  <div class="entry">
+  <div class="listentry">
     {{ event }}
   </div>
 </template>
@@ -8,11 +8,11 @@
 export default {
   name: 'TodoCard',
   props: {
-  //   parent: Number,
+    //   parent: Number,
     event: String,
-  //   complete: Boolean,
-  //   description: String,
-  //   duration: Number,
+    //   complete: Boolean,
+    //   description: String,
+    //   duration: Number,
   },
   data() {
     return {
@@ -23,8 +23,8 @@ export default {
         complete: true,
         description: 'Make the template for the list',
         duration: 45,
-      }
+      },
     }
-  } 
+  },
 }
 </script>

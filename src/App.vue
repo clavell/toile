@@ -9,10 +9,30 @@
 <style>
 :root {
   --main-background-colour: #171a1d;
-  --list-background-colour: #AD1448;
-  --entry-background-colour: #C41751;
-  --entry-size:100px;
+  --list-background-colour: #ad1448;
+  --entry-background-colour: #c41751;
+  --entry-size: 100px;
   --list-font-colour: white;
+  --calendar-height: 90vh;
+
+  --sidebar-color: #1e1e1e;
+  --sidebar-text-colour: #e6e6e6;
+  --sidebar-width: 100px;
+
+  --scroll-bar-width: 15px;
+  --border-radius: 10px;
+
+  --top-thickness: 35px;
+  --top-colour: #101010;
+
+  --timesegment-height: 40px;
+  --timesegment-separator-thickness: 1px;
+  --timesegment-separator-colour: #464646;
+  --timesegment-colour: #282828;
+
+  --secondary-timesegment-separator-colour: #37383a;
+
+  --body-color: #141414;
 }
 
 #app {
@@ -22,6 +42,10 @@
   text-align: center;
   color: #2c3e50;
   background-color: var(--main-background-colour);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--list-background-colour);
 }
 
 body {

@@ -14,7 +14,7 @@ export default {
   name: 'Lists',
   components: {
     List,
-    Calendar
+    Calendar,
   },
 }
 </script>
@@ -22,6 +22,7 @@ export default {
 <style>
 .Lists {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+
 }
 </style>
