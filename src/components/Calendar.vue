@@ -15,19 +15,25 @@
         <SidebarTime v-for="time in times" :key="time" :timetext="time" />
         <div class="half-time"></div>
       </div>
-      <div class="cal">
+      <div class="cal" :style="{ gridTemplateRows: grid }">
         <TimeGridUnit
           v-for="gridarea in gridareas"
           :key="gridarea"
           :gridarea="gridarea"
         />
-        <CalendarEntry :entrytitle="title"/>
+        <CalendarEntry
+          v-for="entry in todaysCommitments"
+          :key="entry"
+          :entry="entry"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { DateTime } from 'luxon'
+
 import SidebarTime from '@/components/SidebarTime.vue'
 import TimeGridUnit from '@/components/TimeGridUnit.vue'
 import CalendarEntry from '@/components/CalendarEntry.vue'
@@ -37,7 +43,7 @@ export default {
   components: {
     SidebarTime,
     TimeGridUnit,
-    CalendarEntry
+    CalendarEntry,
   },
   data() {
     var meridiemIndicator = ['AM', 'PM']
@@ -73,10 +79,30 @@ export default {
     }
   },
   computed: {
-    title() {
+    entry() {
       return this.$store.state.commitments[1]
-    }
-  }
+    },
+    grid() {
+      var lineNames = []
+      var dt = DateTime.fromISO('2021-06-20')
+      var x = 0
+      while (dt < DateTime.fromISO('2021-06-21')) {
+        lineNames.push(dt.toFormat('yyyyMMddHHmm'))
+
+        dt = dt.plus({ minute: 15 })
+        x++
+        if (x > 200) break
+      }
+      var rowLinesStyle = ''
+      for (var lineName of lineNames) {
+        rowLinesStyle += `[d${lineName}] 1fr `
+      }
+      return rowLinesStyle
+    },
+    todaysCommitments() {
+      return this.$store.getters.commitmentsOnCurrentDate
+    },
+  },
 }
 </script>
 
@@ -214,6 +240,7 @@ body {
   display: flex;
   opacity: 0.7;
   grid-area: 25 / 1 / 30 / 2;
+  color: white;
 }
 
 .entry > div {
@@ -222,6 +249,7 @@ body {
   margin-right: 3px;
   border-radius: 5px 0 0 5px;
   justify-self: flex-start;
+  opacity: 0.2;
 }
 
 .entry > span {

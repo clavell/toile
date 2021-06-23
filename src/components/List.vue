@@ -3,7 +3,11 @@
     <div class="title">Commitments</div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
-      <TodoCard v-for="item in commitments" :key="item" :event="item" />
+      <TodoCard
+        v-for="item in commitments"
+        :key="item"
+        :event="item.entrytitle"
+      />
     </div>
   </div>
 </template>
@@ -46,10 +50,6 @@ export default {
   gap: 2px;
   grid-auto-rows: var(--entry-size);
   scrollbar-color: rgba(255, 255, 255, 0.2) var(--list-background-colour);
-}
-
-:-webkit-scrollbar-track {
-  background: var(--list-background-colour);
 }
 
 .listentry {

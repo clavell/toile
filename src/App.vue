@@ -44,10 +44,6 @@
   background-color: var(--main-background-colour);
 }
 
-body::-webkit-scrollbar-track {
-  background: var(--list-background-colour);
-}
-
 body {
   background-color: var(--main-background-colour);
 }

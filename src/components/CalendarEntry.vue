@@ -1,15 +1,31 @@
 <template>
-  <div class="entry">
-    <div></div>
-    <span>{{ entrytitle }}</span>
+  <div class="entry" :style="[style, gridSpot]">
+    <div :style="style"></div>
+    <span>{{ entry.entrytitle }}</span>
   </div>
 </template>
 
 <script>
+import { DateTime } from 'luxon'
+
 export default {
   name: 'CalendarEntry',
   props: {
-    entrytitle: String
+    entry: Object,
+  },
+  computed: {
+    style() {
+      return { backgroundColor: 'var(--list-background-colour)' }
+    },
+    gridSpot() {
+      var startTime = DateTime.fromFormat(this.entry.startTime, this.$store.state.timeFormat)
+      var endTime = startTime.plus({ minutes: this.entry.duration })
+      return {
+        gridRow: `d${startTime.toFormat(this.$store.state.timeFormat)} / d${endTime.toFormat(
+          this.$store.state.timeFormat
+        )}`,
+      }
+    },
   },
 }
 </script>
