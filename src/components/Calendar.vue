@@ -15,16 +15,19 @@
         <SidebarTime v-for="time in times" :key="time" :timetext="time" />
         <div class="half-time"></div>
       </div>
-      <div class="cal" :style="{ gridTemplateRows: grid }">
+      <div class="cal" :style="{ gridTemplateRows: gridTemplateRows }">
         <TimeGridUnit
-          v-for="gridarea in gridareas"
-          :key="gridarea"
-          :gridarea="gridarea"
+          v-for="row in gridRows"
+          :key="row"
+          :rowDelimeters="row"
+          @dragover.prevent
+          @dragenter.prevent
         />
         <CalendarEntry
           v-for="entry in todaysCommitments"
-          :key="entry"
+          :key="entry.id"
           :entry="entry"
+          draggable="true"
         />
       </div>
     </div>
@@ -46,58 +49,63 @@ export default {
     CalendarEntry,
   },
   data() {
+    //make the times on the sidebar
     var meridiemIndicator = ['AM', 'PM']
     var times = []
-    var gridareas = []
     for (var t = 0; t < meridiemIndicator.length; t++) {
       for (var i of Array(11)
         .fill()
         .map((element, index) => index)) {
-        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' +
-        // calendar.innerHTML += '<div class="timesegment"' +
-        gridareas.push([
-          1 + t * 48 + i * 4 + ' / 1 / ' + (3 + t * 48 + i * 4) + ' / 2',
-          3 + t * 48 + i * 4 + ' / 1 / ' + (5 + t * 48 + i * 4) + ' / 2',
-        ])
         times.push(i + 1 + ' ' + meridiemIndicator[t])
       }
       if (t === 0) {
-        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' +
-        // calendar.innerHTML += '<div class="timesegment"' +
-        gridareas.push(['45 / 1 / 47 / 2', '47 / 1 / 49  / 2'])
         times.push('12 PM')
-      } else {
-        // calendar.innerHTML += '<div class="timesegment secondary-timesegment"' +
-        // calendar.innerHTML += '<div class="timesegment"' +
-        gridareas.push(['93 / 1 / 95 / 2', '95 / 1 / 97 / 2'])
-      }
+      } 
     }
-
+    
     return {
       times: times,
-      gridareas: gridareas,
     }
   },
   computed: {
     entry() {
       return this.$store.state.commitments[1]
     },
-    grid() {
+    lineNames() {
       var lineNames = []
-      var dt = DateTime.fromISO('2021-06-20')
+      var dt = DateTime.fromFormat(this.$store.state.currentDate, 'yyyyMMdd')
+      var endDt = dt.plus({days:1})
       var x = 0
-      while (dt < DateTime.fromISO('2021-06-21')) {
-        lineNames.push(dt.toFormat('yyyyMMddHHmm'))
+      while (dt < endDt) {
+        lineNames.push(dt.toFormat(this.$store.state.timeFormat))
 
         dt = dt.plus({ minute: 15 })
+
+        //here to keep runaway while loops at bay
         x++
-        if (x > 200) break
+        if (x > 200) {
+          console.log(`limit of ${x} grid lines reached. stopping grid declaration`)
+          break
+        }
       }
+      lineNames.push(endDt.toFormat(this.$store.state.timeFormat))
+      return lineNames
+    },
+    gridTemplateRows(){
+      //this names the rows in the upper level calendar grid
       var rowLinesStyle = ''
-      for (var lineName of lineNames) {
+      for (var lineName of this.lineNames) {
         rowLinesStyle += `[d${lineName}] 1fr `
       }
       return rowLinesStyle
+    },
+    gridRows() {
+      //this gives all of the time grid elements start and end lines in the grid defined in gredtemplateRows()
+      var rows = []
+      for(var i=0; i<this.lineNames.length-1; i++ ){
+        rows.push({rowStart: this.lineNames[i], rowEnd: this.lineNames[i+1]})
+      }
+      return rows
     },
     todaysCommitments() {
       return this.$store.getters.commitmentsOnCurrentDate
@@ -160,7 +168,6 @@ export default {
 
 .timesegment {
   background-color: var(--timesegment-colour);
-  /* height: var(--timesegment-height); */
   grid-row: span 2;
   width: auto;
   border-bottom: var(--timesegment-separator-thickness) solid

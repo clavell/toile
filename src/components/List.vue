@@ -24,7 +24,6 @@ export default {
       return this.$store.state.commitments
     },
     numberOfCommitments() {
-      console.log(this.$store.state.commitments.length)
       return this.$store.getters.commitmentsCount
     },
   },
