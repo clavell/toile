@@ -27,7 +27,6 @@
           v-for="entry in todaysCommitments"
           :key="entry.id"
           :entry="entry"
-          draggable="true"
         />
       </div>
     </div>
@@ -60,9 +59,9 @@ export default {
       }
       if (t === 0) {
         times.push('12 PM')
-      } 
+      }
     }
-    
+
     return {
       times: times,
     }
@@ -74,7 +73,7 @@ export default {
     lineNames() {
       var lineNames = []
       var dt = DateTime.fromFormat(this.$store.state.currentDate, 'yyyyMMdd')
-      var endDt = dt.plus({days:1})
+      var endDt = dt.plus({ days: 1 })
       var x = 0
       while (dt < endDt) {
         lineNames.push(dt.toFormat(this.$store.state.timeFormat))
@@ -84,14 +83,16 @@ export default {
         //here to keep runaway while loops at bay
         x++
         if (x > 200) {
-          console.log(`limit of ${x} grid lines reached. stopping grid declaration`)
+          console.log(
+            `limit of ${x} grid lines reached. stopping grid declaration`
+          )
           break
         }
       }
       lineNames.push(endDt.toFormat(this.$store.state.timeFormat))
       return lineNames
     },
-    gridTemplateRows(){
+    gridTemplateRows() {
       //this names the rows in the upper level calendar grid
       var rowLinesStyle = ''
       for (var lineName of this.lineNames) {
@@ -102,8 +103,11 @@ export default {
     gridRows() {
       //this gives all of the time grid elements start and end lines in the grid defined in gredtemplateRows()
       var rows = []
-      for(var i=0; i<this.lineNames.length-1; i++ ){
-        rows.push({rowStart: this.lineNames[i], rowEnd: this.lineNames[i+1]})
+      for (var i = 0; i < this.lineNames.length - 1; i++) {
+        rows.push({
+          rowStart: this.lineNames[i],
+          rowEnd: this.lineNames[i + 1],
+        })
       }
       return rows
     },
