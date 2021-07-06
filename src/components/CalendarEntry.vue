@@ -1,35 +1,51 @@
 <template>
   <div
+    ref="el"
     class="entry"
     :style="[style, gridSpot, movingStyle]"
-    @mousedown="pickup($event)"
-    @onmouseup="drop($event)"
-    @mousemove="move($event)"
+    @touchstart.prevent
+    @mousedown.prevent
   >
-    <div :style="style"></div>
+    <div></div>
     <span>{{ entry.entrytitle }}</span>
   </div>
 </template>
 
 <script>
+import { makeDraggable } from '@/use/MakeDraggable.js'
+import { ref } from 'vue'
 import { DateTime } from 'luxon'
+import { useStore } from 'vuex'
 
 export default {
   name: 'CalendarEntry',
   props: {
     entry: Object,
   },
+  setup(props){
+    const store = useStore()
+     const el = ref(null);
+      const {
+        position,
+        style,
+      } = makeDraggable(el,props,store);
+
+      return {
+        el,
+        position,
+        style,
+      };
+  },
   data() {
     return {
       moving: null,
       left: null,
       top: null,
+      shiftX: null,
+      shiftY:null,
     }
   },
   computed: {
-    style() {
-      return { backgroundColor: 'var(--list-background-colour)' }
-    },
     gridSpot() {
       var startTime = DateTime.fromFormat(
         this.entry.startTime,
@@ -43,46 +59,22 @@ export default {
       }
     },
     movingStyle() {
-      if (this.moving && this.moving != null) {
-        console.log(this.left)
+      if (this.moving) {
         return {
           height: this.moving.clientHeight + 'px',
           width: this.moving.clientWidth + 'px',
           position: 'fixed',
-          // left: this.left,
-          // top: this.top,
+          left: this.left +'px',
+          top: this.top + 'px',
         }
       }
       return {}
     },
   },
-
-  methods: {
-    pickup(event) {
-      this.moving = event.target
-      while (this.moving.className !== 'entry') {
-        this.moving = this.moving.parentNode
-      }
-    },
-    drop(event) {
-      console.log(event)
-      this.moving = null
-    },
-    move(event) {
-      if (this.moving) {
-        if (event.clientX) {
-          // mousemove
-          this.left = event.clientX - this.moving.clientWidth / 2
-          this.top = event.clientY - this.moving.clientHeight / 2
-        } else {
-          // touchmove - assuming a single touchpoint
-          this.left =
-            event.changedTouches[0].clientX - this.moving.clientWidth / 2
-          this.top =
-            event.changedTouches[0].clientY - this.moving.clientHeight / 2
-        }
-      }
-    },
-  },
 }
 </script>
+<style scoped>
+div{
+  background-color: var(--list-background-colour);
+}
+</style>
