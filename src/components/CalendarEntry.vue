@@ -22,27 +22,15 @@ export default {
   props: {
     entry: Object,
   },
-  setup(props){
+  setup(props) {
     const store = useStore()
-     const el = ref(null);
-      const {
-        position,
-        style,
-      } = makeDraggable(el,props,store);
+    const el = ref(null)
+    const { position, style } = makeDraggable(el, props, store)
 
-      return {
-        el,
-        position,
-        style,
-      };
-  },
-  data() {
     return {
-      moving: null,
-      left: null,
-      top: null,
-      shiftX: null,
-      shiftY:null,
+      el,
+      position,
+      style,
     }
   },
   computed: {
@@ -58,23 +46,11 @@ export default {
         )} / d${endTime.toFormat(this.$store.state.timeFormat)}`,
       }
     },
-    movingStyle() {
-      if (this.moving) {
-        return {
-          height: this.moving.clientHeight + 'px',
-          width: this.moving.clientWidth + 'px',
-          position: 'fixed',
-          left: this.left +'px',
-          top: this.top + 'px',
-        }
-      }
-      return {}
-    },
   },
 }
 </script>
 <style scoped>
-div{
+div {
   background-color: var(--list-background-colour);
 }
 </style>

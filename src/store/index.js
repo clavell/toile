@@ -60,7 +60,7 @@ export default createStore({
       //could become more complex as api calls are added etc.
       console.log(id)
       console.log(newStartTime)
-      if(newStartTime !== ''){
+      if (newStartTime !== '') {
         commit('UPDATE_STARTTIME', { newStartTime, id })
       }
     },
