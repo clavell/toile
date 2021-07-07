@@ -1,22 +1,39 @@
 <template>
-  <div class="entry" :style="[style, gridSpot]" @dragstart="drag($event)">
-    <div :style="style"></div>
+  <div
+    ref="el"
+    class="entry"
+    :style="[style, gridSpot, movingStyle]"
+    @touchstart.prevent
+    @mousedown.prevent
+  >
+    <div></div>
     <span>{{ entry.entrytitle }}</span>
   </div>
 </template>
 
 <script>
+import { makeDraggable } from '@/use/MakeDraggable.js'
+import { ref } from 'vue'
 import { DateTime } from 'luxon'
+import { useStore } from 'vuex'
 
 export default {
   name: 'CalendarEntry',
   props: {
     entry: Object,
   },
+  setup(props) {
+    const store = useStore()
+    const el = ref(null)
+    const { position, style } = makeDraggable(el, props, store)
+
+    return {
+      el,
+      position,
+      style,
+    }
+  },
   computed: {
-    style() {
-      return { backgroundColor: 'var(--list-background-colour)' }
-    },
     gridSpot() {
       var startTime = DateTime.fromFormat(
         this.entry.startTime,
@@ -30,13 +47,10 @@ export default {
       }
     },
   },
-  methods:{
-    drag(evt){
-      evt.dataTransfer.dropEffect = 'move'
-      evt.dataTransfer.effectAllowed = 'move'
-      evt.dataTransfer.setData('commitmentId', this.entry.id)
-    },
-    
-    }
-  }
+}
 </script>
+<style scoped>
+div {
+  background-color: var(--list-background-colour);
+}
+</style>
