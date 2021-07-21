@@ -2,7 +2,7 @@
   <div
     ref="el"
     class="entry"
-    :style="[style, gridSpot, movingStyle]"
+    :style="[style, gridSpot]"
     @touchstart.prevent
     @mousedown.prevent
   >

@@ -11,7 +11,8 @@
   --main-background-colour: #171a1d;
   --list-background-colour: #ad1448;
   --entry-background-colour: #c41751;
-  --entry-size: 100px;
+  --entry-addition-colour: #96123e;
+  --entry-size: 75px;
   --list-font-colour: white;
   --calendar-height: 90vh;
 
@@ -59,5 +60,16 @@ body {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+/* overlay */
+div.overlay {
+  opacity: 0.5;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
 }
 </style>

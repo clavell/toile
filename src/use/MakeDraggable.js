@@ -82,7 +82,6 @@ const makeDraggable = function (element, props, store) {
 
   watch(element, (element) => {
     // if (!element instanceof HTMLElement) return;
-    console.log(element)
     let rect = element.getBoundingClientRect(element)
     position.init = true
     position.x = Math.round(rect.x)

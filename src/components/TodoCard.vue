@@ -1,18 +1,23 @@
 <template>
-  <div class="listentry">
-    {{ event }}
+  <div class="listentry" :style="entryWidth">
+    {{ entrytitle }}
   </div>
 </template>
 
 <script>
+import { inject } from '@vue/runtime-core'
 export default {
   name: 'TodoCard',
   props: {
     //   parent: Number,
-    event: String,
+    entrytitle: String,
     //   complete: Boolean,
     //   description: String,
     //   duration: Number,
+  },
+  setup() {
+    const entryWidth = inject('entryWidth')
+    return { entryWidth }
   },
   data() {
     return {
