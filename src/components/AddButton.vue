@@ -1,5 +1,5 @@
 <template>
-  <div :style="buttonWidth" class="listentry" ref="el" @pointerup="press">
+  <div :style="buttonWidth" class="listentry" ref="el" @click="press">
     +
   </div>
 </template>
@@ -9,24 +9,13 @@ import { inject } from '@vue/runtime-core'
 
 export default {
   name: 'AddButton',
-  setup() {
+  setup(props,{ emit }) {
     const buttonWidth = inject('entryWidth')
-
+    const press = (event) => {
+      emit("press",event.target)
+    }
     return { buttonWidth, press }
   },
-}
-
-function press() {
-  // addingEntry.value=true
-  // document.addEventListener('pointerdown',(event) => {
-  //   var x = event.clientX, y = event.clientY,
-  //   elementMouseIsOver = document.elementFromPoint(x, y);
-  //   if(elementMouseIsOver.classList.contains('overlay')){
-  //     console.log('you clicked on overlay')
-  //     addingEntry.value=false;
-  //   }
-  // })
-  console.log('add button pressed')
 }
 </script>
 

@@ -10,8 +10,8 @@
       />
     </div>
     <div class="buttoncontainer">
-      <AddEntry v-if="addingEntry" />
-      <AddButton v-else ref="buttonElement" />
+      <AddEntry v-if="addingEntry" @submitted="hideAddCard"/>
+      <AddButton v-else ref="buttonElement" @press="showAddCard"/>
     </div>
     <div v-if="addingEntry" class="overlay"></div>
   </div>
@@ -36,19 +36,6 @@ export default {
 
     watch(el, (el) => {
       listWidth.value = el.offsetWidth
-      el.addEventListener('pointerup', () => {
-        addingEntry.value = true
-        document.addEventListener('pointerdown', (event) => {
-          var x = event.clientX,
-            y = event.clientY,
-            elementMouseIsOver = document.elementFromPoint(x, y)
-          if (elementMouseIsOver.classList.contains('overlay')) {
-            console.log('you clicked on overlay')
-            addingEntry.value = false
-          }
-        })
-        console.log(document.getElementsByClassName('overlay'))
-      })
     })
 
     provide(
@@ -63,7 +50,24 @@ export default {
       })
     )
 
-    return { el, addingEntry }
+    const hideAddCard = () => {
+      addingEntry.value = false
+    }
+    
+    const showAddCard = () => {
+      addingEntry.value = true
+      document.addEventListener('pointerdown', (event) => {
+        var x = event.clientX,
+          y = event.clientY,
+        elementMouseIsOver = document.elementFromPoint(x, y)
+        if (elementMouseIsOver.classList.contains('overlay')) {
+          hideAddCard()
+        }
+      })
+    }
+
+
+    return { el, addingEntry, showAddCard, hideAddCard }
   },
   computed: {
     commitments() {

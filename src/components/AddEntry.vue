@@ -1,6 +1,6 @@
 <template>
   <div id="entry-form">
-    <form>
+    <form @submit.prevent="addEntry" >
       <input
         type="text"
         v-model="entrytitle"
@@ -8,7 +8,7 @@
         class="field"
       />
       <div>
-        <label for="duration">Duration</label>
+        <label for="duration" >Duration</label>
         <input
           type="Number"
           v-model="duration"
@@ -17,7 +17,7 @@
         />
       </div>
       <div>
-        <label>Due Date (dd/mm/yyyy)</label>
+        <label >Due Date (dd/mm/yyyy)</label>
         <input type="text" v-model="duedate" class="field" />
       </div>
       <button type="submit">Add</button>
@@ -30,11 +30,20 @@ export default {
   name: 'AddEntry',
   data() {
     return {
-      id: '',
       entrytitle: '',
       duedate: '21/07/2021',
       duration: 45,
     }
+  },
+  methods: {
+    addEntry(){
+      this.$store.dispatch('addCommitment', {
+        entrytitle: this.entrytitle,
+        duedate: this.duedate,
+        duration: this.duration
+      })
+      this.$emit('submitted', true)
+    },
   },
 }
 </script>

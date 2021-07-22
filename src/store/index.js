@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { DateTime } from 'luxon'
+import { v4 as uuidv4} from 'uuid'
 
 const state = {
   timeFormat: 'yyyyMMddHHmm',
@@ -55,7 +56,8 @@ export const actions = {
     }
   },
   addCommitment({ commit }, newCommitment) {
-    if (newCommitment !== null) {
+    if (newCommitment && newCommitment.entrytitle) {
+      newCommitment.id = uuidv4()
       commit('ADD_COMMITMENT', newCommitment)
     }
   },
@@ -67,7 +69,9 @@ export default createStore({
     commitmentsOnCurrentDate(state) {
       //find all events on `currentDate`
       var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
+      
       return state.commitments.filter((commitment) => {
+        if(!commitment.startTime) return false
         var commitmentTime = DateTime.fromFormat(
           commitment.startTime,
           state.timeFormat
