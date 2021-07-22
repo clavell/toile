@@ -21,7 +21,8 @@ export default {
 
 <style>
 .Lists {
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap:30px;
 }
 </style>

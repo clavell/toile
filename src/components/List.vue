@@ -1,6 +1,6 @@
 <template>
   <div class="list" ref="el">
-    <div class="title">Commitments</div>
+    <div class="title" :style="entryWidth">Commitments</div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
       <TodoCard
@@ -33,14 +33,7 @@ export default {
     const el = ref(null)
     const listWidth = ref(null)
     const addingEntry = ref(false)
-
-    watch(el, (el) => {
-      listWidth.value = el.offsetWidth
-    })
-
-    provide(
-      'entryWidth',
-      computed(() => {
+    const entryWidth = computed(() => {
         if (listWidth.value) {
           return {
             width: listWidth.value * 0.75 + 'px',
@@ -48,6 +41,13 @@ export default {
         }
         return {}
       })
+    watch(el, (el) => {
+      listWidth.value = el.offsetWidth
+    })
+
+    provide(
+      'entryWidth', entryWidth
+      
     )
 
     const hideAddCard = () => {
@@ -91,7 +91,7 @@ export default {
   padding: 0 20px 0 40px;
   display: grid;
   grid-template-rows: var(--entry-size) 1fr calc(2 * var(--entry-size));
-  width: 300px;
+  width: 350px;
   height: 500px;
   background-color: var(--list-background-colour);
   border-radius: 20px;
@@ -103,7 +103,6 @@ export default {
 
 #wrapper {
   display: grid;
-  width: 300px;
   overflow-y: auto;
   gap: 2px;
   grid-auto-rows: var(--entry-size);
