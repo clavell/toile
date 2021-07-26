@@ -51,6 +51,7 @@ export default {
 </script>
 <style scoped>
 div {
-  background-color: var(--list-background-colour);
+  /* using tailwind classes will cause the drag and drop to stop working */
+  background-color: theme('colors.pink.900');
 }
 </style>

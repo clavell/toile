@@ -93,7 +93,7 @@ export default {
   grid-template-rows: var(--entry-size) 1fr calc(2 * var(--entry-size));
   width: 350px;
   height: 500px;
-  background-color: var(--list-background-colour);
+  background-color: theme('colors.pink.900');
   border-radius: 20px;
   color: var(--list-font-colour);
   gap: 2px;
@@ -106,12 +106,13 @@ export default {
   overflow-y: auto;
   gap: 2px;
   grid-auto-rows: var(--entry-size);
-  scrollbar-color: rgba(255, 255, 255, 0.2) var(--list-background-colour);
+  scrollbar-color: rgba(255, 255, 255, 0.2) theme('colors.pink.900');
   padding: 0;
 }
 
 .listentry {
-  background-color: var(--entry-background-colour);
+  /* thinking ahead to when going to be using drag and drop */
+  background-color: theme('colors.pink.800');
   border-radius: 5px;
   display: flex;
   /* width: 100%; */

@@ -56,7 +56,7 @@ export default {
   left: -10px;
   width: 290px;
   height: 1000px;
-  background-color: var(--entry-addition-colour);
+  background-color: theme('colors.pink.900');
   border-radius: 10px;
   z-index: 20;
 }
@@ -101,7 +101,7 @@ optgroup,
 input,
 select,
 option {
-  background-color: var(--entry-background-colour);
+  background-color: theme('colors.pink.800');
   border-style: none;
   outline: none;
   border-radius: 5px;

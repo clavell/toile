@@ -1,5 +1,5 @@
 <template>
-  <div :style="buttonWidth" class="listentry" ref="el" @click="press">
+  <div :style="buttonWidth" class="listentry flex items-center cursor-pointer" ref="el" @click="press">
     +
   </div>
 </template>
@@ -24,7 +24,6 @@ div {
   /* width: 80%; */
   height: var(--entry-size);
   opacity: 0.8;
-  background-color: var(--entry-background-colour);
 }
 </style>
 >
