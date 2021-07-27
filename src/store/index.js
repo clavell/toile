@@ -37,15 +37,26 @@ const state = {
 export const mutations = {
   UPDATE_START_TIME(state, { newStartTime, id }) {
     //find the correct commitment in the commitments array
-    var index = state.commitments.findIndex((el) => {
-      return el.id === id
-    })
+    const index = findIndex(id)
     //set the value of the start time of this commitment to the new start time
     state.commitments[index].startTime = newStartTime
   },
   ADD_COMMITMENT(state, newCommitment) {
     state.commitments.push(newCommitment)
   },
+  SET_AS_COMPLETE(state, id) {
+    //find the correct commitment in the commitments array
+    const index = findIndex(id)
+    //set complete to be true
+    state.commitments[index].complete = true
+  }
+}
+
+function findIndex(id){
+  var index = state.commitments.findIndex((el) => {
+    return el.id === id
+  })
+  return index
 }
 
 export const actions = {
@@ -61,25 +72,30 @@ export const actions = {
       commit('ADD_COMMITMENT', newCommitment)
     }
   },
+  setAsComplete( {commit }, id) {
+      commit('SET_AS_COMPLETE',id)
+  }
+}
+
+export const getters = {
+  commitmentsOnCurrentDate(state) {
+    //find all events on `currentDate`
+    var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
+    
+    return state.commitments.filter((commitment) => {
+      if(!commitment.startTime) return false
+      var commitmentTime = DateTime.fromFormat(
+        commitment.startTime,
+        state.timeFormat
+      )
+      return currentDate.hasSame(commitmentTime, 'day')
+    })
+  },
 }
 
 export default createStore({
   state,
-  getters: {
-    commitmentsOnCurrentDate(state) {
-      //find all events on `currentDate`
-      var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
-      
-      return state.commitments.filter((commitment) => {
-        if(!commitment.startTime) return false
-        var commitmentTime = DateTime.fromFormat(
-          commitment.startTime,
-          state.timeFormat
-        )
-        return currentDate.hasSame(commitmentTime, 'day')
-      })
-    },
-  },
+  getters,
   mutations,
   actions,
   strict: process.env.NODE_ENV !== 'production',

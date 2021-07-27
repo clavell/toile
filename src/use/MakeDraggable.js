@@ -24,7 +24,7 @@ const makeDraggable = function (element, props, store) {
           ? '3px 6px 16px rgba(0, 0, 0, 0.15)'
           : '',
         //   "transform": position.isDragging ? "translate(-3px, -6px)" : "",
-        cursor: position.isDragging ? 'grab' : 'pointer',
+        cursor: position.isDragging ? 'grabbing' : 'grab',
       }
     }
     return {}
