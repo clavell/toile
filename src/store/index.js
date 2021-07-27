@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 import { DateTime } from 'luxon'
 import { v4 as uuidv4} from 'uuid'
 
-const state = {
+export const state = {
   timeFormat: 'yyyyMMddHHmm',
   currentDate: '20210620',
   commitments: [
@@ -11,24 +11,28 @@ const state = {
       entrytitle: 'set up vuex',
       startTime: '202106201330',
       duration: 45,
+      complete: false,
     },
     {
       id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
       entrytitle: 'add dummy data to vuex',
       startTime: '202106200430',
       duration: 45,
+      complete: false,
     },
     {
       id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
       entrytitle: 'display dummy data in list view',
       startTime: '202106201530',
       duration: 45,
+      complete: false,
     },
     {
       id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
       entrytitle: 'display dummy data in calendar view',
       startTime: '202106201630',
       duration: 45,
+      complete: false,
     },
   ],
 }
@@ -69,10 +73,11 @@ export const actions = {
   addCommitment({ commit }, newCommitment) {
     if (newCommitment && newCommitment.entrytitle) {
       newCommitment.id = uuidv4()
+      newCommitment.complete = false
       commit('ADD_COMMITMENT', newCommitment)
     }
   },
-  setAsComplete( {commit }, id) {
+  setAsComplete( { commit }, id) {
       commit('SET_AS_COMPLETE',id)
   }
 }
@@ -91,6 +96,10 @@ export const getters = {
       return currentDate.hasSame(commitmentTime, 'day')
     })
   },
+  commitmentsSortedByCompletedStatus(state) {
+    let commitments = state.commitments
+    return [...commitments].sort((a,b) => a.complete - b.complete) 
+  }
 }
 
 export default createStore({

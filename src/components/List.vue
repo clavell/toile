@@ -6,7 +6,7 @@
       <TodoCard
         v-for="item in commitments"
         :key="item"
-        :entrytitle="item.entrytitle"
+        :commitment="item"
       />
     </div>
     <div class="buttoncontainer">
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     commitments() {
-      return this.$store.state.commitments
+      return this.$store.getters.commitmentsSortedByCompletedStatus
     },
     numberOfCommitments() {
       return this.$store.getters.commitmentsCount
