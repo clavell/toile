@@ -12,6 +12,7 @@ describe('mutations', () => {
       entrytitle: 'set up vuex',
       startTime: '202106201330',
       duration: 45,
+      complete:false,
     }
   })
 
@@ -27,6 +28,16 @@ describe('mutations', () => {
     SET_AS_COMPLETE(state, state.commitments[0].id)
     expect(state.commitments[0].complete).toBe(true)
 
+  })
+
+  it('sets item as not complete', () => {
+    // put a complete commitment into the state
+    newCommitment.complete = true
+    state.commitments.push(newCommitment)
+
+    //run the mutation
+    SET_AS_COMPLETE(state, state.commitments[0].id)
+    expect(state.commitments[0].complete).toBe(false)
   })
 
   it('updates start time', () => {

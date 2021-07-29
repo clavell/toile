@@ -13,7 +13,6 @@ describe('getters', () => {
     expect(teststate.commitments[0].complete).toBe(true)
     //return the sorted commitments
     let sortedCommitments = commitmentsSortedByCompletedStatus(teststate)
-    console.log(sortedCommitments)
     //check to see that the final commitment is in fact true
     expect(sortedCommitments[sortedCommitments.length-1].complete).toBe(true)
   })

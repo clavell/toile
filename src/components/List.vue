@@ -1,11 +1,11 @@
 <template>
   <div class="list" ref="el">
-    <div class="title" :style="entryWidth">Commitments</div>
+    <div class="title" >Commitments</div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
       <TodoCard
         v-for="item in commitments"
-        :key="item"
+        :key="item.id"
         :commitment="item"
       />
     </div>

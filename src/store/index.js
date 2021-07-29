@@ -52,7 +52,7 @@ export const mutations = {
     //find the correct commitment in the commitments array
     const index = findIndex(id)
     //set complete to be true
-    state.commitments[index].complete = true
+    state.commitments[index].complete = !state.commitments[index].complete
   }
 }
 
@@ -99,6 +99,9 @@ export const getters = {
   commitmentsSortedByCompletedStatus(state) {
     let commitments = state.commitments
     return [...commitments].sort((a,b) => a.complete - b.complete) 
+  },
+  commitmentById: (state) => (id) => {
+    return state.commitments.find(commitment => commitment.id === id)
   }
 }
 
