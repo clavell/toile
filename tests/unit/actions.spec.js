@@ -1,19 +1,14 @@
-import { actions } from '@/store/index.js'
-
-const { addCommitment, setAsComplete } = actions
+import { actions } from '@/store/actions.js'
+import { findIndex } from '../../src/store';
+import { generateNewCommitment, generateAlteredCommitment, generateState} from '@/store/stategenerator.js'
+const { addCommitment, setAsComplete, updateCommitment } = actions
 
 let newCommitment;
 const commit = jest.fn()
 
 describe('actions', () => {
   beforeEach(() => {
-    newCommitment = {
-      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-      entrytitle: 'set up vuex',
-      startTime: '202106201330',
-      duration: 45,
-      complete: false,
-    }
+    newCommitment = generateNewCommitment()
     commit.mockClear()
   })
   it('commits new entry', () => {
@@ -31,4 +26,31 @@ describe('actions', () => {
     setAsComplete({ commit } , newCommitment.id)
     expect(commit).toHaveBeenCalledWith('SET_AS_COMPLETE', newCommitment.id)
   })
+
+  it('commits the UPDATE_COMMITMENT mutation when commitment has changed', () => {
+    //create a dummy state
+    let state = generateState()
+    state.commitments.push(newCommitment)
+    //create editted commitment to add in the orignal's place
+   
+    const edittedCommitment = generateAlteredCommitment()
+
+    updateCommitment({ state, commit } , {newCommitment: edittedCommitment, oldCommitment: newCommitment})
+
+    const index = findIndex(newCommitment.id, state)
+    expect(commit).toHaveBeenCalledWith('UPDATE_COMMITMENT', {newCommitment: edittedCommitment, index: index})
+
+  })
+
+  it('does not commit the UPDATE_COMMITMENT mutation when commitment has NOT changed', () => {
+    //create a dummy state
+    let state = generateState()
+    state.commitments.push(newCommitment)
+
+    updateCommitment({ state, commit } , {newCommitment: newCommitment, oldCommitment: newCommitment})
+
+    expect(commit).toHaveBeenCalledTimes(0)
+
+  })
+  
 })

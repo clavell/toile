@@ -84,6 +84,8 @@ label {
   font-weight: 200;
   opacity: 0.5;
 }
+
+/* removing the buttons on the number input */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

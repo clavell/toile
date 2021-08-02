@@ -1,47 +1,16 @@
-import { createStore } from 'vuex'
 import { DateTime } from 'luxon'
-import { v4 as uuidv4} from 'uuid'
+import { createStore } from 'vuex'
+import { actions } from './actions.js'
+import { generateState } from '@/store/stategenerator.js'
 
-export const state = {
-  timeFormat: 'yyyyMMddHHmm',
-  currentDate: '20210620',
-  commitments: [
-    {
-      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-      entrytitle: 'set up vuex',
-      startTime: '202106201330',
-      duration: 45,
-      complete: false,
-    },
-    {
-      id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
-      entrytitle: 'add dummy data to vuex',
-      startTime: '202106200430',
-      duration: 45,
-      complete: false,
-    },
-    {
-      id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
-      entrytitle: 'display dummy data in list view',
-      startTime: '202106201530',
-      duration: 45,
-      complete: false,
-    },
-    {
-      id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-      entrytitle: 'display dummy data in calendar view',
-      startTime: '202106201630',
-      duration: 45,
-      complete: false,
-    },
-  ],
-}
+
+const state = generateState()
 
 // export `mutations` as a named export
 export const mutations = {
   UPDATE_START_TIME(state, { newStartTime, id }) {
     //find the correct commitment in the commitments array
-    const index = findIndex(id)
+    const index = findIndex(id,state)
     //set the value of the start time of this commitment to the new start time
     state.commitments[index].startTime = newStartTime
   },
@@ -50,37 +19,22 @@ export const mutations = {
   },
   SET_AS_COMPLETE(state, id) {
     //find the correct commitment in the commitments array
-    const index = findIndex(id)
+    const index = findIndex(id,state)
     //set complete to be true
     state.commitments[index].complete = !state.commitments[index].complete
+  },
+  UPDATE_COMMITMENT(state,  {newInfo, index}){
+    state.commitments[index] = newInfo
   }
 }
 
-function findIndex(id){
+export function findIndex(id,state){
   var index = state.commitments.findIndex((el) => {
     return el.id === id
   })
   return index
 }
 
-export const actions = {
-  updateStartTime({ commit }, { newStartTime, id }) {
-    //could become more complex as api calls are added etc.
-    if (newStartTime !== '') {
-      commit('UPDATE_START_TIME', { newStartTime, id })
-    }
-  },
-  addCommitment({ commit }, newCommitment) {
-    if (newCommitment && newCommitment.entrytitle) {
-      newCommitment.id = uuidv4()
-      newCommitment.complete = false
-      commit('ADD_COMMITMENT', newCommitment)
-    }
-  },
-  setAsComplete( { commit }, id) {
-      commit('SET_AS_COMPLETE',id)
-  }
-}
 
 export const getters = {
   commitmentsOnCurrentDate(state) {

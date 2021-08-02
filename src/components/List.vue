@@ -11,7 +11,7 @@
     </div>
     <div class="buttoncontainer">
       <AddEntry v-if="addingEntry" @submitted="hideAddCard"/>
-      <AddButton v-else ref="buttonElement" @press="showAddCard"/>
+      <AddButton v-else @press="showAddCard"/>
     </div>
     <div v-if="addingEntry" class="overlay"></div>
   </div>
