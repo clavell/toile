@@ -33,7 +33,7 @@ const makeDraggable = function (element, props, store) {
   const onMouseDown = (e) => {
     e.stopPropagation()
     let moving = e.target
-    while (moving.className !== 'entry') {
+    while (!moving.classList.contains('draggable')) {
       moving = moving.parentNode
     }
     let clientX = e.clientX
@@ -81,11 +81,13 @@ const makeDraggable = function (element, props, store) {
   }
 
   watch(element, (element) => {
+
+    console.log("watch fired")
     // if (!element instanceof HTMLElement) return;
     let rect = element.getBoundingClientRect(element)
     position.init = true
-    position.x = Math.round(rect.x)
-    position.y = Math.round(rect.y)
+    // position.x = Math.round(rect.x)
+    // position.y = Math.round(rect.y)
     position.width = Math.round(rect.width)
     position.height = Math.round(rect.height)
 

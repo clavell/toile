@@ -1,7 +1,7 @@
 <template>
   <div
     ref="el"
-    class="entry"
+    class="entry draggable"
     :style="[style, gridSpot]"
     @touchstart.prevent
     @mousedown.prevent
