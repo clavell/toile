@@ -12,7 +12,7 @@ const makeDraggable = function (element, props, store) {
     dragStartY: null,
   })
 
-  const style = computed(() => {
+  const draggableStyle = computed(() => {
     if (position.init) {
       return {
         position: position.isDragging ? 'fixed' : '',
@@ -96,7 +96,7 @@ const makeDraggable = function (element, props, store) {
 
   return {
     position,
-    style,
+    draggableStyle,
   }
 }
 

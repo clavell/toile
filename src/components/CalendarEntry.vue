@@ -2,7 +2,7 @@
   <div
     ref="el"
     class="entry draggable"
-    :style="[style, gridSpot]"
+    :style="[draggableStyle, gridSpot]"
     @touchstart.prevent
     @mousedown.prevent
   >
@@ -25,12 +25,12 @@ export default {
   setup(props) {
     const store = useStore()
     const el = ref(null)
-    const { position, style } = makeDraggable(el, props, store)
+    const { position, draggableStyle } = makeDraggable(el, props, store)
 
     return {
       el,
       position,
-      style,
+      draggableStyle,
     }
   },
   computed: {
