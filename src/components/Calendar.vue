@@ -24,9 +24,9 @@
           @dragenter.prevent
         />
         <CalendarEntry
-          v-for="entry in todaysCommitments"
-          :key="entry.id"
-          :entry="entry"
+          v-for="commitment in todaysCommitments"
+          :key="commitment.id"
+          :commitment="commitment"
         />
       </div>
     </div>
@@ -67,9 +67,9 @@ export default {
     }
   },
   computed: {
-    entry() {
-      return this.$store.state.commitments[1]
-    },
+    // commitment() {
+    //   return this.$store.state.commitments[1]
+    // },
     lineNames() {
       var lineNames = []
       var dt = DateTime.fromFormat(this.$store.state.currentDate, 'yyyyMMdd')
@@ -236,7 +236,7 @@ body {
     var(--sidebar-color);
 }
 
-.entry {
+.commitment {
   /* grid-row: 9 / span 3; */
   background-color: #02494d;
   /* height: calc(var(--timesegment-height) - 4px); */
@@ -254,7 +254,7 @@ body {
   color: white;
 }
 
-.entry > div {
+.commitment > div {
   width: 6px;
   background-color: #5d7778;
   margin-right: 3px;
@@ -263,7 +263,7 @@ body {
   opacity: 0.2;
 }
 
-.entry > span {
+.commitment > span {
   padding: 3px;
 }
 </style>

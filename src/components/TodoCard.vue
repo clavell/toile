@@ -1,5 +1,5 @@
 <template>
-  <div class="listentry draggable grid grid-cols-todolistentry bg-pink-800" :style="entryWidth">
+  <div ref="el" class="listentry draggable grid grid-cols-todolistentry bg-pink-800" :style="[entryWidth,draggableStyle]">
     <!-- <div class="flex flex-col justify-center items-center">
       <div class="rounded-full h-5 w-5 flex items-center justify-center bg-pink-900 hover:bg-pink-700 transform active:scale-90 scale-75 hover:scale-100 transition duration-200 ease-in-out active:duration-100 cursor-pointer"
        @click='markAsComplete' @touchstart.prevent='markAsComplete' >
@@ -15,7 +15,10 @@
 
 <script>
 import { inject } from '@vue/runtime-core'
-import { computed,  } from 'vue'
+import { computed, ref} from 'vue'
+import { makeDraggable } from '@/use/MakeDraggable.js'
+import { useStore } from 'vuex'
+
 
 export default {
   name: 'TodoCard',
@@ -24,6 +27,9 @@ export default {
   },
   setup(props) {
 
+    const store = useStore()
+    const el = ref(null)
+    const { position, draggableStyle } = makeDraggable(el, props, store)
     const entryWidth = inject('entryWidth')
      
     const style = computed(() => {
@@ -36,7 +42,7 @@ export default {
     return {}
   })
 
-    return { entryWidth,style, }
+    return { entryWidth,style, el, draggableStyle,position}
 },
   computed: {
     checked: {

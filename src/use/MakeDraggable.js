@@ -32,6 +32,10 @@ const makeDraggable = function (element, props, store) {
 
   const onMouseDown = (e) => {
     e.stopPropagation()
+    //if clickin on a checkbox don't drag
+    if(e.explicitOriginalTarget.type=="checkbox"){
+      return
+    }
     let moving = e.target
     while (!moving.classList.contains('draggable')) {
       moving = moving.parentNode
@@ -70,7 +74,7 @@ const makeDraggable = function (element, props, store) {
     const newTime = timeSegment.style.gridArea.toString().substring(1, 13)
     store.dispatch('updateStartTime', {
       newStartTime: newTime,
-      id: props.entry.id,
+      id: props.commitment.id,
     })
 
     position.isDragging = false

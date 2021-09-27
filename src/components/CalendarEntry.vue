@@ -1,13 +1,13 @@
 <template>
   <div
     ref="el"
-    class="entry draggable"
+    class="commitment draggable"
     :style="[draggableStyle, gridSpot]"
     @touchstart.prevent
     @mousedown.prevent
   >
     <div></div>
-    <span>{{ entry.entrytitle }}</span>
+    <span>{{ commitment.entrytitle }}</span>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import { useStore } from 'vuex'
 export default {
   name: 'CalendarEntry',
   props: {
-    entry: Object,
+    commitment: Object,
   },
   setup(props) {
     const store = useStore()
@@ -36,10 +36,10 @@ export default {
   computed: {
     gridSpot() {
       var startTime = DateTime.fromFormat(
-        this.entry.startTime,
+        this.commitment.startTime,
         this.$store.state.timeFormat
       )
-      var endTime = startTime.plus({ minutes: this.entry.duration })
+      var endTime = startTime.plus({ minutes: this.commitment.duration })
       return {
         gridRow: `d${startTime.toFormat(
           this.$store.state.timeFormat
