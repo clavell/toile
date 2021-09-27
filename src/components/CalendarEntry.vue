@@ -16,6 +16,7 @@ import { makeDraggable } from '@/use/MakeDraggable.js'
 import { ref } from 'vue'
 import { DateTime } from 'luxon'
 import { useStore } from 'vuex'
+import { onMouseUpDetails } from '@/use/OnMouseUpDetailsCalendarEntry.js'
 
 export default {
   name: 'CalendarEntry',
@@ -25,7 +26,7 @@ export default {
   setup(props) {
     const store = useStore()
     const el = ref(null)
-    const { position, draggableStyle } = makeDraggable(el, props, store)
+    const { position, draggableStyle } = makeDraggable(el, props, store,onMouseUpDetails)
 
     return {
       el,

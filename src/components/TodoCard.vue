@@ -18,7 +18,12 @@ import { inject } from '@vue/runtime-core'
 import { computed, ref} from 'vue'
 import { makeDraggable } from '@/use/MakeDraggable.js'
 import { useStore } from 'vuex'
-
+const onMouseUpDetails = function(position,props,store,){
+  position
+  console.log(props)
+  store
+}
+// import {onMouseUpDetails} from '@/use/OnMouseUpDetailsCalendarEntry'
 
 export default {
   name: 'TodoCard',
@@ -29,7 +34,7 @@ export default {
 
     const store = useStore()
     const el = ref(null)
-    const { position, draggableStyle } = makeDraggable(el, props, store)
+    const { position, draggableStyle } = makeDraggable(el, props, store,onMouseUpDetails)
     const entryWidth = inject('entryWidth')
      
     const style = computed(() => {

@@ -1,6 +1,15 @@
+//to make an element draggable, the element needs the following: 
+// - a ref tag in the template
+// - imported store with useStore() from vuex
+// - an addition to the class list named draggable (hopefully don't have that as a css tag already)
+// - an addition to the style list of draggableStyle
+// to be added - change the onMouseUp function so that what the function checks for is modular
+
 import { reactive, computed, watch } from 'vue'
 
-const makeDraggable = function (element, props, store) {
+
+
+const makeDraggable = function (element, props, store, onMouseUpDetails) {
   const position = reactive({
     init: false,
     x: 0,
@@ -65,17 +74,9 @@ const makeDraggable = function (element, props, store) {
 
   const onMouseUp = (e) => {
     e.stopPropagation()
-
-    const timeSegment = document.elementFromPoint(
-      position.x + position.width / 2,
-      position.y + 3
-    )
-    //update start time with the id and the start time retrieved from the grid
-    const newTime = timeSegment.style.gridArea.toString().substring(1, 13)
-    store.dispatch('updateStartTime', {
-      newStartTime: newTime,
-      id: props.commitment.id,
-    })
+    store
+    props
+    onMouseUpDetails(position,props,store)
 
     position.isDragging = false
     position.dragStartX = null
