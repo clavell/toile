@@ -19,8 +19,8 @@ import { inject } from '@vue/runtime-core'
 import { computed, ref} from 'vue'
 import { makeDraggable } from '@/use/MakeDraggable.js'
 import { useStore } from 'vuex'
-import {findIndex} from '@/store/index.js'
 import commitmentSideBarStyleReuse from '@/use/commitmentSideBarStyleReuse.js'
+import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'
 
 const onMouseUpDetails = function(position,props,store,){
   position
@@ -43,7 +43,12 @@ const onMouseMoveDetails = function({store, position, mouseMoveArguments}){
     position.x - 1 ,
     position.y + position.height/2
   )
-  console.log(leftSide)
+  if(leftSide){
+    if((!isNaN(leftSide.id) && leftSide.id !== "") && parseInt(leftSide.id) !== store.state.blankSpacePosition) {
+      console.log('yahhooo')
+      store.commit('MOVE_BLANK_SPACE_TO_NEW_POSITION', leftSide.id) 
+    }
+  }
 }
 
 export default {
@@ -68,17 +73,7 @@ export default {
     //sidebar indicator for when the element is being dragged over a particular spot
     const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
 
-    const currentDisplayPosition = computed(() => {
-      const index = findIndex(store.state.topParent.id,store.state, 'currentCommitmentStackDisplayOrder')
-      console.log(store.state.currentCommitmentStackDisplayOrder[index].commitments)
-      const currentPage = store.state.currentCommitmentStackDisplayOrder[index].commitments
-      console.log(currentPage.findIndex((el) => {
-        return el.id === props.commitment.id
-      }))
-      return currentPage.findIndex((el) => {
-        return el.id === props.commitment.id
-      })
-    })
+    const { currentDisplayPosition } = currentDisplayPositionReuse(store, props)
     
     //mark the entry as complete or not
     const checked = computed({

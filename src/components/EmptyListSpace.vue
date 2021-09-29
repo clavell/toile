@@ -1,15 +1,26 @@
 <template>
-  <div :style="commitmentSideBarStyle"></div>
-  <div></div>
+  <div :style="commitmentSideBarStyle" :id="currentDisplayPosition"></div>
+  <div :id="currentDisplayPosition"></div>
 </template>
 
 <script>
 import commitmentSideBarStyleReuse from '@/use/commitmentSideBarStyleReuse.js'
+import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'
+
+import { useStore } from 'vuex'
+
 
 export default {
   name: 'EmptyListSpace',
-  setup() {
-     return commitmentSideBarStyleReuse()
+  props:{
+    commitment: Object
+  },
+  setup(props) {
+    const store = useStore()
+    const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
+
+    const { currentDisplayPosition } = currentDisplayPositionReuse(store, props)
+    return { currentDisplayPosition, commitmentSideBarStyle }
   }
 }
 </script>

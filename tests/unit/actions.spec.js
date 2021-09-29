@@ -37,7 +37,7 @@ describe('actions', () => {
 
     updateCommitment({ state, commit } , {newCommitment: edittedCommitment, oldCommitment: newCommitment})
 
-    const index = findIndex(newCommitment.id, state)
+    const index = findIndex(newCommitment.id, state,'commitments')
     expect(commit).toHaveBeenCalledWith('UPDATE_COMMITMENT', {newCommitment: edittedCommitment, index: index})
 
   })

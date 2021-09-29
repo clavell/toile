@@ -5,6 +5,10 @@ import { generateState } from '@/store/stategenerator.js'
 
 
 const state = generateState()
+const blankSpace = {
+    id:"",
+    type:'EmptyListSpace'
+  }
 
 // export `mutations` as a named export
 export const mutations = {
@@ -27,15 +31,29 @@ export const mutations = {
     state.commitments[index] = newInfo
   },
   ADD_BLANK_SPACE_TO_LIST(state, commitmentPosition){
-    const index = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
-    // console.log(state.topParent.id)
-    // console.log(index,commitmentPosition)
-    state.currentCommitmentStackDisplayOrder[index].commitments.splice(commitmentPosition, 0, 
-      {
-        id:state.topParent.id,
-        type:'EmptyListSpace'
-      });
-  }
+    const parentIndex = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
+    state.currentCommitmentStackDisplayOrder[parentIndex].commitments.splice(commitmentPosition, 0, blankSpace)
+    state.blankSpacePosition=commitmentPosition
+  },
+
+  MOVE_BLANK_SPACE_TO_NEW_POSITION(state, commitmentPosition) {
+    const parentIndex = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
+    //get the currently in topParent commitments
+    let topParentCommitments = [...state.currentCommitmentStackDisplayOrder[parentIndex].commitments]
+    //set the type of the former blank space to old
+    let oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'EmptyListSpace')
+    topParentCommitments.splice(oldBlankPosition, 1, {...blankSpace, type:'old'})
+    //remove the blank from the old position
+    oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'old')
+    topParentCommitments.splice(oldBlankPosition,1)
+    //add a blank at the new position
+    topParentCommitments.splice(commitmentPosition, 0, blankSpace)
+    //set this new topParentCommitments array to be the new displayArray at the top parent position
+    state.currentCommitmentStackDisplayOrder[parentIndex].commitments = topParentCommitments
+    //set the blank space position
+    state.blankSpacePosition=topParentCommitments.findIndex((el) => el.type === 'EmptyListSpace')
+  },
+
 }
 
 export function findIndex(id,state,stateAttribute){

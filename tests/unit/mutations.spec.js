@@ -1,13 +1,16 @@
 import { mutations,findIndex } from '@/store/index.js'
 import { generateNewCommitment,generateAlteredCommitment, generateState } from '@/store/stategenerator.js'
-const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT } = mutations
+const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION } = mutations
 
 let state
-let newCommitment;
+let newCommitment
+let parentIndex
+
 describe('mutations', () => {
   beforeEach(() => {
     state = generateState()
     newCommitment = generateNewCommitment()
+    parentIndex = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
   })
 
   it('adds item to store', () => {
@@ -53,7 +56,7 @@ describe('mutations', () => {
     
     const edittedCommitment = generateAlteredCommitment()
     
-    const index = findIndex(newCommitment.id, state)
+    const index = findIndex(newCommitment.id, state,'commitments')
     UPDATE_COMMITMENT(state, {newInfo:edittedCommitment, index: index})
 
     //expect there to be only one of the editted commitment
@@ -61,6 +64,31 @@ describe('mutations', () => {
 
     //expect the updated commitment to be in the same place as the old one
     expect(state.commitments[index]).toBe(edittedCommitment)
+  })
+
+  it('adds a blank space to the currentDisplayOrder',() => {
+    const rankToAddBlank = 2
+
+    ADD_BLANK_SPACE_TO_LIST(state, rankToAddBlank)
+
+    expect(state.currentCommitmentStackDisplayOrder[parentIndex].commitments[rankToAddBlank].type).toBe('EmptyListSpace')
+
+    expect(state.blankSpacePosition).toBe(rankToAddBlank)
+  })
+
+  it('moves the blank space to the new spot',() => {
+    const rankToAddBlank = 2
+    const rankToMoveBlank = 4
+
+    ADD_BLANK_SPACE_TO_LIST(state, rankToAddBlank)
+
+    expect(state.currentCommitmentStackDisplayOrder[parentIndex].commitments[rankToAddBlank].type).toBe('EmptyListSpace')
+
+    MOVE_BLANK_SPACE_TO_NEW_POSITION(state, rankToMoveBlank)
+
+    expect(state.currentCommitmentStackDisplayOrder[parentIndex].commitments[rankToMoveBlank].type).toBe('EmptyListSpace') 
+    expect(state.blankSpacePosition).toBe(rankToMoveBlank)
+
   })
 
 })

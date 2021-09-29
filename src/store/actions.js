@@ -21,7 +21,7 @@ export const actions = {
   updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
     if(JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment))
     {
-      const index = findIndex(oldCommitment.id, state)
+      const index = findIndex(oldCommitment.id, state,'commitments')
       commit('UPDATE_COMMITMENT',{newCommitment, index})
     } 
 
