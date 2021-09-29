@@ -3,7 +3,7 @@
     ref="el"
     class="commitment draggable"
     :style="[draggableStyle, gridSpot]"
-    @touchstart.prevent
+
     @mousedown.prevent
   >
     <div></div>
