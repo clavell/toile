@@ -9,7 +9,7 @@ import { reactive, computed, watch } from 'vue'
 
 
 
-const makeDraggable = function (element, props, store, onMouseUpDetails) {
+const makeDraggable = function ({element, props, store, onMouseUpDetails,onMouseDownDetails, mouseDownArguments,onMouseMoveDetails,mouseMoveArguments}) {
   const position = reactive({
     init: false,
     x: 0,
@@ -60,13 +60,18 @@ const makeDraggable = function (element, props, store, onMouseUpDetails) {
     position.dragStartY = clientY - position.y
 
     position.isDragging = true
-
+    if(onMouseDownDetails){
+      onMouseDownDetails({store, mouseDownArguments})
+    }
     document.addEventListener('pointerup', onMouseUp)
     document.addEventListener('pointermove', onMouseMove)
   }
 
   const onMouseMove = (e) => {
     e.stopPropagation()
+    if(onMouseMoveDetails){
+      onMouseMoveDetails({store, position, mouseMoveArguments})
+    }
     let { clientX, clientY } = e
     position.x = clientX - position.dragStartX
     position.y = clientY - position.dragStartY
@@ -87,7 +92,6 @@ const makeDraggable = function (element, props, store, onMouseUpDetails) {
 
   watch(element, (element) => {
 
-    console.log("watch fired")
     // if (!element instanceof HTMLElement) return;
     let rect = element.getBoundingClientRect(element)
     position.init = true

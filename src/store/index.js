@@ -10,7 +10,7 @@ const state = generateState()
 export const mutations = {
   UPDATE_START_TIME(state, { newStartTime, id }) {
     //find the correct commitment in the commitments array
-    const index = findIndex(id,state)
+    const index = findIndex(id,state,'commitments')
     //set the value of the start time of this commitment to the new start time
     state.commitments[index].startTime = newStartTime
   },
@@ -19,17 +19,28 @@ export const mutations = {
   },
   SET_AS_COMPLETE(state, id) {
     //find the correct commitment in the commitments array
-    const index = findIndex(id,state)
+    const index = findIndex(id,state,'commitments')
     //set complete to be true
     state.commitments[index].complete = !state.commitments[index].complete
   },
   UPDATE_COMMITMENT(state,  {newInfo, index}){
     state.commitments[index] = newInfo
+  },
+  ADD_BLANK_SPACE_TO_LIST(state, commitmentPosition){
+    const index = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
+    // console.log(state.topParent.id)
+    // console.log(index,commitmentPosition)
+    state.currentCommitmentStackDisplayOrder[index].commitments.splice(commitmentPosition, 0, 
+      {
+        id:state.topParent.id,
+        type:'EmptyListSpace'
+      });
   }
 }
 
-export function findIndex(id,state){
-  var index = state.commitments.findIndex((el) => {
+export function findIndex(id,state,stateAttribute){
+  //use this function to find an index an an array found in the state
+  var index = state[stateAttribute].findIndex((el) => {
     return el.id === id
   })
   return index
@@ -56,7 +67,7 @@ export const getters = {
   },
   commitmentById: (state) => (id) => {
     return state.commitments.find(commitment => commitment.id === id)
-  }
+  },
 }
 
 export default createStore({

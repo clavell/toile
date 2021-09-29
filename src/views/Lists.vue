@@ -1,7 +1,11 @@
 <template>
   <div class="Lists">
-    <Calendar />
-    <List />
+    <Calendar/>
+    <List 
+      v-for="list in lists"
+      :key="list.id"
+      :listInfo="list"
+    />
   </div>
 </template>
 
@@ -16,7 +20,19 @@ export default {
     List,
     Calendar,
   },
+  // setup(){
+  //   const lists = computed(() => {
+      
+  //   })
+  //   return { lists, }
+  // }
+computed: {
+    lists() {
+      return this.$store.state.currentCommitmentStackDisplayOrder
+    }   
+  }
 }
+
 </script>
 
 <style>

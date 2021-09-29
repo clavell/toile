@@ -3,8 +3,9 @@
     <div class="title" >Commitments</div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
-      <TodoCard
-        v-for="item in commitments"
+      <component
+        v-for="item in listInfo.commitments"
+        :is="item.type"
         :key="item.id"
         :commitment="item"
       />
@@ -21,13 +22,18 @@
 import TodoCard from '@/components/TodoCard.vue'
 import AddButton from '@/components/AddButton.vue'
 import AddEntry from '@/components/AddEntry.vue'
+import EmptyListSpace from '@/components/EmptyListSpace.vue'
 import { computed, ref, watch, provide } from 'vue'
 export default {
   name: 'List',
+  props: {
+    listInfo: Object
+    },
   components: {
     TodoCard,
     AddButton,
     AddEntry,
+    EmptyListSpace
   },
   setup() {
     const el = ref(null)
@@ -106,6 +112,7 @@ export default {
   overflow-y: auto;
   gap: 2px;
   grid-auto-rows: var(--entry-size);
+  grid-template-columns: 1fr 20fr;
   scrollbar-color: rgba(255, 255, 255, 0.2) theme('colors.pink.900');
   padding: 0;
 }

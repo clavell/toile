@@ -63,13 +63,10 @@ export default {
     }
 
     return {
-      times: times,
+      times,
     }
   },
   computed: {
-    // commitment() {
-    //   return this.$store.state.commitments[1]
-    // },
     lineNames() {
       var lineNames = []
       var dt = DateTime.fromFormat(this.$store.state.currentDate, 'yyyyMMdd')
