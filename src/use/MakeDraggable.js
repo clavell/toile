@@ -42,9 +42,9 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,onMouse
   const onMouseDown = (e) => {
     e.stopPropagation()
     //if clickin on a checkbox don't drag
-    if(e.explicitOriginalTarget.type=="checkbox"){
-      return
-    }
+    // if(e.explicitOriginalTarget.type=="checkbox"){
+    //   return
+    // }
     let moving = e.target
     while (!moving.classList.contains('draggable')) {
       moving = moving.parentNode
