@@ -3,7 +3,6 @@ export function generateState () {
     timeFormat: 'yyyyMMddHHmm',
     currentDate: '20210620',
     topParent: {id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa'},
-    movingInList: null,
     blankSpacePosition: null,
     commitments: [
       {

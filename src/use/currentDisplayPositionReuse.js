@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import {findIndex} from '@/store/index.js'
+import {findIndex} from '@/store/helpers.js'
 
 
 export default function (store, props) {

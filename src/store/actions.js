@@ -1,5 +1,5 @@
 import { v4 as uuidv4} from 'uuid'
-import { findIndex } from '@/store/index.js'
+import { findIndex } from '@/store/helpers.js'
 
 export const actions = {
   updateStartTime({ commit }, { newStartTime, id }) {

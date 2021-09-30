@@ -1,4 +1,4 @@
-import { getters } from '@/store/index.js'
+import { getters } from '@/store/getters.js'
 import {generateState} from '@/store/stategenerator.js'
 const { commitmentsSortedByCompletedStatus } = getters
 let state

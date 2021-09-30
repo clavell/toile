@@ -11,7 +11,9 @@
     </div> -->
       <div class="flex items-center justify-center"><input type="checkbox" :id="commitment.id" v-model="checked" :checked="checked"/></div>
       <div class="flex items-center" :style="commitmentTextStyle" >
-        <label :for="commitment.id">{{ fullCommitment.entrytitle }}</label> 
+        <label 
+        @click.prevent
+        :for="commitment.id">{{ fullCommitment.entrytitle }}</label> 
       </div>
   </div>
 </template>
@@ -43,7 +45,7 @@ const onMouseUpDetails = function({store, position, mouseUpArguments:{fullCommit
           return el.id === store.state.topParent.id
         })[0].commitments
         for(let i=0; i<currentDisplay.length; i++){
-          console.log(currentDisplay[i].id)
+          // console.log(currentDisplay[i].id)
           // store.commit('SET_RANK',{id:currentDisplay[i].id, rank:i})
         }
       }
@@ -60,12 +62,13 @@ const onMouseDownDetails = function({store, mouseDownArguments:{fullCommitment}}
   store.commit('ADD_BLANK_SPACE_TO_LIST', fullCommitment.value.rank)
 }
 
-const onMouseMoveDetails = function({store, position, mouseMoveArguments}){
-  mouseMoveArguments
+const onMouseMoveDetails = function({store, position, }){
+  
   const leftSide = document.elementFromPoint(
     position.x - 1 ,
     position.y + position.height/2
   )
+  console.log(leftSide.id, store.state.blankSpacePosition)
   if(leftSide){
     if((!isNaN(leftSide.id) && leftSide.id !== "") && parseInt(leftSide.id) !== store.state.blankSpacePosition) {
       store.commit('MOVE_BLANK_SPACE_TO_NEW_POSITION', parseInt(leftSide.id)) 

@@ -79,6 +79,7 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUp
   }
 
   const onMouseUp = (e) => {
+    e.preventDefault()
     e.stopPropagation()
     store
     props

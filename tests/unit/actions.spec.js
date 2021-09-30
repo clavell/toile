@@ -1,5 +1,5 @@
+import { findIndex } from '@/store/helpers.js'
 import { actions } from '@/store/actions.js'
-import { findIndex } from '../../src/store';
 import { generateNewCommitment, generateAlteredCommitment, generateState} from '@/store/stategenerator.js'
 const { addCommitment, setAsComplete, updateCommitment } = actions
 
@@ -30,6 +30,7 @@ describe('actions', () => {
   it('commits the UPDATE_COMMITMENT mutation when commitment has changed', () => {
     //create a dummy state
     let state = generateState()
+    console.log(state)
     state.commitments.push(newCommitment)
     //create editted commitment to add in the orignal's place
    

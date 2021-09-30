@@ -1,4 +1,5 @@
-import { mutations,findIndex } from '@/store/index.js'
+import { mutations } from '@/store/mutations.js'
+import { findIndex } from '@/store/helpers.js'
 import { generateNewCommitment,generateAlteredCommitment, generateState } from '@/store/stategenerator.js'
 const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION, UPDATE_DISPLAY,SET_RANK } = mutations
 
@@ -115,7 +116,6 @@ describe('mutations', () => {
     const newRank = 10
     const commitmentPosition = 1
     const id = state.commitments[commitmentPosition].id
-    console.log(id)
 
     //set the rank
     SET_RANK(state, id, newRank)
