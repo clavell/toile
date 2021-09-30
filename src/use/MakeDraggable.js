@@ -41,8 +41,8 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,onMouse
 
   const onMouseDown = (e) => {
     e.stopPropagation()
-    //if clickin on a checkbox don't drag
-    if(e.srcElement.type=="checkbox"){
+    //if clicking on a checkbox don't drag
+    if(e.target.type=="checkbox"){
       return
     }
     e.preventDefault()
