@@ -12,7 +12,7 @@ export function generateState () {
         // startTime: '202106201330',
         // duration: 45,
         complete: false,
-        parent: null,
+        parent: {id:null},
         rank: null,
       },
       {
@@ -78,10 +78,12 @@ export function generateState () {
 export function generateNewCommitment() {
   return {
     id: '0766c8ed-4ab0-425a-8a88-02335ba51bac',
-    entrytitle: 'set up vuex',
+    entrytitle: 'set up vuex again',
     startTime: '202106201330',
     duration: 45,
     complete: false,
+    parent:{id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa'},
+    rank: 5,
   }
 }
 

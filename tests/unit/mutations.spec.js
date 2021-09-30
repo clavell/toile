@@ -1,6 +1,6 @@
 import { mutations,findIndex } from '@/store/index.js'
 import { generateNewCommitment,generateAlteredCommitment, generateState } from '@/store/stategenerator.js'
-const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION } = mutations
+const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION, UPDATE_DISPLAY } = mutations
 
 let state
 let newCommitment
@@ -88,6 +88,29 @@ describe('mutations', () => {
 
     expect(state.currentCommitmentStackDisplayOrder[parentIndex].commitments[rankToMoveBlank].type).toBe('EmptyListSpace') 
     expect(state.blankSpacePosition).toBe(rankToMoveBlank)
+
+  })
+
+  it('updates the currentCommitmentStackDisplayOrder array',() => {
+    //get the original top parent's commitments
+    const originalTopParentDisplay = state.currentCommitmentStackDisplayOrder.filter((el) => {
+      return el.id === state.topParent.id
+    })[0].commitments
+    console.log(originalTopParentDisplay)
+
+    //the entry in the commitmentsdisplayorder will be slightly different
+    const expectedEntry = {id:newCommitment.id, type:'TodoCard'}
+
+    //add a new commitment with that parent id
+    state.commitments.push(newCommitment)
+
+    //run the mutation
+    UPDATE_DISPLAY(state)
+    //does the new display array contain the new element?
+    const newTopParentDisplay = state.currentCommitmentStackDisplayOrder.filter((el) => {
+      return el.id === state.topParent.id
+    })[0].commitments
+    expect(newTopParentDisplay[newTopParentDisplay.length-1]).toStrictEqual(expectedEntry)
 
   })
 

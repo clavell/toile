@@ -54,6 +54,20 @@ export const mutations = {
     state.blankSpacePosition=topParentCommitments.findIndex((el) => el.type === 'EmptyListSpace')
   },
 
+  UPDATE_DISPLAY(state) {
+    console.log(state.commitments)
+
+    const commitmentsFromParent = state.commitments.filter((el) => {
+      return el.parent.id === state.topParent.id
+    }).sort((a,b)=> a.rank - b.rank)
+
+    const commitmentsToAdd = commitmentsFromParent.map((el) => {
+      return {id: el.id, type:'TodoCard'}
+    })
+    state.currentCommitmentStackDisplayOrder = [{id:state.topParent.id, commitments:commitmentsToAdd}]
+
+  }
+
 }
 
 export function findIndex(id,state,stateAttribute){

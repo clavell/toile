@@ -24,6 +24,8 @@ import AddButton from '@/components/AddButton.vue'
 import AddEntry from '@/components/AddEntry.vue'
 import EmptyListSpace from '@/components/EmptyListSpace.vue'
 import { computed, ref, watch, provide } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   name: 'List',
   props: {
@@ -39,6 +41,17 @@ export default {
     const el = ref(null)
     const listWidth = ref(null)
     const addingEntry = ref(false)
+    const store = useStore()
+    const commitmentsList = computed(() => {
+      return store.state.commitments.filter(((el) => {
+        return el.parent.id === store.state.topParent.id
+      }))
+    })
+    store.commit('UPDATE_DISPLAY')
+    watch(commitmentsList,()=>{
+    store.commit('UPDATE_DISPLAY')
+    })
+
     const entryWidth = computed(() => {
         if (listWidth.value) {
           return {

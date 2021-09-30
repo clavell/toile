@@ -40,7 +40,8 @@ export default {
       this.$store.dispatch('addCommitment', {
         entrytitle: this.entrytitle,
         duedate: this.duedate,
-        duration: this.duration
+        duration: this.duration,
+        parent: {id:this.$store.state.topParent.id},
       })
       this.$emit('submitted', true)
     },
