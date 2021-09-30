@@ -1,6 +1,6 @@
 <template>
   <div class="list" ref="el">
-    <div class="title" >Commitments</div>
+    <div class="title">Commitments</div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
       <component
@@ -11,8 +11,8 @@
       />
     </div>
     <div class="buttoncontainer">
-      <AddEntry v-if="addingEntry" @submitted="hideAddCard"/>
-      <AddButton v-else @press="showAddCard"/>
+      <AddEntry v-if="addingEntry" @submitted="hideAddCard" />
+      <AddButton v-else @press="showAddCard" />
     </div>
     <div v-if="addingEntry" class="overlay"></div>
   </div>
@@ -29,13 +29,13 @@ import { useStore } from 'vuex'
 export default {
   name: 'List',
   props: {
-    listInfo: Object
-    },
+    listInfo: Object,
+  },
   components: {
     TodoCard,
     AddButton,
     AddEntry,
-    EmptyListSpace
+    EmptyListSpace,
   },
   setup() {
     const el = ref(null)
@@ -43,48 +43,44 @@ export default {
     const addingEntry = ref(false)
     const store = useStore()
     const commitmentsList = computed(() => {
-      return store.state.commitments.filter(((el) => {
+      return store.state.commitments.filter((el) => {
         return el.parent.id === store.state.topParent.id
-      }))
+      })
     })
     store.commit('UPDATE_DISPLAY')
-    watch(commitmentsList,()=>{
-    store.commit('UPDATE_DISPLAY')
+    watch(commitmentsList, () => {
+      store.commit('UPDATE_DISPLAY')
     })
 
     const entryWidth = computed(() => {
-        if (listWidth.value) {
-          return {
-            width: listWidth.value * 0.75 + 'px',
-          }
+      if (listWidth.value) {
+        return {
+          width: listWidth.value * 0.75 + 'px',
         }
-        return {}
-      })
+      }
+      return {}
+    })
     watch(el, (el) => {
       listWidth.value = el.offsetWidth
     })
 
-    provide(
-      'entryWidth', entryWidth
-      
-    )
+    provide('entryWidth', entryWidth)
 
     const hideAddCard = () => {
       addingEntry.value = false
     }
-    
+
     const showAddCard = () => {
       addingEntry.value = true
       document.addEventListener('pointerdown', (event) => {
         var x = event.clientX,
           y = event.clientY,
-        elementMouseIsOver = document.elementFromPoint(x, y)
+          elementMouseIsOver = document.elementFromPoint(x, y)
         if (elementMouseIsOver.classList.contains('overlay')) {
           hideAddCard()
         }
       })
     }
-
 
     return { el, addingEntry, showAddCard, hideAddCard }
   },

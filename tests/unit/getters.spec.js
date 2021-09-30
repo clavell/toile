@@ -1,10 +1,10 @@
 import { getters } from '@/store/getters.js'
-import {generateState} from '@/store/stategenerator.js'
+import { generateState } from '@/store/stategenerator.js'
 const { commitmentsSortedByCompletedStatus } = getters
 let state
 describe('getters', () => {
   beforeEach(() => {
-    state =  generateState()
+    state = generateState()
   })
 
   it('returns a sorted list based on whether task is completed or not', () => {
@@ -14,6 +14,6 @@ describe('getters', () => {
     //return the sorted commitments
     let sortedCommitments = commitmentsSortedByCompletedStatus(state)
     //check to see that the final commitment is in fact true
-    expect(sortedCommitments[sortedCommitments.length-1].complete).toBe(true)
+    expect(sortedCommitments[sortedCommitments.length - 1].complete).toBe(true)
   })
 })

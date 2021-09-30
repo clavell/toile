@@ -1,11 +1,7 @@
 <template>
   <div class="Lists">
-    <Calendar/>
-    <List 
-      v-for="list in lists"
-      :key="list.id"
-      :listInfo="list"
-    />
+    <Calendar />
+    <List v-for="list in lists" :key="list.id" :listInfo="list" />
   </div>
 </template>
 
@@ -22,23 +18,22 @@ export default {
   },
   // setup(){
   //   const lists = computed(() => {
-      
+
   //   })
   //   return { lists, }
   // }
-computed: {
+  computed: {
     lists() {
       return this.$store.state.currentCommitmentStackDisplayOrder
-    }   
-  }
+    },
+  },
 }
-
 </script>
 
 <style>
 .Lists {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap:30px;
+  gap: 30px;
 }
 </style>

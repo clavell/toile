@@ -4,17 +4,17 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        'todolistentry': '1fr 3fr'
+        todolistentry: '1fr 3fr',
       },
     },
   },
   variants: {
     extend: {
-      transform: [ 'active', 'hover', ],
-      animation: ['active',],
-      scale: ['active',],
+      transform: ['active', 'hover'],
+      animation: ['active'],
+      scale: ['active'],
       transitionDuration: ['active', 'hover'],
-  },
+    },
   },
   plugins: [],
 }

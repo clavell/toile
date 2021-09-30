@@ -26,7 +26,12 @@ export default {
   setup(props) {
     const store = useStore()
     const el = ref(null)
-    const { position, draggableStyle } = makeDraggable({element:el, props, store,onMouseUpDetails})
+    const { position, draggableStyle } = makeDraggable({
+      element: el,
+      props,
+      store,
+      onMouseUpDetails,
+    })
 
     return {
       el,

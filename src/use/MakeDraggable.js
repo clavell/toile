@@ -1,4 +1,4 @@
-//to make an element draggable, the element needs the following: 
+//to make an element draggable, the element needs the following:
 // - a ref tag in the template
 // - imported store with useStore() from vuex
 // - an addition to the class list named draggable (hopefully don't have that as a css tag already)
@@ -7,9 +7,17 @@
 
 import { reactive, computed, watch } from 'vue'
 
-
-
-const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUpArguments,onMouseDownDetails, mouseDownArguments,onMouseMoveDetails,mouseMoveArguments}) {
+const makeDraggable = function ({
+  element,
+  props,
+  store,
+  onMouseUpDetails,
+  mouseUpArguments,
+  onMouseDownDetails,
+  mouseDownArguments,
+  onMouseMoveDetails,
+  mouseMoveArguments,
+}) {
   const position = reactive({
     init: false,
     x: 0,
@@ -42,7 +50,7 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUp
   const onMouseDown = (e) => {
     e.stopPropagation()
     //if clicking on a checkbox don't drag
-    if(e.target.type=="checkbox"){
+    if (e.target.type == 'checkbox') {
       return
     }
     e.preventDefault()
@@ -61,8 +69,8 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUp
     position.dragStartY = clientY - position.y
 
     position.isDragging = true
-    if(onMouseDownDetails){
-      onMouseDownDetails({store, mouseDownArguments})
+    if (onMouseDownDetails) {
+      onMouseDownDetails({ store, mouseDownArguments })
     }
     document.addEventListener('pointerup', onMouseUp)
     document.addEventListener('pointermove', onMouseMove)
@@ -70,8 +78,8 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUp
 
   const onMouseMove = (e) => {
     e.stopPropagation()
-    if(onMouseMoveDetails){
-      onMouseMoveDetails({store, position, mouseMoveArguments})
+    if (onMouseMoveDetails) {
+      onMouseMoveDetails({ store, props, position, mouseMoveArguments })
     }
     let { clientX, clientY } = e
     position.x = clientX - position.dragStartX
@@ -81,10 +89,8 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUp
   const onMouseUp = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    store
-    props
-    if(onMouseUpDetails) {
-      onMouseUpDetails({store,position,props,mouseUpArguments})
+    if (onMouseUpDetails) {
+      onMouseUpDetails({ store, position, props, mouseUpArguments })
     }
 
     position.isDragging = false
@@ -95,7 +101,6 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUp
   }
 
   watch(element, (element) => {
-
     // if (!element instanceof HTMLElement) return;
     let rect = element.getBoundingClientRect(element)
     position.init = true

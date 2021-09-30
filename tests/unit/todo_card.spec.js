@@ -7,7 +7,7 @@ describe.skip('TodoCard', () => {
       entrytitle: 'higibabalyee',
       duration: 45,
       complete: false,
-    }
+    },
   }
 
   it('mounted todo shows the title, duration and whether it is complete', () => {

@@ -1,4 +1,4 @@
-const onMouseUpDetails = function ({store,position,props}) {
+const onMouseUpDetails = function ({ store, position, props }) {
   const timeSegment = document.elementFromPoint(
     position.x + position.width / 2,
     position.y + 3
@@ -11,4 +11,4 @@ const onMouseUpDetails = function ({store,position,props}) {
   })
 }
 
-export {onMouseUpDetails}
+export { onMouseUpDetails }

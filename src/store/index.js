@@ -5,7 +5,6 @@ import { getters } from '@/store/getters.js'
 
 import { generateState } from '@/store/stategenerator.js'
 
-
 const state = generateState()
 
 export default createStore({

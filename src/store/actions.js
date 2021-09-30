@@ -1,4 +1,4 @@
-import { v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { getters } from '@/store/getters.js'
 
 export const actions = {
@@ -15,15 +15,22 @@ export const actions = {
       commit('ADD_COMMITMENT', newCommitment)
     }
   },
-  setAsComplete( { commit }, id) {
-      commit('SET_AS_COMPLETE',id)
+  setAsComplete({ commit }, id) {
+    commit('SET_AS_COMPLETE', id)
   },
   updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
-    if(JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment))
-    {
-      const index = getters.indexFromStateArray(oldCommitment.id, state,'commitments')
-      commit('UPDATE_COMMITMENT',{newCommitment, index})
-    } 
-
+    if (JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment)) {
+      const index = getters.indexFromStateArray(
+        oldCommitment.id,
+        state,
+        'commitments'
+      )
+      commit('UPDATE_COMMITMENT', { newCommitment, index })
+    }
   },
+  // updateDisplayOrder({state, commit},{commitment, newPosition}){
+
+  // }
+
+  // updateRanks({ state,commit },{  })
 }
