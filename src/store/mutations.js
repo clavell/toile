@@ -1,11 +1,11 @@
-import { blankSpace,findIndex,removeBlankHelper } from '@/store/helpers.js'
+import { blankSpace,removeBlankHelper } from '@/store/helpers.js'
 import {getters } from '@/store/getters.js'
 
 // export `mutations` as a named export
 export const mutations = {
   UPDATE_START_TIME(state, { newStartTime, id }) {
     //find the correct commitment in the commitments array
-    const index = findIndex(id,state,'commitments')
+    const index = getters.indexFromStateArray(id,state,'commitments')
     //set the value of the start time of this commitment to the new start time
     state.commitments[index].startTime = newStartTime
   },
@@ -14,7 +14,7 @@ export const mutations = {
   },
   SET_AS_COMPLETE(state, id) {
     //find the correct commitment in the commitments array
-    const index = findIndex(id,state,'commitments')
+    const index = getters.indexFromStateArray(id,state,'commitments')
     //set complete to be true
     state.commitments[index].complete = !state.commitments[index].complete
   },
@@ -64,7 +64,7 @@ export const mutations = {
   },
 
   SET_RANK(state, id,newRank){
-    state.commitments[findIndex(id,state,'commitments')].rank = newRank
+    state.commitments[getters.indexFromStateArray(id,state,'commitments')].rank = newRank
   },
 
 

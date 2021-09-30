@@ -1,9 +1,8 @@
-import { findTopParentIndex } from '@/store/helpers.js'
 import { DateTime } from 'luxon'
 
 export const getters = {
   topParentCommitments(state){
-    const parentIndex = findTopParentIndex(state)
+    const parentIndex = getters.topParentIndex(state)
     //get the currently in topParent commitments
     let topParentCommitments = [...state.currentCommitmentStackDisplayOrder[parentIndex].commitments]
     return {topParentCommitments,parentIndex}
@@ -28,5 +27,15 @@ export const getters = {
   commitmentById: (state) => (id) => {
     return state.commitments.find(commitment => commitment.id === id)
   },
+  indexFromStateArray(id,state,stateAttribute){
+    //use this function to find an index an an array found in the state
+    var index = state[stateAttribute].findIndex((el) => {
+      return el.id === id
+    })
+    return index
+    },
+  topParentIndex(state){
+    return getters.indexFromStateArray(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
+  }
 
 }

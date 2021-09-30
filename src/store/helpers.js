@@ -18,15 +18,5 @@ export function removeBlankHelper(state){
 }
 
 
-export function findIndex(id,state,stateAttribute){
-//use this function to find an index an an array found in the state
-var index = state[stateAttribute].findIndex((el) => {
-  return el.id === id
-})
-return index
-}
 
 
-export function findTopParentIndex(state){
-return findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
-}

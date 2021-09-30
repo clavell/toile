@@ -1,4 +1,4 @@
-import { findIndex } from '@/store/helpers.js'
+import { getters } from '@/store/getters.js'
 import { actions } from '@/store/actions.js'
 import { generateNewCommitment, generateAlteredCommitment, generateState} from '@/store/stategenerator.js'
 const { addCommitment, setAsComplete, updateCommitment } = actions
@@ -38,7 +38,7 @@ describe('actions', () => {
 
     updateCommitment({ state, commit } , {newCommitment: edittedCommitment, oldCommitment: newCommitment})
 
-    const index = findIndex(newCommitment.id, state,'commitments')
+    const index = getters.indexFromStateArray(newCommitment.id, state,'commitments')
     expect(commit).toHaveBeenCalledWith('UPDATE_COMMITMENT', {newCommitment: edittedCommitment, index: index})
 
   })

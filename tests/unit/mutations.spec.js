@@ -1,5 +1,5 @@
 import { mutations } from '@/store/mutations.js'
-import { findIndex } from '@/store/helpers.js'
+import { getters } from '@/store/getters.js'
 import { generateNewCommitment,generateAlteredCommitment, generateState } from '@/store/stategenerator.js'
 const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION, UPDATE_DISPLAY,SET_RANK } = mutations
 
@@ -11,7 +11,7 @@ describe('mutations', () => {
   beforeEach(() => {
     state = generateState()
     newCommitment = generateNewCommitment()
-    parentIndex = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
+    parentIndex = getters.indexFromStateArray(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
   })
 
   it('adds item to store', () => {
@@ -57,7 +57,7 @@ describe('mutations', () => {
     
     const edittedCommitment = generateAlteredCommitment()
     
-    const index = findIndex(newCommitment.id, state,'commitments')
+    const index = getters.indexFromStateArray(newCommitment.id, state,'commitments')
     UPDATE_COMMITMENT(state, {newInfo:edittedCommitment, index: index})
 
     //expect there to be only one of the editted commitment

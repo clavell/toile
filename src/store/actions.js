@@ -1,5 +1,5 @@
 import { v4 as uuidv4} from 'uuid'
-import { findIndex } from '@/store/helpers.js'
+import { getters } from '@/store/getters.js'
 
 export const actions = {
   updateStartTime({ commit }, { newStartTime, id }) {
@@ -21,7 +21,7 @@ export const actions = {
   updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
     if(JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment))
     {
-      const index = findIndex(oldCommitment.id, state,'commitments')
+      const index = getters.indexFromStateArray(oldCommitment.id, state,'commitments')
       commit('UPDATE_COMMITMENT',{newCommitment, index})
     } 
 
