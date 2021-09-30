@@ -1,6 +1,6 @@
 import { mutations,findIndex } from '@/store/index.js'
 import { generateNewCommitment,generateAlteredCommitment, generateState } from '@/store/stategenerator.js'
-const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION, UPDATE_DISPLAY } = mutations
+const { ADD_COMMITMENT, SET_AS_COMPLETE, UPDATE_START_TIME, UPDATE_COMMITMENT, ADD_BLANK_SPACE_TO_LIST, MOVE_BLANK_SPACE_TO_NEW_POSITION, UPDATE_DISPLAY,SET_RANK } = mutations
 
 let state
 let newCommitment
@@ -92,11 +92,7 @@ describe('mutations', () => {
   })
 
   it('updates the currentCommitmentStackDisplayOrder array',() => {
-    //get the original top parent's commitments
-    const originalTopParentDisplay = state.currentCommitmentStackDisplayOrder.filter((el) => {
-      return el.id === state.topParent.id
-    })[0].commitments
-    console.log(originalTopParentDisplay)
+   
 
     //the entry in the commitmentsdisplayorder will be slightly different
     const expectedEntry = {id:newCommitment.id, type:'TodoCard'}
@@ -111,6 +107,21 @@ describe('mutations', () => {
       return el.id === state.topParent.id
     })[0].commitments
     expect(newTopParentDisplay[newTopParentDisplay.length-1]).toStrictEqual(expectedEntry)
+
+  })
+
+  it('sets the rank of the commitment',() => {
+    //choose a new rank to set
+    const newRank = 10
+    const commitmentPosition = 1
+    const id = state.commitments[commitmentPosition].id
+    console.log(id)
+
+    //set the rank
+    SET_RANK(state, id, newRank)
+
+    //expect it to be change in the state
+    expect(state.commitments[commitmentPosition].rank).toBe(newRank)
 
   })
 

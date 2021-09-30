@@ -9,7 +9,7 @@ import { reactive, computed, watch } from 'vue'
 
 
 
-const makeDraggable = function ({element, props, store, onMouseUpDetails,onMouseDownDetails, mouseDownArguments,onMouseMoveDetails,mouseMoveArguments}) {
+const makeDraggable = function ({element, props, store, onMouseUpDetails,mouseUpArguments,onMouseDownDetails, mouseDownArguments,onMouseMoveDetails,mouseMoveArguments}) {
   const position = reactive({
     init: false,
     x: 0,
@@ -46,7 +46,6 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,onMouse
       return
     }
     e.preventDefault()
-    console.log(e)
     let moving = e.target
     while (!moving.classList.contains('draggable')) {
       moving = moving.parentNode
@@ -83,7 +82,9 @@ const makeDraggable = function ({element, props, store, onMouseUpDetails,onMouse
     e.stopPropagation()
     store
     props
-    onMouseUpDetails(position,props,store)
+    if(onMouseUpDetails) {
+      onMouseUpDetails({store,position,props,mouseUpArguments})
+    }
 
     position.isDragging = false
     position.dragStartX = null

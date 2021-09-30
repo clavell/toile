@@ -25,13 +25,34 @@ import { useStore } from 'vuex'
 import commitmentSideBarStyleReuse from '@/use/commitmentSideBarStyleReuse.js'
 import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'
 
-const onMouseUpDetails = function(position,props,store,){
-  position
-  props
-  store
-}
-// import {onMouseUpDetails} from '@/use/OnMouseUpDetailsCalendarEntry'
+const onMouseUpDetails = function({store, position, mouseUpArguments:{fullCommitment}}){
+  const leftSide = document.elementFromPoint(
+  position.x - 1 ,
+  position.y + position.height/2
+  )
+  
+  if(leftSide){
+    if(!isNaN(leftSide.id) && leftSide.id !== "") {
+      //assuming we didn't leave the current parent
+      //if the id is equal to the initial rank then we remove the blank from the display array
+      console.log(leftSide.id, fullCommitment.value.rank,leftSide.id == fullCommitment.value.rank)
+      if(leftSide.id == fullCommitment.value.rank){
+        store.commit("REMOVE_BLANK_FROM_LIST")
+      } else {
+        const currentDisplay = store.state.currentCommitmentStackDisplayOrder.filter((el) => {
+          return el.id === store.state.topParent.id
+        })[0].commitments
+        for(let i=0; i<currentDisplay.length; i++){
+          console.log(currentDisplay[i].id)
+          // store.commit('SET_RANK',{id:currentDisplay[i].id, rank:i})
+        }
+      }
+    } else {
+      store.commit("REMOVE_BLANK_FROM_LIST")
+    }
 
+  }
+}
 
 const onMouseDownDetails = function({store, mouseDownArguments:{fullCommitment}}) {
   //want to check where in the display array is the card that's being moved
@@ -40,7 +61,6 @@ const onMouseDownDetails = function({store, mouseDownArguments:{fullCommitment}}
 }
 
 const onMouseMoveDetails = function({store, position, mouseMoveArguments}){
-  store
   mouseMoveArguments
   const leftSide = document.elementFromPoint(
     position.x - 1 ,
@@ -48,8 +68,7 @@ const onMouseMoveDetails = function({store, position, mouseMoveArguments}){
   )
   if(leftSide){
     if((!isNaN(leftSide.id) && leftSide.id !== "") && parseInt(leftSide.id) !== store.state.blankSpacePosition) {
-      console.log('yahhooo')
-      store.commit('MOVE_BLANK_SPACE_TO_NEW_POSITION', leftSide.id) 
+      store.commit('MOVE_BLANK_SPACE_TO_NEW_POSITION', parseInt(leftSide.id)) 
     }
   }
 }
@@ -68,9 +87,8 @@ export default {
     const fullCommitment = computed(() => {
       return store.getters.commitmentById(props.commitment.id)
     })
-
     //make the entry draggable
-    const { position, draggableStyle } = makeDraggable({element:el, props, store,onMouseUpDetails, onMouseDownDetails, mouseDownArguments:{fullCommitment},onMouseMoveDetails, })
+    const { position, draggableStyle } = makeDraggable({element:el, props, store, onMouseDownDetails, mouseDownArguments:{fullCommitment},onMouseMoveDetails, mouseUpArguments:{fullCommitment}, onMouseUpDetails})
     const entryWidth = inject('entryWidth')
     
     //sidebar indicator for when the element is being dragged over a particular spot

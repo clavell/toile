@@ -35,17 +35,16 @@ export const mutations = {
     state.currentCommitmentStackDisplayOrder[parentIndex].commitments.splice(commitmentPosition, 0, blankSpace)
     state.blankSpacePosition=commitmentPosition
   },
+  REMOVE_BLANK_FROM_LIST(state){
+    let {parentIndex, topParentCommitments} = removeBlankHelper(state)
+      //set this new topParentCommitments array to be the new displayArray at the top parent position
+      state.currentCommitmentStackDisplayOrder[parentIndex].commitments = topParentCommitments
+      //set the blank space position
+      state.blankSpacePosition=null
+  },
 
   MOVE_BLANK_SPACE_TO_NEW_POSITION(state, commitmentPosition) {
-    const parentIndex = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
-    //get the currently in topParent commitments
-    let topParentCommitments = [...state.currentCommitmentStackDisplayOrder[parentIndex].commitments]
-    //set the type of the former blank space to old
-    let oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'EmptyListSpace')
-    topParentCommitments.splice(oldBlankPosition, 1, {...blankSpace, type:'old'})
-    //remove the blank from the old position
-    oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'old')
-    topParentCommitments.splice(oldBlankPosition,1)
+    let {parentIndex, topParentCommitments} = removeBlankHelper(state)
     //add a blank at the new position
     topParentCommitments.splice(commitmentPosition, 0, blankSpace)
     //set this new topParentCommitments array to be the new displayArray at the top parent position
@@ -55,7 +54,6 @@ export const mutations = {
   },
 
   UPDATE_DISPLAY(state) {
-    console.log(state.commitments)
 
     const commitmentsFromParent = state.commitments.filter((el) => {
       return el.parent.id === state.topParent.id
@@ -66,9 +64,27 @@ export const mutations = {
     })
     state.currentCommitmentStackDisplayOrder = [{id:state.topParent.id, commitments:commitmentsToAdd}]
 
-  }
+  },
+
+  SET_RANK(state, id,newRank){
+    state.commitments[findIndex(id,state,'commitments')].rank = newRank
+  },
+
 
 }
+function removeBlankHelper(state){
+  const parentIndex = findIndex(state.topParent.id,state, 'currentCommitmentStackDisplayOrder')
+    //get the currently in topParent commitments
+    let topParentCommitments = [...state.currentCommitmentStackDisplayOrder[parentIndex].commitments]
+    //set the type of the former blank space to old
+    let oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'EmptyListSpace')
+    topParentCommitments.splice(oldBlankPosition, 1, {...blankSpace, type:'old'})
+    //remove the blank from the old position
+    oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'old')
+    topParentCommitments.splice(oldBlankPosition,1)
+    return {parentIndex,topParentCommitments,}
+}
+
 
 export function findIndex(id,state,stateAttribute){
   //use this function to find an index an an array found in the state
