@@ -1,6 +1,6 @@
 <template>
   <div class="list" ref="el">
-    <div class="title">Commitments</div>
+    <div class="title">{{ parentCommitment.entrytitle }}</div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
       <component
@@ -37,20 +37,25 @@ export default {
     AddEntry,
     EmptyListSpace,
   },
-  setup() {
+  setup(props) {
     const el = ref(null)
     const listWidth = ref(null)
     const addingEntry = ref(false)
     const store = useStore()
-    const commitmentsList = computed(() => {
-      return store.state.commitments.filter((el) => {
-        return el.parent.id === store.state.topParent.id
-      })
-    })
-    store.commit('UPDATE_DISPLAY')
-    watch(commitmentsList, () => {
-      store.commit('UPDATE_DISPLAY')
-    })
+    // const commitmentsList = computed(() => {
+    //   return store.state.commitments.filter((el) => {
+    //     return el.parent.id === props.listInfo.id
+    //   })
+    // })
+    const parentCommitment = store.getters.commitmentById(
+      props.listInfo.id,
+      store.state
+    )
+
+    // store.commit('UPDATE_DISPLAY')
+    // watch(commitmentsList, () => {
+    //   store.commit('UPDATE_DISPLAY')
+    // })
 
     const entryWidth = computed(() => {
       if (listWidth.value) {
@@ -82,7 +87,7 @@ export default {
       })
     }
 
-    return { el, addingEntry, showAddCard, hideAddCard }
+    return { el, addingEntry, showAddCard, hideAddCard, parentCommitment }
   },
   computed: {
     commitments() {

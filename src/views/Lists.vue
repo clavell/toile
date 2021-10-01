@@ -9,23 +9,23 @@
 // @ is an alias to /src
 import List from '@/components/List.vue'
 import Calendar from '@/components/Calendar.vue'
-
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
   name: 'Lists',
   components: {
     List,
     Calendar,
   },
-  // setup(){
-  //   const lists = computed(() => {
+  setup() {
+    const store = useStore()
+    store.commit('SET_TOP_PARENT', {
+      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+    })
+    store.commit('ADD_ANCESTORS_TO_STACK')
+    const lists = computed(() => store.state.currentCommitmentStackDisplayOrder)
 
-  //   })
-  //   return { lists, }
-  // }
-  computed: {
-    lists() {
-      return this.$store.state.currentCommitmentStackDisplayOrder
-    },
+    return { lists }
   },
 }
 </script>

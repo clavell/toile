@@ -59,21 +59,19 @@ const onMouseUpDetails = function ({ store, position }) {
   }
 }
 
-const onMouseMoveDetails = function ({ store, props, position }) {
-  store
+const onMouseMoveDetails = function ({ store, props, position, mouseMoveArguments: {fullCommitment}}) {
   const leftSide = document.elementFromPoint(
     position.x - 1,
     position.y + position.height / 2
   )
-
   //action for changing the position in the display array
 
   if (leftSide) {
     if (!isNaN(leftSide.id) && leftSide.id !== '') {
-      console.log(leftSide.id)
       store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
         commitment: props.commitment,
         newPosition: leftSide.id,
+        parent: store.getters.commitmentById(fullCommitment.value.parent.id)
       })
     }
   }
@@ -103,13 +101,14 @@ export default {
       onMouseMoveDetails,
       mouseUpArguments: { fullCommitment },
       onMouseUpDetails,
+      mouseMoveArguments: { fullCommitment }
     })
     const entryWidth = inject('entryWidth')
 
     //sidebar indicator for when the element is being dragged over a particular spot
     const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
 
-    const { currentDisplayPosition } = currentDisplayPositionReuse(store, props)
+    const { currentDisplayPosition } = currentDisplayPositionReuse(store, props,fullCommitment)
 
     //mark the entry as complete or not
     const checked = computed({

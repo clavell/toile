@@ -1,11 +1,11 @@
 import { computed } from 'vue'
 import { getters } from '@/store/getters.js'
 
-export default function (store, props) {
+export default function (store, props, fullCommitment) {
   return {
     currentDisplayPosition: computed(() => {
       const index = getters.indexFromStateArray(
-        store.state.topParent.id,
+        fullCommitment.value.parent.id,
         store.state,
         'currentCommitmentStackDisplayOrder'
       )

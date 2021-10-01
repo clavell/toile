@@ -16,11 +16,27 @@ const {
   SET_RANK,
   UPDATE_DISPLAY_LIST_POSITIONS,
   SET_RANKS,
+  ADD_ANCESTORS_TO_STACK,
 } = mutations
 
 let state
 let newCommitment
 let parentIndex
+
+function setup_UPDATE_DISPLAY_LIST_test_reuse(
+  oldPosition,
+  newPosition,
+  parent
+) {
+  let {parentCommitments} = getters.parentCommitmentsByParent2(state, parent)
+  //get a commitment to move
+  const commitment = parentCommitments[oldPosition]
+  if (newPosition == -1) {
+    newPosition = parentCommitments.length - 1
+  }
+
+  return { commitment, newPosition }
+}
 
 describe('mutations', () => {
   beforeEach(() => {
@@ -161,36 +177,47 @@ describe('mutations', () => {
 
     //expect it to be change in the state
     expect(state.commitments[commitmentPosition].rank).toBe(newRank)
-  }),
-    it('updates the display list order when the new position is below the old one', () => {
-      //choose an id from the list to move
-      const oldPosition = 0
-      let { topParentCommitments } = getters.topParentCommitments(state)
-      const commitment = topParentCommitments[oldPosition]
-      //choose a place to move it to
-      const newPosition = 2
-      //perform the mutation
-      UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition })
+  })
 
-      //get the list and expect the commitment id to be at the new position
-      const { topParentCommitments: updatedTopParentCommitments } =
-        getters.topParentCommitments(state)
-      expect(
-        updatedTopParentCommitments.findIndex((el) => {
-          return el.id === commitment.id
-        })
-      ).toBe(newPosition)
-    })
+  //UPDATE_DISPLAY_LIST
+  it('updates the display list order when the new position is below the old one', () => {
+    //choose an id from the list to move
+    const oldPosition = 0
+    //choose a place to move it to
+    let newPositionIdentifier = 2
+    const parent = state.topParent
+    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
+      oldPosition,
+      newPositionIdentifier,
+      parent
+    )
+    //perform the mutation
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
+
+    //get the list and expect the commitment id to be at the new position
+    const { topParentCommitments: updatedTopParentCommitments } =
+      getters.topParentCommitments(state)
+    expect(
+      updatedTopParentCommitments.findIndex((el) => {
+        return el.id === commitment.id
+      })
+    ).toBe(newPosition)
+  })
 
   it('updates the display list order when the new position is above the old one (and first in the list)', () => {
     //choose an id from the list to move
     const oldPosition = 2
-    let { topParentCommitments } = getters.topParentCommitments(state)
-    const commitment = topParentCommitments[oldPosition]
     //choose a place to move it to
-    const newPosition = 0
+    let newPositionIdentifier = 0
+    const parent = state.topParent
+    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
+      oldPosition,
+      newPositionIdentifier,
+      parent
+    )
+
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
 
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
@@ -205,12 +232,16 @@ describe('mutations', () => {
   it('updates the display list order when the new position is at the end of the list', () => {
     //choose an id from the list to move
     const oldPosition = 2
-    let { topParentCommitments } = getters.topParentCommitments(state)
-    const commitment = topParentCommitments[oldPosition]
     //choose a place to move it to
-    const newPosition = topParentCommitments.length - 1
+    let newPositionIdentifier = -1
+    const parent = state.topParent
+    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
+      oldPosition,
+      newPositionIdentifier,
+      parent
+    )
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
 
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
@@ -220,6 +251,60 @@ describe('mutations', () => {
         return el.id === commitment.id
       })
     ).toBe(newPosition)
+  })
+
+  it('updates the display list order when the list is not the top parent', () => {
+    
+    // console.log(JSON.stringify(state.currentCommitmentStackDisplayOrder))
+    const expectedStack = [
+      {
+        id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa', type: 'TodoCard' },
+          { id: '601b550c-2c68-4cbe-85b6-a6a61563db1f', type: 'TodoCard' },
+          { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },
+          { id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49', type: 'TodoCard' },
+        ],
+      },
+      {
+        id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },
+          { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
+          { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+        ],
+      },
+      {
+        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        commitments: [
+          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
+          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
+          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+        ],
+      },
+    ]
+    //create the desired stack
+    state.topParent = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    ADD_ANCESTORS_TO_STACK(state)
+
+    //choose an id from the list to move
+    const oldPosition = 2
+    // //choose a place to move it to
+    let newPositionIdentifier = 1
+    const parent = {
+      id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+    }
+    //get the commitment based on the parent and which position it was at
+    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
+      oldPosition,
+      newPositionIdentifier,
+      parent
+    )
+    // perform the mutation
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent,})
+
+    const newStack = state.currentCommitmentStackDisplayOrder
+    expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedStack))
   })
 
   it('updates the ranks of the commitments', () => {
@@ -232,7 +317,7 @@ describe('mutations', () => {
     const newPosition = 1
     //modify the order of the elements
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition,  })
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
@@ -247,9 +332,45 @@ describe('mutations', () => {
     const fullCommitments = state.commitments.filter((el) => {
       return el.parent.id == state.topParent.id
     })
-    // console.log(fullCommitments, updatedTopParentCommitments)
     expect(fullCommitments.filter((el) => el.id == commitment.id)[0].rank).toBe(
       newPosition
     )
+  })
+
+  it('adds ancestors to stack (2 ancestors)', () => {
+    const expectedStack = [
+      {
+        id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa', type: 'TodoCard' },
+          { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },
+          { id: '601b550c-2c68-4cbe-85b6-a6a61563db1f', type: 'TodoCard' },
+          { id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49', type: 'TodoCard' },
+        ],
+      },
+      {
+        id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },
+          { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
+          { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+        ],
+      },
+      {
+        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        commitments: [
+          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
+          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
+          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+        ],
+      },
+    ]
+    //set the top parent
+    state.topParent = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    ADD_ANCESTORS_TO_STACK(state)
+    expect(JSON.stringify(state.currentCommitmentStackDisplayOrder)).toBe(
+      JSON.stringify(expectedStack)
+    )
+    // expect(state.currentCommitmentStackDisplayOrder).toBe(expectedStack)
   })
 })
