@@ -1,4 +1,3 @@
-import { blankSpace, removeBlankHelper } from '@/store/helpers.js'
 import { getters } from '@/store/getters.js'
 
 // export `mutations` as a named export
@@ -21,40 +20,6 @@ export const mutations = {
   UPDATE_COMMITMENT(state, { newInfo, index }) {
     state.commitments[index] = newInfo
   },
-  ADD_BLANK_SPACE_TO_LIST(state, commitmentPosition) {
-    let { parentIndex, topParentCommitments } =
-      getters.topParentCommitments(state)
-    topParentCommitments.splice(commitmentPosition, 0, blankSpace)
-
-    state.currentCommitmentStackDisplayOrder[parentIndex].commitments =
-      topParentCommitments
-    state.blankSpacePosition = commitmentPosition
-  },
-  REMOVE_BLANK_FROM_LIST(state) {
-    let { parentIndex, topParentCommitments } = removeBlankHelper(state)
-    //set this new topParentCommitments array to be the new displayArray at the top parent position
-    state.currentCommitmentStackDisplayOrder[parentIndex].commitments =
-      topParentCommitments
-    //set the blank space position
-    state.blankSpacePosition = null
-  },
-
-  MOVE_BLANK_SPACE_TO_NEW_POSITION(state, commitmentPosition) {
-    //remove the blank space
-    let { parentIndex, topParentCommitments } = removeBlankHelper(state)
-
-    //add a blank at the new position
-    topParentCommitments.splice(commitmentPosition, 0, blankSpace)
-
-    //set this new topParentCommitments array to be the new displayArray at the top parent position
-    state.currentCommitmentStackDisplayOrder[parentIndex].commitments =
-      topParentCommitments
-
-    //set the blank space position
-    state.blankSpacePosition = topParentCommitments.findIndex(
-      (el) => el.type === 'EmptyListSpace'
-    )
-  },
 
   UPDATE_DISPLAY(state) {
     const commitmentsFromParent = state.commitments
@@ -66,9 +31,9 @@ export const mutations = {
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
       return { id: el.id, type: 'TodoCard' }
     })
-    state.currentCommitmentStackDisplayOrder = [
+    state.decks[0] = {deck:[
       { id: state.topParent.id, commitments: commitmentsToAdd },
-    ]
+    ]}
   },
 
   SET_RANK(state, id, newRank) {
@@ -88,14 +53,14 @@ export const mutations = {
     parentCommitments.splice(newPosition, 0, commitment)
     //set the state
     //need the commitments stack array
-    let newCommitmentsStack = state.currentCommitmentStackDisplayOrder.map((item) => {
+    let newCommitmentsStack = state.decks[0].deck.map((item) => {
       if(item.id == parent.id){
         return {...item, commitments: parentCommitments}
       }
       return item
     })
 
-    state.currentCommitmentStackDisplayOrder = newCommitmentsStack
+    state.decks[0].deck = newCommitmentsStack
   },
   SET_RANKS(state, { parent }) {
     parent
@@ -144,7 +109,7 @@ export const mutations = {
       return { id: item.id, commitments: commitmentsToAdd }
     })
     //set the stack to be the new stack
-    state.currentCommitmentStackDisplayOrder = newStack
+    state.decks[0].deck = newStack
   },
   SET_TOP_PARENT(state, newTopParent) {
     state.topParent = getters.commitmentById2(state, newTopParent.id)

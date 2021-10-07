@@ -21,8 +21,7 @@ const {
 
 let state
 let newCommitment
-let parentIndex
-
+//this function should return the commitment at the old position based on the parent id
 function setup_UPDATE_DISPLAY_LIST_test_reuse(
   oldPosition,
   newPosition,
@@ -42,11 +41,6 @@ describe('mutations', () => {
   beforeEach(() => {
     state = generateState()
     newCommitment = generateNewCommitment()
-    parentIndex = getters.indexFromStateArray(
-      state.topParent.id,
-      state,
-      'currentCommitmentStackDisplayOrder'
-    )
   })
 
   it('adds item to store', () => {
@@ -110,43 +104,7 @@ describe('mutations', () => {
     expect(state.commitments[index]).toBe(edittedCommitment)
   })
 
-  it('adds a blank space to the currentDisplayOrder', () => {
-    const rankToAddBlank = 2
-
-    ADD_BLANK_SPACE_TO_LIST(state, rankToAddBlank)
-
-    expect(
-      state.currentCommitmentStackDisplayOrder[parentIndex].commitments[
-        rankToAddBlank
-      ].type
-    ).toBe('EmptyListSpace')
-
-    expect(state.blankSpacePosition).toBe(rankToAddBlank)
-  })
-
-  it('moves the blank space to the new spot', () => {
-    const rankToAddBlank = 2
-    const rankToMoveBlank = 4
-
-    ADD_BLANK_SPACE_TO_LIST(state, rankToAddBlank)
-
-    expect(
-      state.currentCommitmentStackDisplayOrder[parentIndex].commitments[
-        rankToAddBlank
-      ].type
-    ).toBe('EmptyListSpace')
-
-    MOVE_BLANK_SPACE_TO_NEW_POSITION(state, rankToMoveBlank)
-
-    expect(
-      state.currentCommitmentStackDisplayOrder[parentIndex].commitments[
-        rankToMoveBlank
-      ].type
-    ).toBe('EmptyListSpace')
-    expect(state.blankSpacePosition).toBe(rankToMoveBlank)
-  })
-
-  it('updates the currentCommitmentStackDisplayOrder array', () => {
+  it('updates the decks array', () => {
     //the entry in the commitmentsdisplayorder will be slightly different
     const expectedEntry = { id: newCommitment.id, type: 'TodoCard' }
 
@@ -156,7 +114,7 @@ describe('mutations', () => {
     //run the mutation
     UPDATE_DISPLAY(state)
     //does the new display array contain the new element?
-    const newTopParentDisplay = state.currentCommitmentStackDisplayOrder.filter(
+    const newTopParentDisplay = state.decks[0].deck.filter(
       (el) => {
         return el.id === state.topParent.id
       }
@@ -191,6 +149,8 @@ describe('mutations', () => {
       newPositionIdentifier,
       parent
     )
+
+    console.log(commitment,oldPosition,newPosition, parent)
     //perform the mutation
     UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
 
@@ -255,7 +215,6 @@ describe('mutations', () => {
 
   it('updates the display list order when the list is not the top parent', () => {
     
-    // console.log(JSON.stringify(state.currentCommitmentStackDisplayOrder))
     const expectedStack = [
       {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
@@ -303,7 +262,7 @@ describe('mutations', () => {
     // perform the mutation
     UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent,})
 
-    const newStack = state.currentCommitmentStackDisplayOrder
+    const newStack = state.decks[0].deck
     expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedStack))
   })
 
@@ -317,7 +276,7 @@ describe('mutations', () => {
     const newPosition = 1
     //modify the order of the elements
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition,  })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent:state.topParent, getters  })
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
@@ -368,9 +327,9 @@ describe('mutations', () => {
     //set the top parent
     state.topParent = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     ADD_ANCESTORS_TO_STACK(state)
-    expect(JSON.stringify(state.currentCommitmentStackDisplayOrder)).toBe(
+    expect(JSON.stringify(state.decks[0].deck)).toBe(
       JSON.stringify(expectedStack)
     )
-    // expect(state.currentCommitmentStackDisplayOrder).toBe(expectedStack)
+    // expect(state.decks).toBe(expectedStack)
   })
 })

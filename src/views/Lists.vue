@@ -23,7 +23,7 @@ export default {
       id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
     })
     store.commit('ADD_ANCESTORS_TO_STACK')
-    const lists = computed(() => store.state.currentCommitmentStackDisplayOrder)
+    const lists = computed(() => store.state.decks[0].deck)
 
     return { lists }
   },

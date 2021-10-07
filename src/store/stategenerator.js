@@ -152,7 +152,7 @@ export function generateState() {
         rank: 1,
       },
     ],
-    currentCommitmentStackDisplayOrder: [
+    decks: [{deck: [
       {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
@@ -175,6 +175,7 @@ export function generateState() {
         ],
       },
     ],
+  }]
   }
 }
 

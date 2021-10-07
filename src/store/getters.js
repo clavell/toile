@@ -6,19 +6,27 @@ export const getters = {
     const parentIndex = getters.topParentIndex(state)
     //get the currently in topParent commitments
     let topParentCommitments = [
-      ...state.currentCommitmentStackDisplayOrder[parentIndex].commitments,
+      ...state.decks[0].deck[parentIndex].commitments,
     ]
     // .sort((a,b)=> a.rank - b.rank)
     return { topParentCommitments, parentIndex }
   },
   parentCommitmentsByParent2(state, parent) {
      //get the current stack
-  let currentStack = state.currentCommitmentStackDisplayOrder
+  let currentStack = state.decks[0].deck
   //get the commitments for chosen parent
   let parentCommitments = currentStack.filter((el) => el.id == parent.id)[0]
     .commitments
     return {parentCommitments}
   },
+  parentCommitmentsByParent:(state) => (parent) => {
+    //get the current stack
+ let currentStack = state.decks[0].deck
+ //get the commitments for chosen parent
+ let parentCommitments = currentStack.filter((el) => el.id == parent.id)[0]
+   .commitments
+   return {parentCommitments}
+ },
   commitmentsOnCurrentDate(state) {
     //find all events on `currentDate`
     var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
@@ -50,10 +58,14 @@ export const getters = {
     return index
   },
   topParentIndex(state) {
-    return getters.indexFromStateArray(
-      state.topParent.id,
-      state,
-      'currentCommitmentStackDisplayOrder'
-    )
+    // return getters.indexFromStateArray(
+    //   state.topParent.id,
+    //   state,
+    //   'decks'
+    // )
+    return state.decks[0].deck.findIndex((el) => {
+      return el.id === state.topParent.id
+    })
+
   },
 }
