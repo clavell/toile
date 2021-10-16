@@ -27,7 +27,7 @@ function setup_UPDATE_DISPLAY_LIST_test_reuse(
   newPosition,
   parent
 ) {
-  let {parentCommitments} = getters.parentCommitmentsByParent2(state, parent)
+  let {parentCommitments} = getters.parentCommitmentsByParent(state, parent)
   //get a commitment to move
   const commitment = parentCommitments[oldPosition]
   if (newPosition == -1) {
@@ -114,9 +114,10 @@ describe('mutations', () => {
     //run the mutation
     UPDATE_DISPLAY(state)
     //does the new display array contain the new element?
+    
     const newTopParentDisplay = state.decks[0].deck.filter(
       (el) => {
-        return el.id === state.topParent.id
+        return el.id === state.topParent[0].id && typeof el.id !== 'undefined' 
       }
     )[0].commitments
     expect(newTopParentDisplay[newTopParentDisplay.length - 1]).toStrictEqual(
@@ -143,16 +144,15 @@ describe('mutations', () => {
     const oldPosition = 0
     //choose a place to move it to
     let newPositionIdentifier = 2
-    const parent = state.topParent
+    const parent = state.topParent[0]
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
       oldPosition,
       newPositionIdentifier,
       parent
     )
 
-    console.log(commitment,oldPosition,newPosition, parent)
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent:parent, newParent:parent })
 
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
@@ -169,7 +169,7 @@ describe('mutations', () => {
     const oldPosition = 2
     //choose a place to move it to
     let newPositionIdentifier = 0
-    const parent = state.topParent
+    const parent = state.topParent[0]
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
       oldPosition,
       newPositionIdentifier,
@@ -177,7 +177,7 @@ describe('mutations', () => {
     )
 
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent:parent, newParent:parent })
 
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
@@ -194,14 +194,14 @@ describe('mutations', () => {
     const oldPosition = 2
     //choose a place to move it to
     let newPositionIdentifier = -1
-    const parent = state.topParent
+    const parent = state.topParent[0]
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
       oldPosition,
       newPositionIdentifier,
       parent
     )
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent:parent, newParent:parent })
 
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
@@ -243,7 +243,7 @@ describe('mutations', () => {
       },
     ]
     //create the desired stack
-    state.topParent = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    state.topParent[0] = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     ADD_ANCESTORS_TO_STACK(state)
 
     //choose an id from the list to move
@@ -260,7 +260,7 @@ describe('mutations', () => {
       parent
     )
     // perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent,})
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent: parent, newParent:parent})
 
     const newStack = state.decks[0].deck
     expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedStack))
@@ -276,7 +276,7 @@ describe('mutations', () => {
     const newPosition = 1
     //modify the order of the elements
     //perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, parent:state.topParent, getters  })
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent:state.topParent[0], newParent:state.topParent[0], })
     //get the list and expect the commitment id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
@@ -286,10 +286,10 @@ describe('mutations', () => {
       })
     ).toBe(newPosition)
     //now if the user were to let go we would want these to be recorded in the state
-    SET_RANKS(state, { parent: state.topParent })
+    SET_RANKS(state, { parent: state.topParent[0] })
 
     const fullCommitments = state.commitments.filter((el) => {
-      return el.parent.id == state.topParent.id
+      return el.parent.id == state.topParent[0].id
     })
     expect(fullCommitments.filter((el) => el.id == commitment.id)[0].rank).toBe(
       newPosition
@@ -325,11 +325,68 @@ describe('mutations', () => {
       },
     ]
     //set the top parent
-    state.topParent = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    state.topParent[0] = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     ADD_ANCESTORS_TO_STACK(state)
     expect(JSON.stringify(state.decks[0].deck)).toBe(
       JSON.stringify(expectedStack)
     )
     // expect(state.decks).toBe(expectedStack)
   })
+
+  it('adds the task to a parent other than the top one when being moved through the deck',() => {
+
+    const expectedStack = [
+      {
+        id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa', type: 'TodoCard' },
+          // { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },//move this one 
+          { id: '601b550c-2c68-4cbe-85b6-a6a61563db1f', type: 'TodoCard' },
+          { id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49', type: 'TodoCard' },
+        ],
+      },
+      {
+        id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },
+          { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
+          { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+        ],
+      },
+      {
+        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        commitments: [
+          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
+          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
+          { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },//final spot
+          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+        ],
+      },
+    ]
+    //create the desired stack
+    state.topParent[0] = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    ADD_ANCESTORS_TO_STACK(state)
+
+    //choose an id from the list to move
+    const oldPosition = 1
+    const oldParent = {
+      id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',}
+    // //choose a place to move it to
+    let newPositionIdentifier = 2
+    const newParent = {
+      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+    }
+    //get the commitment based on the parent and which position it was at
+    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
+      oldPosition,
+      newPositionIdentifier,
+      oldParent
+    )
+    // perform the mutation
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent, newParent})
+
+    const newStack = state.decks[0].deck
+    expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedStack))
+  })
+
 })

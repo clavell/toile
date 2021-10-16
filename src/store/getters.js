@@ -11,7 +11,7 @@ export const getters = {
     // .sort((a,b)=> a.rank - b.rank)
     return { topParentCommitments, parentIndex }
   },
-  parentCommitmentsByParent2(state, parent) {
+  parentCommitmentsByParent(state, parent) {
      //get the current stack
   let currentStack = state.decks[0].deck
   //get the commitments for chosen parent
@@ -19,14 +19,7 @@ export const getters = {
     .commitments
     return {parentCommitments}
   },
-  parentCommitmentsByParent:(state) => (parent) => {
-    //get the current stack
- let currentStack = state.decks[0].deck
- //get the commitments for chosen parent
- let parentCommitments = currentStack.filter((el) => el.id == parent.id)[0]
-   .commitments
-   return {parentCommitments}
- },
+ 
   commitmentsOnCurrentDate(state) {
     //find all events on `currentDate`
     var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
@@ -44,7 +37,7 @@ export const getters = {
     let commitments = state.commitments
     return [...commitments].sort((a, b) => a.complete - b.complete)
   },
-  commitmentById2: (state, id) => {
+  commitmentById2(state, id) {
     return state.commitments.find((commitment) => commitment.id === id)
   },
   commitmentById: (state) => (id) => {
@@ -64,7 +57,7 @@ export const getters = {
     //   'decks'
     // )
     return state.decks[0].deck.findIndex((el) => {
-      return el.id === state.topParent.id
+      return el.id === state.topParent[0].id
     })
 
   },
