@@ -1,10 +1,10 @@
 import { computed } from 'vue'
 
-export default function (store, props, fullCommitment) {
+export default function ({store, props}) {
   return {
     currentDisplayPosition: computed(() => {
       const index = store.state.decks[0].deck.findIndex((el) => {
-        return el.id === fullCommitment.value.parent.id
+        return el.id === props.parentCommitment.id
       })
         
       

@@ -77,7 +77,6 @@ const makeListEntryDraggable = function ({
     position.y + position.height / 2
   )
   //action for changing the position in the display array
-  console.log(leftSide)
   if (leftSide) {
     if (!isNaN(leftSide.id) && leftSide.id !== '') {
 
@@ -85,14 +84,13 @@ const makeListEntryDraggable = function ({
       const newParent = {
         id: [...leftSide.classList].filter((className) => parentRegex.test(className))[0].split('_')[1]
         }
-
         
 
       store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
-        commitment: store.state.moving.original,
-        newPosition: leftSide.id,
-        newParent: store.getters.commitmentById(newParent.id),
-        oldParent: store.getters.commitmentById(store.state.moving.parent.id)
+        commitment: JSON.parse(JSON.stringify(store.state.moving.original)),
+        newPosition: JSON.parse(JSON.stringify(leftSide.id)),
+        newParent: JSON.parse(JSON.stringify(store.getters.commitmentById(newParent.id))),
+        oldParent: JSON.parse(JSON.stringify(store.getters.commitmentById(store.state.moving.parent.id)))
       })
     }
   }
@@ -215,6 +213,7 @@ export default {
   name: 'TodoCard',
   props: {
     commitment: Object,
+    parentCommitment: Object,
   },
   setup(props) {
     const store = useStore()
@@ -243,10 +242,10 @@ export default {
     //sidebar indicator for when the element is being dragged over a particular spot
     const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
 
-    const { currentDisplayPosition } = currentDisplayPositionReuse(store, props,fullCommitment)
+    const { currentDisplayPosition } = currentDisplayPositionReuse({store, props})
 
     const parent = computed(() => {
-      return parentString + "_" + fullCommitment.value.parent.id
+      return parentString + "_" + props.parentCommitment.id
     })
 
     //mark the entry as complete or not

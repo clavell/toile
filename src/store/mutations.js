@@ -44,33 +44,53 @@ export const mutations = {
     ].rank = newRank
   },
   UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent, newParent }) {
+    commitment
+    newPosition
+    newParent
     //get the commitments
-    let { parentCommitments:oldParentCommitments } = getters.parentCommitmentsByParent(state,oldParent)
+    let { parentCommitments:oldParentCommitments } = JSON.parse(JSON.stringify(getters.parentCommitmentsByParent(state,oldParent)))
     //remove the original commitment
     // if(JSON.stringify(oldParent) === JSON.stringify(newParent)){
       const indexToRemove = oldParentCommitments.findIndex((el) => {
-      return el.id === commitment.id
+        return el.id === commitment.id
       })
       oldParentCommitments.splice(indexToRemove, 1)
-    // }
-
-      //insert it at the new position
-      let {parentCommitments:newParentCommitments} = getters.parentCommitmentsByParent(state,newParent)
+    // // }
+    //   //insert it at the new position
+    var newParentCommitments
+    if(JSON.stringify(oldParent) === JSON.stringify(newParent)){
+      newParentCommitments = JSON.parse(JSON.stringify(oldParentCommitments))
+    } else{
+      ({parentCommitments:newParentCommitments} = JSON.parse(JSON.stringify(getters.parentCommitmentsByParent(state,newParent))))
+    }
+      
       newParentCommitments.splice(newPosition, 0, commitment)
-    //set the state
-    //need the commitments stack array
-    let newCommitmentsStack = state.decks[0].deck.map((item) => {
-      if(item.id == oldParent.id){
-        return {...item, commitments: oldParentCommitments}
+
+    // //set the state
+    // //need the commitments stack array
+    let oldCommitmentsStack = JSON.parse(JSON.stringify(state.decks[0].deck))
+    let newCommitmentsStack = oldCommitmentsStack.map((item) => {
+      if(oldParent.id == newParent.id) {
+        if(item.id == newParent.id){
+          return {...item, commitments: newParentCommitments.map((el) => {
+            return {id:el.id, type:"TodoCard"}
+          })}
+        }
+      } else{
+        if(item.id == oldParent.id){
+          return {...item, commitments: oldParentCommitments}
+        }
+        if(item.id == newParent.id){
+          return {...item, commitments: newParentCommitments.map((el) => {
+            return {id:el.id, type:"TodoCard"}
+          })}
+        }
       }
 
-      if(item.id == newParent.id){
-        return {...item, commitments: newParentCommitments}
-      }
-
+      
       return item
     })
-
+    state.moving.parent = JSON.parse(JSON.stringify(newParent))
     state.decks[0].deck = newCommitmentsStack
   },
   SET_RANKS(state, { parent }) {

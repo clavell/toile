@@ -8,6 +8,7 @@
         :is="item.type"
         :key="item.id"
         :commitment="item"
+        :parentCommitment="parentCommitment"
       />
     </div>
     <div class="buttoncontainer">
@@ -47,10 +48,11 @@ export default {
     //     return el.parent.id === props.listInfo.id
     //   })
     // })
+
     const parentCommitment = store.getters.commitmentById(
       props.listInfo.id
     )
-
+    props.listInfo.value
     // store.commit('UPDATE_DISPLAY')
     // watch(commitmentsList, () => {
     //   store.commit('UPDATE_DISPLAY')
