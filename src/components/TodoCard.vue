@@ -10,6 +10,7 @@
     class="listentry draggable grid grid-cols-todolistentry bg-pink-800"
     :style="[entryWidth]"
     :id="currentDisplayPosition"
+    v-show="!isMoving"
     @mousedown.prevent
     @touchmove.prevent
   >
@@ -36,7 +37,7 @@
       }}</label>
     </div>
   </div>
-  <!-- <div v-if="position.isDragging" :id="currentDisplayPosition" :class="parent"></div> -->
+  <div v-if="isMoving" :id="currentDisplayPosition" :class="parent"></div>
 </template>
 
 <script>
@@ -96,6 +97,40 @@ const makeListEntryDraggable = function ({
   }
   
   }
+const onMouseUp = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    // if (onMouseUpDetails) {
+    //   onMouseUpDetails({ store, position, props, mouseUpArguments })
+    // }
+    const position = JSON.parse(JSON.stringify(store.state.moving.position))
+    console.log(position)
+    const leftSide = document.elementFromPoint(
+      position.x - 1,
+      position.y + position.height / 2
+    )
+    const rightSide = document.elementFromPoint(
+      position.x + position.width + 1,
+      position.y + position.height / 2
+    )
+
+    leftSide
+    rightSide
+    if (leftSide || rightSide) {
+      if (
+        (!isNaN(leftSide.id) && leftSide.id !== '') ||
+        (!isNaN(rightSide.id) && rightSide.id !== '')
+      ) {
+        //     //assuming we didn't leave the current parent
+        store.commit('SET_RANKS', { oldParent: store.state.topParent })
+      } else {
+        store.commit('UPDATE_DISPLAY')
+      }
+    }
+    // store.commit('STOP_MOVING')
+    // document.removeEventListener('pointerup', onMouseUp)
+    // document.removeEventListener('pointermove', onMouseMove)
+  }
 
   const onMouseDown = (e) => {
     e.stopPropagation()
@@ -133,6 +168,7 @@ const makeListEntryDraggable = function ({
     //   onMouseDownDetails({ store, mouseDownArguments })
     // }
     document.addEventListener('pointermove', onMouseMove)
+    document.addEventListener('pointerup', onMouseUp)
 
   }
   watch(element, (element) => {
@@ -148,6 +184,8 @@ const makeListEntryDraggable = function ({
   })
 }
 
+
+
 const parentString = 'parent'
 
 // const onMouseDownDetails = function ({ store, mouseDownArguments:{fullCommitment} }) {
@@ -155,27 +193,7 @@ const parentString = 'parent'
   
 // }
 
-// const onMouseUpDetails = function ({ store, position }) {
-//   const leftSide = document.elementFromPoint(
-//     position.x - 1,
-//     position.y + position.height / 2
-//   )
-//   const rightSide = document.elementFromPoint(
-//     position.x + position.width + 1,
-//     position.y + position.height / 2
-//   )
-//   if (leftSide || rightSide) {
-//     if (
-//       (!isNaN(leftSide.id) && leftSide.id !== '') ||
-//       (!isNaN(rightSide.id) && rightSide.id !== '')
-//     ) {
-//       //     //assuming we didn't leave the current parent
-//       store.commit('SET_RANKS', { parent: store.state.topParent })
-//     } else {
-//       store.commit('UPDATE_DISPLAY')
-//     }
-//   }
-// }
+
 
 // const onMouseMoveDetails = function ({ store, props, position, 
 // // mouseMoveArguments: {fullCommitment}
@@ -254,6 +272,10 @@ export default {
     //when checked strikethrough the text
     const commitmentTextStyle = commitmentTextStyleReuse(checked)
 
+    const isMoving = computed(() => {
+      return store.state.moving.original.id == fullCommitment.value.id && store.state.moving.position.isDragging
+    })
+
     return {
       entryWidth,
       commitmentTextStyle,
@@ -264,7 +286,8 @@ export default {
       checked,
       fullCommitment,
       currentDisplayPosition,
-      parent
+      parent,
+      isMoving
     }
   },
 }

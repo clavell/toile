@@ -17,6 +17,7 @@ const {
   UPDATE_DISPLAY_LIST_POSITIONS,
   SET_RANKS,
   ADD_ANCESTORS_TO_STACK,
+  SET_TOP_PARENT,
 } = mutations
 
 let state
@@ -266,7 +267,7 @@ describe('mutations', () => {
     expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedStack))
   })
 
-  it('updates the ranks of the commitments', () => {
+  it('updates the ranks of the commitments when they changed in the top parent', () => {
     //get the display array for the current parent
     //choose an id from the list to move
     const oldPosition = 2
@@ -293,6 +294,84 @@ describe('mutations', () => {
     })
     expect(fullCommitments.filter((el) => el.id == commitment.id)[0].rank).toBe(
       newPosition
+    )
+  })
+
+  it('updates the ranks of the commitments when they are in different parents of the same deck', () => {
+    //get the display array for the current parent
+    //choose an id from the list to move
+    //move from "Make the store" the first entry to one level up to "set up vuex"
+
+    //first make the deck
+   SET_TOP_PARENT(state, {
+    id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+  }) 
+    ADD_ANCESTORS_TO_STACK(state)
+
+    const oldParent =  {
+      entrytitle: 'Make the Store',
+      duedate: '21/07/2021',
+      duration: 45,
+      parent: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+      complete: false,
+      rank: 2,
+    }
+    const oldPosition = 0
+    let { parentCommitments: oldParentCommitments } = getters.parentCommitmentsByParent(state, oldParent)
+    const commitment = oldParentCommitments[oldPosition]
+    //after moving the commitment this one will be at the oldPosition
+    const commitmentExpectedToBeInOldPosition = oldParentCommitments[oldPosition + 1]
+
+    //choose a place to move it to (up one level)
+    const newParent =  {
+      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+      entrytitle: 'set up vuex',
+      startTime: '202106201330',
+      duration: 45,
+      complete: false,
+      parent: { id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
+      rank: 0,
+    }
+    const newPosition = 1
+    let { parentCommitments: newParentCommitments } = getters.parentCommitmentsByParent(state, newParent)
+    const commitmentmentToBeUnderNewPostion = newParentCommitments[newPosition]
+    //modify the order of the elements
+    //perform the mutation
+    UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent, newParent, })
+    //get the list and expect the commitment id to be at the new position
+    // const { parentCommitments: updatedOldParentCommitments } = 
+    //   getters.parentCommitmentsByParent(state,oldParent)
+
+    const { parentCommitments: updatedNewParentCommitments } = 
+      getters.parentCommitmentsByParent(state,newParent)
+
+    expect(
+      updatedNewParentCommitments.findIndex((el) => {
+        return el.id === commitment.id
+      })
+    ).toBe(newPosition)
+    //now if the user were to let go we would want these to be recorded in the state
+    SET_RANKS(state, { parent: state.topParent[0] })
+
+    const fullNewParentCommitments = state.commitments.filter((el) => {
+      return el.parent.id == newParent.id
+    })
+
+    // expect the moved commitment to be in the new postion in the new parent
+    expect(fullNewParentCommitments.filter((el) => el.id == commitment.id)[0].rank).toBe(
+      newPosition
+    )
+    //expect the commitment that was in that place to be one down from where it was
+    expect(fullNewParentCommitments.filter((el) => el.id == commitmentmentToBeUnderNewPostion.id)[0].rank).toBe(
+      newPosition + 1
+    )
+    //expect the commitment that was below the moved commitment in the old position to be where the moved commitment used to be
+    const fullOldParentCommitments = state.commitments.filter((el) => {
+      return el.parent.id == oldParent.id
+    })
+    expect(fullOldParentCommitments.filter((el) => el.id == commitmentExpectedToBeInOldPosition.id)[0].rank).toBe(
+      oldPosition
     )
   })
 

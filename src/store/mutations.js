@@ -43,6 +43,7 @@ export const mutations = {
       getters.indexFromStateArray(id, state, 'commitments')
     ].rank = newRank
   },
+  
   UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent, newParent }) {
     commitment
     newPosition
@@ -93,6 +94,7 @@ export const mutations = {
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
     state.decks[0].deck = newCommitmentsStack
   },
+
   SET_RANKS(state, { parent }) {
     parent
     //get all of the commitments
@@ -109,6 +111,7 @@ export const mutations = {
     })
     state.commitments = newlyRankedCommitments
   },
+
   ADD_ANCESTORS_TO_STACK(state) {
     //get the top parent
     const topParent = state.topParent[0]
@@ -142,6 +145,7 @@ export const mutations = {
     //set the stack to be the new stack
     state.decks[0].deck = newStack
   },
+
   SET_TOP_PARENT(state, newTopParent) {
     state.topParent[0] = getters.commitmentById2(state, newTopParent.id)
   },
@@ -160,6 +164,12 @@ export const mutations = {
       x:clientX - position.dragStartX,
       y:clientY - position.dragStartY
     }
+  },
+
+  STOP_MOVING(state,) {
+    state.moving.position.dragging = false
+    state.moving.position.dragStartX = null
+    state.moving.position.dragStartY = null
   }
 
 }
