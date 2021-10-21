@@ -95,16 +95,21 @@ export const mutations = {
     state.decks[0].deck = newCommitmentsStack
   },
 
-  SET_RANKS(state, { parent }) {
-    parent
+  SET_RANKS(state, { oldParent, newParent }) {
     //get all of the commitments
     let allCommitments = state.commitments
-    //get the commitments in the current parent display
-    let { topParentCommitments } = getters.topParentCommitments(state)
+    //get the commitments in the old and new parents
+    let { parentCommitments: oldParentCommitments } = getters.parentCommitmentsByParent(state,oldParent)
+    let { parentCommitments: newParentCommitments } = getters.parentCommitmentsByParent(state,newParent)
     //map from the commitments to a new array
     const newlyRankedCommitments = allCommitments.map((item) => {
-      if (item.parent.id == state.topParent[0].id) {
-        const newRank = topParentCommitments.findIndex((el) => el.id == item.id)
+      //if it's in the new commitments or if it is the moving commitment then look in the newCommitments array
+      if(item.parent.id == newParent.id || item.id == state.moving.original.id){
+        let newRank = newParentCommitments.findIndex((el) => el.id == item.id)
+        return {...item, rank:newRank, parent: newParent}
+      }
+      else if (item.parent.id == oldParent.id) {
+        let newRank = oldParentCommitments.findIndex((el) => el.id == item.id)
         return { ...item, rank: newRank }
       }
       return item
@@ -167,7 +172,7 @@ export const mutations = {
   },
 
   STOP_MOVING(state,) {
-    state.moving.position.dragging = false
+    state.moving.position.isDragging = false
     state.moving.position.dragStartX = null
     state.moving.position.dragStartY = null
   }

@@ -121,15 +121,19 @@ const onMouseUp = (e) => {
         (!isNaN(leftSide.id) && leftSide.id !== '') ||
         (!isNaN(rightSide.id) && rightSide.id !== '')
       ) {
-        //     //assuming we didn't leave the current parent
-        store.commit('SET_RANKS', { oldParent: store.state.topParent })
+        const parentRegex = new RegExp(parentString)
+        const newParent = {
+          id: [...leftSide.classList].filter((className) => parentRegex.test(className))[0].split('_')[1]
+        }
+
+        store.commit('SET_RANKS', { oldParent: store.state.moving.parent, newParent  })
       } else {
         store.commit('UPDATE_DISPLAY')
       }
     }
-    // store.commit('STOP_MOVING')
-    // document.removeEventListener('pointerup', onMouseUp)
-    // document.removeEventListener('pointermove', onMouseMove)
+    store.commit('STOP_MOVING')
+    document.removeEventListener('pointerup', onMouseUp)
+    document.removeEventListener('pointermove', onMouseMove)
   }
 
   const onMouseDown = (e) => {
