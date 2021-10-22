@@ -166,14 +166,18 @@ export const mutations = {
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
   },
 
-  SET_RANKS(state, { oldParent, newParent }) {
+  SET_RANKS(state, { oldParent, newParent,oldDeckIndex, newDeckIndex }) {
+    if(!oldDeckIndex) oldDeckIndex = 0
+    if(!newDeckIndex) newDeckIndex = 0
+
+
     //get all of the commitments
     let allCommitments = state.commitments
     //get the commitments in the old and new parents
     let { parentCommitments: oldParentCommitments } =
-      getters.parentCommitmentsByParent(state, oldParent)
+      getters.parentCommitmentsByParent(state, oldParent, oldDeckIndex)
     let { parentCommitments: newParentCommitments } =
-      getters.parentCommitmentsByParent(state, newParent)
+      getters.parentCommitmentsByParent(state, newParent, newDeckIndex)
     //map from the commitments to a new array
     const newlyRankedCommitments = allCommitments.map((item) => {
       //if it's in the new commitments or if it is the moving commitment then look in the newCommitments array
@@ -228,12 +232,13 @@ export const mutations = {
   //set a particular deck as only being one parent deep
   SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment }) {
     //add the children of the desired parent as subcommitments
-    const commitmentsFromParent = state.commitments
+    const commitments = JSON.parse(JSON.stringify(state.commitments))
+    const commitmentsFromParent = commitments
       .filter((el) => {
         return commitment.id === el.parent.id
       })
       .sort((a, b) => a.rank - b.rank)
-
+      
     // add them as the sub array
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
       return { id: el.id, type: 'TodoCard' }

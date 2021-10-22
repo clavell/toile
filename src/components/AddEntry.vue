@@ -27,6 +27,9 @@
 
 <script>
 export default {
+  props:{
+    parent: Object,
+  },
   name: 'AddEntry',
   data() {
     return {
@@ -37,11 +40,12 @@ export default {
   },
   methods: {
     addEntry() {
+      const newParent = JSON.parse(JSON.stringify(this.parent))
       this.$store.dispatch('addCommitment', {
         entrytitle: this.entrytitle,
         duedate: this.duedate,
         duration: this.duration,
-        parent: { id: this.$store.state.topParent.id },
+        parent: { id: newParent.id },
       })
       this.$emit('submitted', true)
     },

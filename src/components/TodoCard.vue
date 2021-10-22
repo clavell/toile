@@ -141,10 +141,17 @@ const makeListEntryDraggable = function ({
             .filter((className) => parentRegex.test(className))[0]
             .split('_')[1],
         }
-
+         const deckRegex = new RegExp(deckString)
+        const newDeckIndex = 
+          [...leftSide.classList]
+            .filter((className) => deckRegex.test(className))[0]
+            .split('_')[1]
         store.commit('SET_RANKS', {
           oldParent: store.state.moving.parent,
           newParent,
+          oldDeckIndex:store.state.moving.deckIndex,
+          newDeckIndex
+
         })
       } else {
         store.commit('UPDATE_DISPLAY')
@@ -156,47 +163,55 @@ const makeListEntryDraggable = function ({
   }
 
   const onMouseDown = (e) => {
-    e.stopPropagation()
-    //if clicking on a checkbox don't drag
-    if (e.target.type == 'checkbox') {
-      return
+    if(e.shiftKey){
+      e.stopPropagation()
+      //if clicking on a checkbox don't drag
+      if (e.target.type == 'checkbox') {
+        return
+      }
+      e.preventDefault()
+      //get the right element to be moved
+      let moving = e.target
+      while (!moving.classList.contains('draggable')) {
+        moving = moving.parentNode
+      }
+
+      //get the initial size and position
+      let clientX = e.clientX
+      let clientY = e.clientY
+      const shiftX = e.clientX - moving.getBoundingClientRect().left
+      const shiftY = e.clientY - moving.getBoundingClientRect().top
+      position.x = clientX - shiftX - 7
+      position.y = clientY - shiftY - 7
+
+      position.dragStartX = clientX - position.x
+      position.dragStartY = clientY - position.y
+      position.isDragging = true
+
+      const movingParent = JSON.parse(JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent.id)))
+
+      const original = JSON.parse(JSON.stringify(fullCommitment.value))
+      //add the initial position information to the store
+      store.commit('SET_AS_MOVING', {
+        parent: movingParent,
+        original,
+        position,
+        deckIndex: props.deckIndex,
+      })
+
+      // if (onMouseDownDetails) {
+      //   onMouseDownDetails({ store, mouseDownArguments })
+      // }
+      document.addEventListener('pointermove', onMouseMove)
+      document.addEventListener('pointerup', onMouseUp)
+    } else{
+      let commitmentToGoTo = JSON.parse(JSON.stringify(fullCommitment.value))
+      store.commit('SET_DECK_AS_SINGLE_PARENT', {
+        deckIndex: props.deckIndex, 
+        commitment:commitmentToGoTo,
+      })
+      // SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment })
     }
-    e.preventDefault()
-    //get the right element to be moved
-    let moving = e.target
-    while (!moving.classList.contains('draggable')) {
-      moving = moving.parentNode
-    }
-
-    //get the initial size and position
-    let clientX = e.clientX
-    let clientY = e.clientY
-    const shiftX = e.clientX - moving.getBoundingClientRect().left
-    const shiftY = e.clientY - moving.getBoundingClientRect().top
-    position.x = clientX - shiftX - 7
-    position.y = clientY - shiftY - 7
-
-    position.dragStartX = clientX - position.x
-    position.dragStartY = clientY - position.y
-    position.isDragging = true
-
-    const movingParent = JSON.parse(JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent.id)))
-
-    const original = JSON.parse(JSON.stringify(fullCommitment.value))
-    //add the initial position information to the store
-    store.commit('SET_AS_MOVING', {
-      parent: movingParent,
-      original,
-      position,
-      deckIndex: props.deckIndex,
-    })
-
-    // if (onMouseDownDetails) {
-    //   onMouseDownDetails({ store, mouseDownArguments })
-    // }
-    onMouseUp
-    document.addEventListener('pointermove', onMouseMove)
-    document.addEventListener('pointerup', onMouseUp)
   }
   watch(element, (element) => {
     // if (!element instanceof HTMLElement) return;

@@ -1,6 +1,9 @@
 <template>
   <div class="list" ref="el">
-    <div class="title">{{ parentCommitment.entrytitle }}</div>
+    <div class="listheader" >
+      <div v-if="canGoBack" @click="goBack(parentCommitment)">&lt;</div>
+      <div class="title">{{ parentCommitment.entrytitle }}</div>
+    </div>
     <div id="wrapper">
       <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
       <component
@@ -13,7 +16,7 @@
       />
     </div>
     <div class="buttoncontainer">
-      <AddEntry v-if="addingEntry" @submitted="hideAddCard" />
+      <AddEntry v-if="addingEntry" @submitted="hideAddCard" :parent="parentCommitment"/>
       <AddButton v-else @press="showAddCard" />
     </div>
     <div v-if="addingEntry" class="overlay"></div>
@@ -52,11 +55,12 @@ export default {
     // })
 
     const parentCommitment = store.getters.commitmentById(props.listInfo.id)
-    props.listInfo.value
     // store.commit('UPDATE_DISPLAY')
     // watch(commitmentsList, () => {
     //   store.commit('UPDATE_DISPLAY')
     // })
+
+    const canGoBack = computed(() => parentCommitment.parent.id != null)
 
     const entryWidth = computed(() => {
       if (listWidth.value) {
@@ -74,6 +78,7 @@ export default {
 
     const hideAddCard = () => {
       addingEntry.value = false
+      store.commit('SET_DECK_AS_SINGLE_PARENT', { deckIndex: props.deckIndex, commitment: parentCommitment })
     }
 
     const showAddCard = () => {
@@ -88,7 +93,16 @@ export default {
       })
     }
 
-    return { el, addingEntry, showAddCard, hideAddCard, parentCommitment }
+    const goBack = function(parent) {
+      if(parent.parent.id != null){
+        const previousParent = store.getters.commitmentById(parent.parent.id)
+        store.commit(
+          'SET_DECK_AS_SINGLE_PARENT', 
+          { deckIndex: props.deckIndex, commitment: previousParent}
+        )}
+    }
+
+    return { el, addingEntry, showAddCard, hideAddCard, parentCommitment, goBack, canGoBack }
   },
   computed: {
     commitments() {
@@ -148,5 +162,10 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+.listheader {
+  display: flex; 
+  flex-direction: row;
 }
 </style>

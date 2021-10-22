@@ -441,6 +441,109 @@ describe('mutations', () => {
     ).toBe(newPosition)
   })
 
+  it('sets ranks if the ', () => {
+    //still need to update this
+    const expectedDecks = [
+      {
+        deck: [
+          {
+            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            commitments: [
+              { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
+              { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
+              { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+            ],
+          },
+        ],
+        id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
+      },
+      {
+        deck: [
+          {
+            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            commitments: [
+              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },//this one is moving
+              { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
+              { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+            ],
+          },
+        ],
+        id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
+      },
+      {
+        deck: [
+          {
+            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            commitments: [
+              { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
+              { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' }, //to here
+              { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
+              { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+            ],
+          },
+        ],
+        id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
+      },
+    ]
+
+    // const deckParents = [
+    //   { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+    //   { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+    //   { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+    // ]
+
+    //create the desired stack
+    SET_DECK_AS_SINGLE_PARENT(state, {
+      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      deckIndex: 0,
+    })
+    SET_DECK_AS_SINGLE_PARENT(state, {
+      commitment: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      deckIndex: 1,
+    })
+    SET_DECK_AS_SINGLE_PARENT(state, {
+      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      deckIndex: 2,
+    })
+
+    //choose an id from the list to move
+    const oldPosition = 0
+    const oldParent = {
+      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+    }
+    const oldDeckIndex = 1
+
+    // //choose a place to move it to
+    let newPositionIdentifier = 1
+    const newParent = {
+      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+    }
+    const newDeckIndex = 2
+
+    //get the commitment based on the parent and which position it was at
+    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
+      oldPosition,
+      newPositionIdentifier,
+      oldParent,
+      oldDeckIndex
+    )
+    // // perform the mutation
+    UPDATE_DISPLAY_LIST_POSITIONS(state, {
+      commitment,
+      newPosition,
+      oldParent,
+      newParent,
+      oldDeckIndex,
+      newDeckIndex,
+    })
+
+  
+    expect(JSON.stringify(state.decks[0].deck)).toBe(JSON.stringify(expectedDecks[0].deck))
+    expect(JSON.stringify(state.decks[1].deck)).toBe(JSON.stringify(expectedDecks[1].deck))
+    expect(JSON.stringify(state.decks[2].deck)).toBe(JSON.stringify(expectedDecks[2].deck))
+
+  })
+
   it('adds ancestors to stack (2 ancestors)', () => {
     const expectedStack = [
       {
