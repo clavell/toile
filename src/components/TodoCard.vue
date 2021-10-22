@@ -3,7 +3,7 @@
     :style="commitmentSideBarStyle"
     class="listEntrySideBar"
     :id="currentDisplayPosition"
-    :class="parent"
+    :class="[parent, deck]"
   ></div>
   <div
     ref="el"
@@ -37,7 +37,7 @@
       }}</label>
     </div>
   </div>
-  <div v-if="isMoving" :id="currentDisplayPosition" :class="parent"></div>
+  <div v-if="isMoving" :id="currentDisplayPosition" :class="[parent,deck]"></div>
 </template>
 
 <script>
@@ -54,6 +54,7 @@ const makeListEntryDraggable = function ({
   fullCommitment,
   store,
   element,
+  props
   // onMouseDownDetails,
   // mouseDownArguments,
 }) {
@@ -86,18 +87,27 @@ const makeListEntryDraggable = function ({
             .filter((className) => parentRegex.test(className))[0]
             .split('_')[1],
         }
-
+        const deckRegex = new RegExp(deckString)
+        const newDeckIndex = 
+          [...leftSide.classList]
+            .filter((className) => deckRegex.test(className))[0]
+            .split('_')[1]
+        
+        const oldParent = JSON.parse(
+            JSON.stringify(
+              store.getters.commitmentById(store.state.moving.parent.id)
+            )
+          )
         store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
           commitment: JSON.parse(JSON.stringify(store.state.moving.original)),
           newPosition: JSON.parse(JSON.stringify(leftSide.id)),
           newParent: JSON.parse(
             JSON.stringify(store.getters.commitmentById(newParent.id))
           ),
-          oldParent: JSON.parse(
-            JSON.stringify(
-              store.getters.commitmentById(store.state.moving.parent.id)
-            )
-          ),
+          oldParent,
+          oldDeckIndex:
+            store.state.moving.deckIndex,
+          newDeckIndex
         })
       }
     }
@@ -170,16 +180,21 @@ const makeListEntryDraggable = function ({
     position.dragStartY = clientY - position.y
     position.isDragging = true
 
+    const movingParent = JSON.parse(JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent.id)))
+
+    const original = JSON.parse(JSON.stringify(fullCommitment.value))
     //add the initial position information to the store
     store.commit('SET_AS_MOVING', {
-      parent: store.getters.commitmentById(fullCommitment.value.parent.id),
-      original: fullCommitment.value,
+      parent: movingParent,
+      original,
       position,
+      deckIndex: props.deckIndex,
     })
 
     // if (onMouseDownDetails) {
     //   onMouseDownDetails({ store, mouseDownArguments })
     // }
+    onMouseUp
     document.addEventListener('pointermove', onMouseMove)
     document.addEventListener('pointerup', onMouseUp)
   }
@@ -197,7 +212,7 @@ const makeListEntryDraggable = function ({
 }
 
 const parentString = 'parent'
-
+const deckString = 'deck'
 // const onMouseDownDetails = function ({ store, mouseDownArguments:{fullCommitment} }) {
 //   store.commit('SET_AS_MOVING',{parent: store.getters.commitmentById(fullCommitment.value.parent.id),original:fullCommitment.value})
 
@@ -250,7 +265,7 @@ export default {
       return store.getters.commitmentById(props.commitment.id)
     })
     //make the entry draggable
-    makeListEntryDraggable({ store, fullCommitment, element: el })
+    makeListEntryDraggable({ store, fullCommitment, element: el,props, })
     // const { position, draggableStyle } = makeDraggable({
     //   element: el,
     //   props,
@@ -274,6 +289,10 @@ export default {
 
     const parent = computed(() => {
       return parentString + '_' + props.parentCommitment.id
+    })
+
+    const deck = computed(() => {
+      return deckString + '_' + props.deckIndex
     })
 
     //mark the entry as complete or not
@@ -301,6 +320,7 @@ export default {
       currentDisplayPosition,
       parent,
       isMoving,
+      deck
     }
   },
 }

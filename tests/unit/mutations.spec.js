@@ -612,7 +612,7 @@ describe('mutations', () => {
     const oldDeckIndex = 1
 
     // //choose a place to move it to
-    let newPositionIdentifier = 2
+    let newPositionIdentifier = 1
     const newParent = {
       id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
     }
@@ -635,8 +635,11 @@ describe('mutations', () => {
       newDeckIndex,
     })
 
-    const newStack = state.decks[0].deck
-    expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedDecks[0].deck))
+  
+    expect(JSON.stringify(state.decks[0].deck)).toBe(JSON.stringify(expectedDecks[0].deck))
+    expect(JSON.stringify(state.decks[1].deck)).toBe(JSON.stringify(expectedDecks[1].deck))
+    expect(JSON.stringify(state.decks[2].deck)).toBe(JSON.stringify(expectedDecks[2].deck))
+
   })
 
   it('sets the zeroth deck as the desired deck', () => {

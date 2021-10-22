@@ -91,6 +91,7 @@ export const mutations = {
     let oldCommitmentsStack = JSON.parse(
       JSON.stringify(state.decks[oldDeckIndex].deck)
     )
+   
     if (newDeckIndex == oldDeckIndex) {
       let newCommitmentsStack = oldCommitmentsStack.map((item) => {
         if (oldParent.id == newParent.id) {
@@ -103,6 +104,7 @@ export const mutations = {
             }
           }
         } else {
+          
           if (item.id == oldParent.id) {
             return { ...item, commitments: oldParentCommitments }
           }
@@ -120,6 +122,7 @@ export const mutations = {
       })
       state.decks[oldDeckIndex].deck = newCommitmentsStack
     } else {
+
       let updatedOldCommitmentsStack = oldCommitmentsStack.map((item) => {
         if (item.id == oldParent.id) {
           return {
@@ -132,7 +135,11 @@ export const mutations = {
         return item
       })
 
-      let updatedNewCommitmentsStack = oldCommitmentsStack.map((item) => {
+      let newCommitmentsStack = JSON.parse(
+        JSON.stringify(state.decks[newDeckIndex].deck)
+      )
+
+      let updatedNewCommitmentsStack = newCommitmentsStack.map((item) => {
         if (item.id == newParent.id) {
           return {
             ...item,
@@ -155,6 +162,7 @@ export const mutations = {
         return item
       })
     }
+    state.moving.deckIndex = newDeckIndex
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
   },
 
@@ -239,10 +247,11 @@ export const mutations = {
     state.topParent[deckIndex] = getters.commitmentById2(state, newTopParent.id)
   },
 
-  SET_AS_MOVING(state, { parent, original, position }) {
+  SET_AS_MOVING(state, { parent, original, position, deckIndex }) {
     //parent is the parent within the current deck that the task is displayed in
     //original is the commitment as it was when picked up (not sure if it is needed)
-    state.moving = { parent, original, position }
+    if(!deckIndex) deckIndex=0
+    state.moving = { parent, original, position, deckIndex }
   },
 
   UPDATE_DRAG_POSITION(state, { e }) {

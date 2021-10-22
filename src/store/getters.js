@@ -13,10 +13,10 @@ export const getters = {
     //get the current stack
     if (!deckIndex) deckIndex = 0
 
-    let currentStack = state.decks[deckIndex].deck
+    let currentStack = JSON.parse(JSON.stringify(state.decks[deckIndex].deck))
     //get the commitments for chosen parent
-    let parentCommitments = currentStack.filter((el) => el.id == parent.id)[0]
-      .commitments
+    let parentCommitments = JSON.parse(JSON.stringify(currentStack.filter((el) => el.id == parent.id)[0]
+      .commitments))
     return { parentCommitments }
   },
 
