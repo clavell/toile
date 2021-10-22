@@ -1,14 +1,18 @@
 <template>
   <div class="Lists">
     <Calendar />
-    <List v-for="list in lists" :key="list.id" :listInfo="list" />
+    <Deck
+      v-for="index in deckIndices"
+      :key="decks[index].id"
+      :deckIndex="index"
+    />
     <MovingTodoCard />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import List from '@/components/List.vue'
+import Deck from '@/components/Deck.vue'
 import Calendar from '@/components/Calendar.vue'
 import MovingTodoCard from '@/components/MovingTodoCard.vue'
 import { useStore } from 'vuex'
@@ -16,19 +20,34 @@ import { computed } from 'vue'
 export default {
   name: 'Lists',
   components: {
-    List,
+    Deck,
     Calendar,
-    MovingTodoCard
+    MovingTodoCard,
   },
   setup() {
     const store = useStore()
-    store.commit('SET_TOP_PARENT', {
-      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+    store.commit('SET_DECK_AS_SINGLE_PARENT', {
+      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      deckIndex: 0,
     })
-    store.commit('ADD_ANCESTORS_TO_STACK')
-    const lists = computed(() => store.state.decks[0].deck)
+    store.commit('SET_DECK_AS_SINGLE_PARENT', {
+      commitment: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      deckIndex: 1,
+    })
+    store.commit('SET_DECK_AS_SINGLE_PARENT', {
+      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      deckIndex: 2,
+    })
+    // store.commit('ADD_ANCESTORS_TO_STACK')
+    const decks = computed(() => store.state.decks)
+    const deckIndices = computed(() => {
+      let deckIndices = Array(decks.value.length)
+        .fill()
+        .map((element, index) => index)
+      return deckIndices
+    })
 
-    return { lists }
+    return { decks, deckIndices }
   },
 }
 </script>

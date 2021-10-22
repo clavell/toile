@@ -14,7 +14,7 @@
     @mousedown.prevent
     @touchmove.prevent
   >
-  <!-- <div
+    <!-- <div
     ref="el"
     class="listentry draggable grid grid-cols-todolistentry bg-pink-800"
     :style="[entryWidth, draggableStyle]"
@@ -68,43 +68,47 @@ const makeListEntryDraggable = function ({
     dragStartY: null,
   }
 
-   const onMouseMove = (e) => {
+  const onMouseMove = (e) => {
     e.stopPropagation()
-    store.commit("UPDATE_DRAG_POSITION",{e})
+    store.commit('UPDATE_DRAG_POSITION', { e })
 
     let position = store.state.moving.position
     const leftSide = document.elementFromPoint(
-    position.x - 1,
-    position.y + position.height / 2
-  )
-  //action for changing the position in the display array
-  if (leftSide) {
-    if (!isNaN(leftSide.id) && leftSide.id !== '') {
-
-      const parentRegex = new RegExp(parentString)
-      const newParent = {
-        id: [...leftSide.classList].filter((className) => parentRegex.test(className))[0].split('_')[1]
+      position.x - 1,
+      position.y + position.height / 2
+    )
+    //action for changing the position in the display array
+    if (leftSide) {
+      if (!isNaN(leftSide.id) && leftSide.id !== '') {
+        const parentRegex = new RegExp(parentString)
+        const newParent = {
+          id: [...leftSide.classList]
+            .filter((className) => parentRegex.test(className))[0]
+            .split('_')[1],
         }
-        
 
-      store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
-        commitment: JSON.parse(JSON.stringify(store.state.moving.original)),
-        newPosition: JSON.parse(JSON.stringify(leftSide.id)),
-        newParent: JSON.parse(JSON.stringify(store.getters.commitmentById(newParent.id))),
-        oldParent: JSON.parse(JSON.stringify(store.getters.commitmentById(store.state.moving.parent.id)))
-      })
+        store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
+          commitment: JSON.parse(JSON.stringify(store.state.moving.original)),
+          newPosition: JSON.parse(JSON.stringify(leftSide.id)),
+          newParent: JSON.parse(
+            JSON.stringify(store.getters.commitmentById(newParent.id))
+          ),
+          oldParent: JSON.parse(
+            JSON.stringify(
+              store.getters.commitmentById(store.state.moving.parent.id)
+            )
+          ),
+        })
+      }
     }
   }
-  
-  }
-const onMouseUp = (e) => {
+  const onMouseUp = (e) => {
     e.preventDefault()
     e.stopPropagation()
     // if (onMouseUpDetails) {
     //   onMouseUpDetails({ store, position, props, mouseUpArguments })
     // }
     const position = JSON.parse(JSON.stringify(store.state.moving.position))
-    console.log(position)
     const leftSide = document.elementFromPoint(
       position.x - 1,
       position.y + position.height / 2
@@ -123,10 +127,15 @@ const onMouseUp = (e) => {
       ) {
         const parentRegex = new RegExp(parentString)
         const newParent = {
-          id: [...leftSide.classList].filter((className) => parentRegex.test(className))[0].split('_')[1]
+          id: [...leftSide.classList]
+            .filter((className) => parentRegex.test(className))[0]
+            .split('_')[1],
         }
 
-        store.commit('SET_RANKS', { oldParent: store.state.moving.parent, newParent  })
+        store.commit('SET_RANKS', {
+          oldParent: store.state.moving.parent,
+          newParent,
+        })
       } else {
         store.commit('UPDATE_DISPLAY')
       }
@@ -162,18 +171,17 @@ const onMouseUp = (e) => {
     position.isDragging = true
 
     //add the initial position information to the store
-    store.commit('SET_AS_MOVING',{
+    store.commit('SET_AS_MOVING', {
       parent: store.getters.commitmentById(fullCommitment.value.parent.id),
-      original:fullCommitment.value,
-      position
-      })
+      original: fullCommitment.value,
+      position,
+    })
 
     // if (onMouseDownDetails) {
     //   onMouseDownDetails({ store, mouseDownArguments })
     // }
     document.addEventListener('pointermove', onMouseMove)
     document.addEventListener('pointerup', onMouseUp)
-
   }
   watch(element, (element) => {
     // if (!element instanceof HTMLElement) return;
@@ -188,18 +196,14 @@ const onMouseUp = (e) => {
   })
 }
 
-
-
 const parentString = 'parent'
 
 // const onMouseDownDetails = function ({ store, mouseDownArguments:{fullCommitment} }) {
 //   store.commit('SET_AS_MOVING',{parent: store.getters.commitmentById(fullCommitment.value.parent.id),original:fullCommitment.value})
-  
+
 // }
 
-
-
-// const onMouseMoveDetails = function ({ store, props, position, 
+// const onMouseMoveDetails = function ({ store, props, position,
 // // mouseMoveArguments: {fullCommitment}
 // }) {
 //   const leftSide = document.elementFromPoint(
@@ -208,27 +212,25 @@ const parentString = 'parent'
 //   )
 //   //action for changing the position in the display array
 //   console.log(leftSide)
-  // console.log(store.state.moving)
-  // console.log(fullCommitment)
-  
-  // if (leftSide) {
-  //   if (!isNaN(leftSide.id) && leftSide.id !== '') {
+// console.log(store.state.moving)
+// console.log(fullCommitment)
 
-  //     const parentRegex = new RegExp(parentString)
-  //     const newParent = {
-  //       id: [...leftSide.classList].filter((className) => parentRegex.test(className))[0].split('_')[1]
-  //       }
+// if (leftSide) {
+//   if (!isNaN(leftSide.id) && leftSide.id !== '') {
 
+//     const parentRegex = new RegExp(parentString)
+//     const newParent = {
+//       id: [...leftSide.classList].filter((className) => parentRegex.test(className))[0].split('_')[1]
+//       }
 
-
-  //     store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
-  //       commitment: props.commitment,
-  //       newPosition: leftSide.id,
-  //       newParent: store.getters.commitmentById(newParent.id),
-  //       oldParent: store.getters.commitmentById(store.state.moving.parent.id)
-  //     })
-  //   }
-  // }
+//     store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
+//       commitment: props.commitment,
+//       newPosition: leftSide.id,
+//       newParent: store.getters.commitmentById(newParent.id),
+//       oldParent: store.getters.commitmentById(store.state.moving.parent.id)
+//     })
+//   }
+// }
 // }
 
 export default {
@@ -236,6 +238,7 @@ export default {
   props: {
     commitment: Object,
     parentCommitment: Object,
+    deckIndex: Number,
   },
   setup(props) {
     const store = useStore()
@@ -247,7 +250,7 @@ export default {
       return store.getters.commitmentById(props.commitment.id)
     })
     //make the entry draggable
-   makeListEntryDraggable({store,fullCommitment,element:el})
+    makeListEntryDraggable({ store, fullCommitment, element: el })
     // const { position, draggableStyle } = makeDraggable({
     //   element: el,
     //   props,
@@ -264,20 +267,26 @@ export default {
     //sidebar indicator for when the element is being dragged over a particular spot
     const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
 
-    const { currentDisplayPosition } = currentDisplayPositionReuse({store, props})
+    const { currentDisplayPosition } = currentDisplayPositionReuse({
+      store,
+      props,
+    })
 
     const parent = computed(() => {
-      return parentString + "_" + props.parentCommitment.id
+      return parentString + '_' + props.parentCommitment.id
     })
 
     //mark the entry as complete or not
-    const {checked} = checkedReuse(store, props.commitment)
+    const { checked } = checkedReuse(store, props.commitment)
 
     //when checked strikethrough the text
     const commitmentTextStyle = commitmentTextStyleReuse(checked)
 
     const isMoving = computed(() => {
-      return store.state.moving.original.id == fullCommitment.value.id && store.state.moving.position.isDragging
+      return (
+        store.state.moving.original.id == fullCommitment.value.id &&
+        store.state.moving.position.isDragging
+      )
     })
 
     return {
@@ -291,14 +300,10 @@ export default {
       fullCommitment,
       currentDisplayPosition,
       parent,
-      isMoving
+      isMoving,
     }
   },
 }
 
-
-  
-
-  
 //   complete: Boober,
 </script>

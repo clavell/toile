@@ -5,21 +5,21 @@ export const getters = {
   topParentCommitments(state) {
     const parentIndex = getters.topParentIndex(state)
     //get the currently in topParent commitments
-    let topParentCommitments = [
-      ...state.decks[0].deck[parentIndex].commitments,
-    ]
+    let topParentCommitments = [...state.decks[0].deck[parentIndex].commitments]
     // .sort((a,b)=> a.rank - b.rank)
     return { topParentCommitments, parentIndex }
   },
-  parentCommitmentsByParent(state, parent) {
-     //get the current stack
-  let currentStack = state.decks[0].deck
-  //get the commitments for chosen parent
-  let parentCommitments = currentStack.filter((el) => el.id == parent.id)[0]
-    .commitments
-    return {parentCommitments}
+  parentCommitmentsByParent(state, parent, deckIndex) {
+    //get the current stack
+    if (!deckIndex) deckIndex = 0
+
+    let currentStack = state.decks[deckIndex].deck
+    //get the commitments for chosen parent
+    let parentCommitments = currentStack.filter((el) => el.id == parent.id)[0]
+      .commitments
+    return { parentCommitments }
   },
- 
+
   commitmentsOnCurrentDate(state) {
     //find all events on `currentDate`
     var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
@@ -59,6 +59,5 @@ export const getters = {
     return state.decks[0].deck.findIndex((el) => {
       return el.id === state.topParent[0].id
     })
-
   },
 }

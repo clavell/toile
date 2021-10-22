@@ -1,4 +1,5 @@
 import { getters } from '@/store/getters.js'
+import { v4 as uuidv4 } from 'uuid'
 
 // export `mutations` as a named export
 export const mutations = {
@@ -32,10 +33,10 @@ export const mutations = {
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
       return { id: el.id, type: 'TodoCard' }
     })
-    //set the 
-    state.decks[0] = {deck:[
-      { id: state.topParent[0].id, commitments: commitmentsToAdd },
-    ]}
+    //set the
+    state.decks[0] = {
+      deck: [{ id: state.topParent[0].id, commitments: commitmentsToAdd }],
+    }
   },
 
   SET_RANK(state, id, newRank) {
@@ -43,72 +44,138 @@ export const mutations = {
       getters.indexFromStateArray(id, state, 'commitments')
     ].rank = newRank
   },
-  
-  UPDATE_DISPLAY_LIST_POSITIONS(state, { commitment, newPosition, oldParent, newParent }) {
-    commitment
-    newPosition
-    newParent
+
+  UPDATE_DISPLAY_LIST_POSITIONS(
+    state,
+    {
+      commitment,
+      newPosition,
+      oldParent,
+      newParent,
+      newDeckIndex,
+      oldDeckIndex,
+    }
+  ) {
+    if (!newDeckIndex) newDeckIndex = 0
+    if (!oldDeckIndex) oldDeckIndex = 0
+
     //get the commitments
-    let { parentCommitments:oldParentCommitments } = JSON.parse(JSON.stringify(getters.parentCommitmentsByParent(state,oldParent)))
+    let { parentCommitments: oldParentCommitments } = JSON.parse(
+      JSON.stringify(
+        getters.parentCommitmentsByParent(state, oldParent, oldDeckIndex)
+      )
+    )
     //remove the original commitment
     // if(JSON.stringify(oldParent) === JSON.stringify(newParent)){
-      const indexToRemove = oldParentCommitments.findIndex((el) => {
-        return el.id === commitment.id
-      })
-      oldParentCommitments.splice(indexToRemove, 1)
+    const indexToRemove = oldParentCommitments.findIndex((el) => {
+      return el.id === commitment.id
+    })
+    oldParentCommitments.splice(indexToRemove, 1)
     // // }
     //   //insert it at the new position
     var newParentCommitments
-    if(JSON.stringify(oldParent) === JSON.stringify(newParent)){
+    if (JSON.stringify(oldParent) === JSON.stringify(newParent)) {
       newParentCommitments = JSON.parse(JSON.stringify(oldParentCommitments))
-    } else{
-      ({parentCommitments:newParentCommitments} = JSON.parse(JSON.stringify(getters.parentCommitmentsByParent(state,newParent))))
+    } else {
+      ;({ parentCommitments: newParentCommitments } = JSON.parse(
+        JSON.stringify(
+          getters.parentCommitmentsByParent(state, newParent, newDeckIndex)
+        )
+      ))
     }
-      
-      newParentCommitments.splice(newPosition, 0, commitment)
+
+    newParentCommitments.splice(newPosition, 0, commitment)
 
     // //set the state
-    // //need the commitments stack array
-    let oldCommitmentsStack = JSON.parse(JSON.stringify(state.decks[0].deck))
-    let newCommitmentsStack = oldCommitmentsStack.map((item) => {
-      if(oldParent.id == newParent.id) {
-        if(item.id == newParent.id){
-          return {...item, commitments: newParentCommitments.map((el) => {
-            return {id:el.id, type:"TodoCard"}
-          })}
+    // //need the commitments stack arrayIndexnewDeckIndex
+    let oldCommitmentsStack = JSON.parse(
+      JSON.stringify(state.decks[oldDeckIndex].deck)
+    )
+    if (newDeckIndex == oldDeckIndex) {
+      let newCommitmentsStack = oldCommitmentsStack.map((item) => {
+        if (oldParent.id == newParent.id) {
+          if (item.id == newParent.id) {
+            return {
+              ...item,
+              commitments: newParentCommitments.map((el) => {
+                return { id: el.id, type: 'TodoCard' }
+              }),
+            }
+          }
+        } else {
+          if (item.id == oldParent.id) {
+            return { ...item, commitments: oldParentCommitments }
+          }
+          if (item.id == newParent.id) {
+            return {
+              ...item,
+              commitments: newParentCommitments.map((el) => {
+                return { id: el.id, type: 'TodoCard' }
+              }),
+            }
+          }
         }
-      } else{
-        if(item.id == oldParent.id){
-          return {...item, commitments: oldParentCommitments}
-        }
-        if(item.id == newParent.id){
-          return {...item, commitments: newParentCommitments.map((el) => {
-            return {id:el.id, type:"TodoCard"}
-          })}
-        }
-      }
 
-      
-      return item
-    })
+        return item
+      })
+      state.decks[oldDeckIndex].deck = newCommitmentsStack
+    } else {
+      let updatedOldCommitmentsStack = oldCommitmentsStack.map((item) => {
+        if (item.id == oldParent.id) {
+          return {
+            ...item,
+            commitments: oldParentCommitments.map((el) => {
+              return { id: el.id, type: 'TodoCard' }
+            }),
+          }
+        }
+        return item
+      })
+
+      let updatedNewCommitmentsStack = oldCommitmentsStack.map((item) => {
+        if (item.id == newParent.id) {
+          return {
+            ...item,
+            commitments: newParentCommitments.map((el) => {
+              return { id: el.id, type: 'TodoCard' }
+            }),
+          }
+        }
+        return item
+      })
+
+      //get all the decks
+      let decks = JSON.parse(JSON.stringify(state.decks))
+      state.decks = decks.map((item, element) => {
+        if (element == newDeckIndex) {
+          return { ...item, deck: updatedNewCommitmentsStack }
+        } else if (element == oldDeckIndex) {
+          return { ...item, deck: updatedOldCommitmentsStack }
+        }
+        return item
+      })
+    }
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
-    state.decks[0].deck = newCommitmentsStack
   },
 
   SET_RANKS(state, { oldParent, newParent }) {
     //get all of the commitments
     let allCommitments = state.commitments
     //get the commitments in the old and new parents
-    let { parentCommitments: oldParentCommitments } = getters.parentCommitmentsByParent(state,oldParent)
-    let { parentCommitments: newParentCommitments } = getters.parentCommitmentsByParent(state,newParent)
+    let { parentCommitments: oldParentCommitments } =
+      getters.parentCommitmentsByParent(state, oldParent)
+    let { parentCommitments: newParentCommitments } =
+      getters.parentCommitmentsByParent(state, newParent)
     //map from the commitments to a new array
     const newlyRankedCommitments = allCommitments.map((item) => {
       //if it's in the new commitments or if it is the moving commitment then look in the newCommitments array
-      if(item.parent.id == newParent.id || item.id == state.moving.original.id){
+      if (
+        item.parent.id == newParent.id ||
+        item.id == state.moving.original.id
+      ) {
         let newRank = newParentCommitments.findIndex((el) => el.id == item.id)
-        return {...item, rank:newRank, parent: newParent}
-      }
-      else if (item.parent.id == oldParent.id) {
+        return { ...item, rank: newRank, parent: newParent }
+      } else if (item.parent.id == oldParent.id) {
         let newRank = oldParentCommitments.findIndex((el) => el.id == item.id)
         return { ...item, rank: newRank }
       }
@@ -148,33 +215,49 @@ export const mutations = {
       return { id: item.id, commitments: commitmentsToAdd }
     })
     //set the stack to be the new stack
-    state.decks[0].deck = newStack
+    state.decks[0] = { deck: newStack, id: uuidv4() }
+  },
+  //set a particular deck as only being one parent deep
+  SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment }) {
+    //add the children of the desired parent as subcommitments
+    const commitmentsFromParent = state.commitments
+      .filter((el) => {
+        return commitment.id === el.parent.id
+      })
+      .sort((a, b) => a.rank - b.rank)
+
+    // add them as the sub array
+    const commitmentsToAdd = commitmentsFromParent.map((el) => {
+      return { id: el.id, type: 'TodoCard' }
+    })
+    let newStack = [{ id: commitment.id, commitments: commitmentsToAdd }]
+    //set the stack to be the new stack
+    state.decks[deckIndex] = { deck: newStack, id: uuidv4() }
   },
 
-  SET_TOP_PARENT(state, newTopParent) {
-    state.topParent[0] = getters.commitmentById2(state, newTopParent.id)
+  SET_TOP_PARENT(state, newTopParent, deckIndex) {
+    state.topParent[deckIndex] = getters.commitmentById2(state, newTopParent.id)
   },
 
-  SET_AS_MOVING(state, {parent, original,position}) {
+  SET_AS_MOVING(state, { parent, original, position }) {
     //parent is the parent within the current deck that the task is displayed in
     //original is the commitment as it was when picked up (not sure if it is needed)
-    state.moving = {parent,original, position}
+    state.moving = { parent, original, position }
   },
 
-  UPDATE_DRAG_POSITION(state, {e}) {
+  UPDATE_DRAG_POSITION(state, { e }) {
     let { clientX, clientY } = e
     let position = state.moving.position
     state.moving.position = {
-      ...position, 
-      x:clientX - position.dragStartX,
-      y:clientY - position.dragStartY
+      ...position,
+      x: clientX - position.dragStartX,
+      y: clientY - position.dragStartY,
     }
   },
 
-  STOP_MOVING(state,) {
+  STOP_MOVING(state) {
     state.moving.position.isDragging = false
     state.moving.position.dragStartX = null
     state.moving.position.dragStartY = null
-  }
-
+  },
 }

@@ -9,6 +9,7 @@
         :key="item.id"
         :commitment="item"
         :parentCommitment="parentCommitment"
+        :deckIndex="deckIndex"
       />
     </div>
     <div class="buttoncontainer">
@@ -31,6 +32,7 @@ export default {
   name: 'List',
   props: {
     listInfo: Object,
+    deckIndex: Number,
   },
   components: {
     TodoCard,
@@ -49,9 +51,7 @@ export default {
     //   })
     // })
 
-    const parentCommitment = store.getters.commitmentById(
-      props.listInfo.id
-    )
+    const parentCommitment = store.getters.commitmentById(props.listInfo.id)
     props.listInfo.value
     // store.commit('UPDATE_DISPLAY')
     // watch(commitmentsList, () => {
