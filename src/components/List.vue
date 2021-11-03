@@ -1,6 +1,6 @@
 <template>
   <div class="list" ref="el">
-    <div class="listheader" >
+    <div class="listheader">
       <div v-if="canGoBack" @click="goBack(parentCommitment)">&lt;</div>
       <div class="title">{{ parentCommitment.entrytitle }}</div>
     </div>
@@ -16,7 +16,11 @@
       />
     </div>
     <div class="buttoncontainer">
-      <AddEntry v-if="addingEntry" @submitted="hideAddCard" :parent="parentCommitment"/>
+      <AddEntry
+        v-if="addingEntry"
+        @submitted="hideAddCard"
+        :parent="parentCommitment"
+      />
       <AddButton v-else @press="showAddCard" />
     </div>
     <div v-if="addingEntry" class="overlay"></div>
@@ -78,7 +82,10 @@ export default {
 
     const hideAddCard = () => {
       addingEntry.value = false
-      store.commit('SET_DECK_AS_SINGLE_PARENT', { deckIndex: props.deckIndex, commitment: parentCommitment })
+      store.commit('SET_DECK_AS_SINGLE_PARENT', {
+        deckIndex: props.deckIndex,
+        commitment: parentCommitment,
+      })
     }
 
     const showAddCard = () => {
@@ -93,16 +100,25 @@ export default {
       })
     }
 
-    const goBack = function(parent) {
-      if(parent.parent.id != null){
+    const goBack = function (parent) {
+      if (parent.parent.id != null) {
         const previousParent = store.getters.commitmentById(parent.parent.id)
-        store.commit(
-          'SET_DECK_AS_SINGLE_PARENT', 
-          { deckIndex: props.deckIndex, commitment: previousParent}
-        )}
+        store.commit('SET_DECK_AS_SINGLE_PARENT', {
+          deckIndex: props.deckIndex,
+          commitment: previousParent,
+        })
+      }
     }
 
-    return { el, addingEntry, showAddCard, hideAddCard, parentCommitment, goBack, canGoBack }
+    return {
+      el,
+      addingEntry,
+      showAddCard,
+      hideAddCard,
+      parentCommitment,
+      goBack,
+      canGoBack,
+    }
   },
   computed: {
     commitments() {
@@ -165,7 +181,7 @@ export default {
 }
 
 .listheader {
-  display: flex; 
+  display: flex;
   flex-direction: row;
 }
 </style>

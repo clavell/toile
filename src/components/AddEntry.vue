@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  props:{
+  props: {
     parent: Object,
   },
   name: 'AddEntry',

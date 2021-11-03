@@ -537,11 +537,15 @@ describe('mutations', () => {
       newDeckIndex,
     })
 
-  
-    expect(JSON.stringify(state.decks[0].deck)).toBe(JSON.stringify(expectedDecks[0].deck))
-    expect(JSON.stringify(state.decks[1].deck)).toBe(JSON.stringify(expectedDecks[1].deck))
-    expect(JSON.stringify(state.decks[2].deck)).toBe(JSON.stringify(expectedDecks[2].deck))
-
+    expect(JSON.stringify(state.decks[0].deck)).toBe(
+      JSON.stringify(expectedDecks[0].deck)
+    )
+    expect(JSON.stringify(state.decks[1].deck)).toBe(
+      JSON.stringify(expectedDecks[1].deck)
+    )
+    expect(JSON.stringify(state.decks[2].deck)).toBe(
+      JSON.stringify(expectedDecks[2].deck)
+    )
   })
 
   it('adds ancestors to stack (2 ancestors)', () => {
@@ -738,11 +742,15 @@ describe('mutations', () => {
       newDeckIndex,
     })
 
-  
-    expect(JSON.stringify(state.decks[0].deck)).toBe(JSON.stringify(expectedDecks[0].deck))
-    expect(JSON.stringify(state.decks[1].deck)).toBe(JSON.stringify(expectedDecks[1].deck))
-    expect(JSON.stringify(state.decks[2].deck)).toBe(JSON.stringify(expectedDecks[2].deck))
-
+    expect(JSON.stringify(state.decks[0].deck)).toBe(
+      JSON.stringify(expectedDecks[0].deck)
+    )
+    expect(JSON.stringify(state.decks[1].deck)).toBe(
+      JSON.stringify(expectedDecks[1].deck)
+    )
+    expect(JSON.stringify(state.decks[2].deck)).toBe(
+      JSON.stringify(expectedDecks[2].deck)
+    )
   })
 
   it('sets the zeroth deck as the desired deck', () => {

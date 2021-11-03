@@ -28,16 +28,19 @@ export const actions = {
       commit('UPDATE_COMMITMENT', { newCommitment, index })
     }
   },
-  addPrerequisite({state,commit}, {commitment, prerequisite}) {
+  addPrerequisite({ state, commit }, { commitment, prerequisite }) {
     let commitmentAncestors = getters.ancestorsById(state, commitment.id)
     let prerequisiteAncestors = getters.ancestorsById(state, prerequisite.id)
-    let safeToAdd = !(commitmentAncestors.includes(prerequisite.id) || prerequisiteAncestors.includes(commitment.id) || commitment.parent.id == prerequisite.id || prerequisite.parent.id == commitment.id)
-    if(safeToAdd){
-      commit('ADD_PREREQUISITE', {commitment,prerequisite})
-
+    let safeToAdd = !(
+      commitmentAncestors.includes(prerequisite.id) ||
+      prerequisiteAncestors.includes(commitment.id) ||
+      commitment.parent.id == prerequisite.id ||
+      prerequisite.parent.id == commitment.id
+    )
+    if (safeToAdd) {
+      commit('ADD_PREREQUISITE', { commitment, prerequisite })
     }
   },
-
 
   // updateDisplayOrder({state, commit},{commitment, newPosition}){
 

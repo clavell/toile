@@ -15,8 +15,11 @@ export const getters = {
 
     let currentStack = JSON.parse(JSON.stringify(state.decks[deckIndex].deck))
     //get the commitments for chosen parent
-    let parentCommitments = JSON.parse(JSON.stringify(currentStack.filter((el) => el.id == parent.id)[0]
-      .commitments))
+    let parentCommitments = JSON.parse(
+      JSON.stringify(
+        currentStack.filter((el) => el.id == parent.id)[0].commitments
+      )
+    )
     return { parentCommitments }
   },
 
@@ -60,14 +63,13 @@ export const getters = {
       return el.id === state.topParent[0].id
     })
   },
-  ancestorsById(state, id){
+  ancestorsById(state, id) {
     let ancestors = []
     let commitment = this.commitmentById2(state, id)
-    while(commitment.parent.id !== null){
-      commitment = this.commitmentById2(state,commitment.parent.id)
+    while (commitment.parent.id !== null) {
+      commitment = this.commitmentById2(state, commitment.parent.id)
       ancestors.push(commitment.id)
-    } 
+    }
     return ancestors
-  }
-
+  },
 }

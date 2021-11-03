@@ -91,7 +91,7 @@ export const mutations = {
     let oldCommitmentsStack = JSON.parse(
       JSON.stringify(state.decks[oldDeckIndex].deck)
     )
-   
+
     if (newDeckIndex == oldDeckIndex) {
       let newCommitmentsStack = oldCommitmentsStack.map((item) => {
         if (oldParent.id == newParent.id) {
@@ -104,7 +104,6 @@ export const mutations = {
             }
           }
         } else {
-          
           if (item.id == oldParent.id) {
             return { ...item, commitments: oldParentCommitments }
           }
@@ -122,7 +121,6 @@ export const mutations = {
       })
       state.decks[oldDeckIndex].deck = newCommitmentsStack
     } else {
-
       let updatedOldCommitmentsStack = oldCommitmentsStack.map((item) => {
         if (item.id == oldParent.id) {
           return {
@@ -166,10 +164,9 @@ export const mutations = {
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
   },
 
-  SET_RANKS(state, { oldParent, newParent,oldDeckIndex, newDeckIndex }) {
-    if(!oldDeckIndex) oldDeckIndex = 0
-    if(!newDeckIndex) newDeckIndex = 0
-
+  SET_RANKS(state, { oldParent, newParent, oldDeckIndex, newDeckIndex }) {
+    if (!oldDeckIndex) oldDeckIndex = 0
+    if (!newDeckIndex) newDeckIndex = 0
 
     //get all of the commitments
     let allCommitments = state.commitments
@@ -238,7 +235,7 @@ export const mutations = {
         return commitment.id === el.parent.id
       })
       .sort((a, b) => a.rank - b.rank)
-      
+
     // add them as the sub array
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
       return { id: el.id, type: 'TodoCard' }
@@ -255,7 +252,7 @@ export const mutations = {
   SET_AS_MOVING(state, { parent, original, position, deckIndex }) {
     //parent is the parent within the current deck that the task is displayed in
     //original is the commitment as it was when picked up (not sure if it is needed)
-    if(!deckIndex) deckIndex=0
+    if (!deckIndex) deckIndex = 0
     state.moving = { parent, original, position, deckIndex }
   },
 
@@ -275,7 +272,11 @@ export const mutations = {
     state.moving.position.dragStartY = null
   },
 
-  ADD_PREREQUISITE(state, {commitment, prerequisite}){
-    state.prerequisites.push({id:uuidv4(), commitmentId: commitment.id, prerequisiteId: prerequisite.id})
-  }
+  ADD_PREREQUISITE(state, { commitment, prerequisite }) {
+    state.prerequisites.push({
+      id: uuidv4(),
+      commitmentId: commitment.id,
+      prerequisiteId: prerequisite.id,
+    })
+  },
 }

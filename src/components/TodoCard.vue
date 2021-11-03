@@ -37,7 +37,11 @@
       }}</label>
     </div>
   </div>
-  <div v-if="isMoving" :id="currentDisplayPosition" :class="[parent,deck]"></div>
+  <div
+    v-if="isMoving"
+    :id="currentDisplayPosition"
+    :class="[parent, deck]"
+  ></div>
 </template>
 
 <script>
@@ -54,7 +58,7 @@ const makeListEntryDraggable = function ({
   fullCommitment,
   store,
   element,
-  props
+  props,
   // onMouseDownDetails,
   // mouseDownArguments,
 }) {
@@ -88,16 +92,15 @@ const makeListEntryDraggable = function ({
             .split('_')[1],
         }
         const deckRegex = new RegExp(deckString)
-        const newDeckIndex = 
-          [...leftSide.classList]
-            .filter((className) => deckRegex.test(className))[0]
-            .split('_')[1]
-        
+        const newDeckIndex = [...leftSide.classList]
+          .filter((className) => deckRegex.test(className))[0]
+          .split('_')[1]
+
         const oldParent = JSON.parse(
-            JSON.stringify(
-              store.getters.commitmentById(store.state.moving.parent.id)
-            )
+          JSON.stringify(
+            store.getters.commitmentById(store.state.moving.parent.id)
           )
+        )
         store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
           commitment: JSON.parse(JSON.stringify(store.state.moving.original)),
           newPosition: JSON.parse(JSON.stringify(leftSide.id)),
@@ -105,9 +108,8 @@ const makeListEntryDraggable = function ({
             JSON.stringify(store.getters.commitmentById(newParent.id))
           ),
           oldParent,
-          oldDeckIndex:
-            store.state.moving.deckIndex,
-          newDeckIndex
+          oldDeckIndex: store.state.moving.deckIndex,
+          newDeckIndex,
         })
       }
     }
@@ -141,17 +143,15 @@ const makeListEntryDraggable = function ({
             .filter((className) => parentRegex.test(className))[0]
             .split('_')[1],
         }
-         const deckRegex = new RegExp(deckString)
-        const newDeckIndex = 
-          [...leftSide.classList]
-            .filter((className) => deckRegex.test(className))[0]
-            .split('_')[1]
+        const deckRegex = new RegExp(deckString)
+        const newDeckIndex = [...leftSide.classList]
+          .filter((className) => deckRegex.test(className))[0]
+          .split('_')[1]
         store.commit('SET_RANKS', {
           oldParent: store.state.moving.parent,
           newParent,
-          oldDeckIndex:store.state.moving.deckIndex,
-          newDeckIndex
-
+          oldDeckIndex: store.state.moving.deckIndex,
+          newDeckIndex,
         })
       } else {
         store.commit('UPDATE_DISPLAY')
@@ -163,7 +163,7 @@ const makeListEntryDraggable = function ({
   }
 
   const onMouseDown = (e) => {
-    if(e.shiftKey){
+    if (e.shiftKey) {
       e.stopPropagation()
       //if clicking on a checkbox don't drag
       if (e.target.type == 'checkbox') {
@@ -188,7 +188,11 @@ const makeListEntryDraggable = function ({
       position.dragStartY = clientY - position.y
       position.isDragging = true
 
-      const movingParent = JSON.parse(JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent.id)))
+      const movingParent = JSON.parse(
+        JSON.stringify(
+          store.getters.commitmentById(fullCommitment.value.parent.id)
+        )
+      )
 
       const original = JSON.parse(JSON.stringify(fullCommitment.value))
       //add the initial position information to the store
@@ -204,11 +208,11 @@ const makeListEntryDraggable = function ({
       // }
       document.addEventListener('pointermove', onMouseMove)
       document.addEventListener('pointerup', onMouseUp)
-    } else{
+    } else {
       let commitmentToGoTo = JSON.parse(JSON.stringify(fullCommitment.value))
       store.commit('SET_DECK_AS_SINGLE_PARENT', {
-        deckIndex: props.deckIndex, 
-        commitment:commitmentToGoTo,
+        deckIndex: props.deckIndex,
+        commitment: commitmentToGoTo,
       })
       // SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment })
     }
@@ -280,7 +284,7 @@ export default {
       return store.getters.commitmentById(props.commitment.id)
     })
     //make the entry draggable
-    makeListEntryDraggable({ store, fullCommitment, element: el,props, })
+    makeListEntryDraggable({ store, fullCommitment, element: el, props })
     // const { position, draggableStyle } = makeDraggable({
     //   element: el,
     //   props,
@@ -335,7 +339,7 @@ export default {
       currentDisplayPosition,
       parent,
       isMoving,
-      deck
+      deck,
     }
   },
 }
