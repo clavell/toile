@@ -161,6 +161,7 @@ export const mutations = {
       })
     }
     state.moving.deckIndex = newDeckIndex
+    //update the parent in the moving object 
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
   },
 

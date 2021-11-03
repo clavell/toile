@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { makeDraggable } from '@/use/MakeDraggable.js'
+import { makeDraggableOld } from '@/use/MakeDraggableOld.js'
 import { ref } from 'vue'
 import { DateTime } from 'luxon'
 import { useStore } from 'vuex'
@@ -26,7 +26,7 @@ export default {
   setup(props) {
     const store = useStore()
     const el = ref(null)
-    const { position, draggableStyle } = makeDraggable({
+    const { position, draggableStyle } = makeDraggableOld({
       element: el,
       props,
       store,
