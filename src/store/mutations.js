@@ -274,4 +274,8 @@ export const mutations = {
     state.moving.position.dragStartX = null
     state.moving.position.dragStartY = null
   },
+
+  ADD_PREREQUISITE(state, {commitment, prerequisite}){
+    state.prerequisites.push({id:uuidv4(), commitmentId: commitment.id, prerequisiteId: prerequisite.id})
+  }
 }

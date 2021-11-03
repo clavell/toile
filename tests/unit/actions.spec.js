@@ -4,8 +4,9 @@ import {
   generateNewCommitment,
   generateAlteredCommitment,
   generateState,
+  
 } from '@/store/stategenerator.js'
-const { addCommitment, setAsComplete, updateCommitment } = actions
+const { addCommitment, setAsComplete, updateCommitment,addPrerequisite, } = actions
 
 let state
 let newCommitment
@@ -63,6 +64,43 @@ describe('actions', () => {
       { state, commit },
       { newCommitment: newCommitment, oldCommitment: newCommitment }
     )
+
+    expect(commit).toHaveBeenCalledTimes(0)
+  })
+
+  it('commits the ADD_PREQUISITE mutation when the commitments are NOT decendents of one another', () => {
+    //choose two commitments that are not directly related
+    let commitment = state.commitments[1] // set up vuex
+    let prerequisite = state.commitments[2] // add dummy data to vuex
+
+    addPrerequisite({ state, commit }, {commitment,  prerequisite} )
+
+    expect(commit).toHaveBeenCalledTimes(1)
+    expect(commit).toHaveBeenCalledWith('ADD_PREREQUISITE', {commitment,prerequisite})
+  })
+
+  it('does not commit the ADD_PREQUISITE mutation when the commitments ARE parents of one another', () => {
+    //choose two commitments that are not directly related
+    let commitment = state.commitments[1] // set up vuex
+    let prerequisite = state.commitments[5] // watch videos (direct decendent of set up vuex)
+
+    //try one way
+    addPrerequisite({ state, commit }, {commitment,  prerequisite} )
+    //try the other
+    addPrerequisite({ state, commit }, {prerequisite, commitment,} )
+
+    expect(commit).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not commit the ADD_PREQUISITE mutation when the commitments ARE grandparents of one another', () => {
+    //choose two commitments that are not directly related
+    let commitment = state.commitments[0] // set up vuex
+    let prerequisite = state.commitments[5] // watch videos (direct decendent of set up vuex)
+
+    //try one way
+    addPrerequisite({ state, commit }, {commitment,  prerequisite} )
+    //try the other
+    addPrerequisite({ state, commit }, {prerequisite, commitment,} )
 
     expect(commit).toHaveBeenCalledTimes(0)
   })

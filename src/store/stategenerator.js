@@ -4,6 +4,7 @@ export function generateState() {
     currentDate: '20210620',
     // topParent: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
     topParent: [{ id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
+    prerequisites: [],
     moving: {
       parent: {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',

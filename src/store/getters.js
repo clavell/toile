@@ -44,7 +44,7 @@ export const getters = {
     return state.commitments.find((commitment) => commitment.id === id)
   },
   indexFromStateArray(id, state, stateAttribute) {
-    //use this function to find an index an an array found in the state
+    //use this function to find an index from an array found in the state
     var index = state[stateAttribute].findIndex((el) => {
       return el.id === id
     })
@@ -60,4 +60,14 @@ export const getters = {
       return el.id === state.topParent[0].id
     })
   },
+  ancestorsById(state, id){
+    let ancestors = []
+    let commitment = this.commitmentById2(state, id)
+    while(commitment.parent.id !== null){
+      commitment = this.commitmentById2(state,commitment.parent.id)
+      ancestors.push(commitment.id)
+    } 
+    return ancestors
+  }
+
 }
