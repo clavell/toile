@@ -6,7 +6,7 @@
       :key="decks[index].id"
       :deckIndex="index"
     />
-    <MovingTodoCard />
+    <MovingTodoCard class="todo" />
   </div>
 </template>
 

@@ -7,7 +7,8 @@
   ></div>
   <div
     ref="el"
-    class="listentry draggable grid grid-cols-todolistentry bg-pink-800"
+    v-bind="$attrs"
+    class="listentry draggable grid grid-cols-todolistentry"
     :style="[entryWidth]"
     :id="currentDisplayPosition"
     v-show="!isMoving"
@@ -27,6 +28,9 @@
         fullCommitment.entrytitle
       }}</label>
     </div>
+    <div class="flex items-center justify-center">
+      <PrerequisiteCircle :commitment="fullCommitment" />
+    </div>
   </div>
   <div
     v-if="isMoving"
@@ -37,15 +41,16 @@
 
 <script>
 import { inject } from '@vue/runtime-core'
-import { computed, ref, } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import commitmentSideBarStyleReuse from '@/use/commitmentSideBarStyleReuse.js'
 import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'
 import checkedReuse from '@/use/checkedReuse.js'
 import commitmentTextStyleReuse from '@/use/commitmentTextStyleReuse.js'
-import {navigateReuse} from '@/use/navigateReuse.js'
-import {makeDraggable, keyEnum} from '@/use/MakeDraggable.js'
-
+import { navigateReuse } from '@/use/navigateReuse.js'
+import { makeDraggable, keyEnum } from '@/use/MakeDraggable.js'
+import PrerequisiteCircle from '@/components/PrerequisiteCircle.vue'
+import { movingEnum, originTypeEnum } from '@/use/enums.js'
 
 const key = keyEnum.shift
 
@@ -53,11 +58,14 @@ const parentString = 'parent'
 const deckString = 'deck'
 
 //details for mouse down event when dragging particular to the list entry
-function mouseDownDetails({store, detailArguments:{fullCommitment}, position, props}) {
+function mouseDownDetails({
+  store,
+  detailArguments: { fullCommitment },
+  position,
+  props,
+}) {
   const movingParent = JSON.parse(
-    JSON.stringify(
-      store.getters.commitmentById(fullCommitment.value.parent.id)
-    )
+    JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent.id))
   )
 
   const original = JSON.parse(JSON.stringify(fullCommitment.value))
@@ -70,9 +78,12 @@ function mouseDownDetails({store, detailArguments:{fullCommitment}, position, pr
   })
 }
 
-
 //details for mouse move event when dragging particular to the list entry
-function mouseMoveDetails({leftSide, detailArguments:{parentString, deckString}, store}) {
+function mouseMoveDetails({
+  leftSide,
+  detailArguments: { parentString, deckString },
+  store,
+}) {
   if (leftSide) {
     if (!isNaN(leftSide.id) && leftSide.id !== '') {
       const parentRegex = new RegExp(parentString)
@@ -105,10 +116,15 @@ function mouseMoveDetails({leftSide, detailArguments:{parentString, deckString},
   }
 }
 //details for mouse up event when dragging particular to the list entry
-function mouseUpDetails({leftSide, rightSide, detailArguments:{parentString, deckString}, store}) {
+function mouseUpDetails({
+  leftSide,
+  rightSide,
+  detailArguments: { parentString, deckString },
+  store,
+}) {
   if (leftSide || rightSide) {
-    if ((!isNaN(leftSide.id) && leftSide.id !== '') ||
-      (!isNaN(rightSide.id) && rightSide.id !== '')) {
+    if (!isNaN(leftSide.id) && leftSide.id !== '') {
+      //(!isNaN(rightSide.id) && rightSide.id !== '')
       const parentRegex = new RegExp(parentString)
       const newParent = {
         id: [...leftSide.classList]
@@ -126,19 +142,22 @@ function mouseUpDetails({leftSide, rightSide, detailArguments:{parentString, dec
         newDeckIndex,
       })
     } else {
-      store.commit('UPDATE_DISPLAY')
+      store.dispatch('resetDecks')
     }
   }
   store.commit('STOP_MOVING')
 }
 
-let details = {mouseUpDetails, mouseMoveDetails, mouseDownDetails}
+let details = { mouseUpDetails, mouseMoveDetails, mouseDownDetails }
 export default {
   name: 'TodoCard',
   props: {
     commitment: Object,
     parentCommitment: Object,
     deckIndex: Number,
+  },
+  components: {
+    PrerequisiteCircle,
   },
   setup(props) {
     const store = useStore()
@@ -149,16 +168,28 @@ export default {
     const fullCommitment = computed(() => {
       return store.getters.commitmentById(props.commitment.id)
     })
-    //make the entry draggable
-    let handlers = {}
-    handlers.click = navigateReuse({store, props, fullCommitment})
 
-    let detailArguments = {}
-    detailArguments.deckString = deckString
-    detailArguments.parentString = parentString
-    detailArguments.fullCommitment = fullCommitment
-    makeDraggable({ store, fullCommitment, element: el, props,handlers,key,parentString,deckString,details,detailArguments })
-    
+    //make the entry draggable
+    if (props.commitment.type == originTypeEnum.todoCard) {
+      let handlers = {}
+      handlers.click = navigateReuse({ store, props, fullCommitment })
+
+      let detailArguments = {}
+      detailArguments.deckString = deckString
+      detailArguments.parentString = parentString
+      detailArguments.fullCommitment = fullCommitment
+
+      makeDraggable({
+        store,
+        element: el,
+        props,
+        handlers,
+        key,
+        details,
+        detailArguments,
+      })
+    }
+
     const entryWidth = inject('entryWidth')
 
     //sidebar indicator for when the element is being dragged over a particular spot
@@ -185,6 +216,7 @@ export default {
 
     const isMoving = computed(() => {
       return (
+        store.state.moving.type == movingEnum.todoCard &&
         store.state.moving.original.id == fullCommitment.value.id &&
         store.state.moving.position.isDragging
       )

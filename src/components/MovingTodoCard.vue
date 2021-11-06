@@ -2,12 +2,16 @@
   <div
     v-if="movingTask.position.isDragging"
     ref="el"
-    class="listentry draggable grid grid-cols-todolistentry bg-pink-800"
+    class="grid grid-cols-todolistentry"
+    :class="appearance"
     :style="[draggableStyle]"
     @mousedown.prevent
     @touchmove.prevent
   >
-    <div class="flex items-center justify-center">
+    <div
+      v-if="movingTask.type == movingEnum.todoCard"
+      class="flex items-center justify-center"
+    >
       <input
         type="checkbox"
         :id="movingTask.original.id"
@@ -15,7 +19,11 @@
         :checked="checked"
       />
     </div>
-    <div class="flex items-center" :style="commitmentTextStyle">
+    <div
+      v-if="movingTask.type == movingEnum.todoCard"
+      class="flex items-center"
+      :style="commitmentTextStyle"
+    >
       <label @click.prevent :for="movingTask.original.id">{{
         movingTask.original.entrytitle
       }}</label>
@@ -28,6 +36,7 @@ import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import checkedReuse from '@/use/checkedReuse.js'
 import commitmentTextStyleReuse from '@/use/commitmentTextStyleReuse.js'
+import { movingEnum } from '@/use/enums.js'
 
 export default {
   name: 'MovingTodoCard',
@@ -51,6 +60,18 @@ export default {
       }
       return {}
     })
+    const appearance = computed(() => {
+      let result
+      switch (store.state.moving.type) {
+        case movingEnum.prerequisiteCircle:
+          result = 'circle'
+          break
+        case movingEnum.todoCard:
+          result = 'listentry'
+          break
+      }
+      return result
+    })
     //seems to be tied to the value of the checked thing in the stategenerator
     //maybe something to do with all of the proxies etc..
     const { checked } = checkedReuse(store, movingTask.value.original)
@@ -58,7 +79,14 @@ export default {
     const { commitmentTextStyle } = commitmentTextStyleReuse(checked)
     watch(checked, (task) => task)
 
-    return { draggableStyle, movingTask, checked, commitmentTextStyle }
+    return {
+      draggableStyle,
+      movingTask,
+      checked,
+      commitmentTextStyle,
+      appearance,
+      movingEnum,
+    }
   },
 }
 </script>

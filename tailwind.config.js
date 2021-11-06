@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        todolistentry: '1fr 3fr',
+        todolistentry: '1fr 3fr 1fr',
       },
     },
   },

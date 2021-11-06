@@ -1,6 +1,6 @@
-import {  watch } from 'vue'
+import { watch } from 'vue'
 
-const keyEnum = Object.freeze({shift:"shift", none:"none"})
+const keyEnum = Object.freeze({ shift: 'shift', none: 'none' })
 
 const makeDraggable = function ({
   store,
@@ -9,10 +9,8 @@ const makeDraggable = function ({
   handlers,
   key,
   details,
-  detailArguments
+  detailArguments,
 }) {
-  
-
   const position = {
     init: false,
     x: 0,
@@ -34,8 +32,8 @@ const makeDraggable = function ({
       position.y + position.height / 2
     )
     //action for changing the position in the display array
-    if(details.mouseMoveDetails){
-      details.mouseMoveDetails({leftSide, detailArguments, store})
+    if (details && details.mouseMoveDetails) {
+      details.mouseMoveDetails({ leftSide, detailArguments, store })
     }
   }
   const onMouseUp = (e) => {
@@ -54,16 +52,16 @@ const makeDraggable = function ({
       position.y + position.height / 2
     )
 
-    if(details.mouseUpDetails){
-      details.mouseUpDetails({leftSide, rightSide, detailArguments, store})
+    if (details && details.mouseUpDetails) {
+      details.mouseUpDetails({ leftSide, rightSide, detailArguments, store })
     }
     document.removeEventListener('pointerup', onMouseUp)
     document.removeEventListener('pointermove', onMouseMove)
   }
 
   const onMouseDown = (e) => {
-    let keyDown 
-    switch(key){
+    let keyDown
+    switch (key) {
       case keyEnum.shift:
         keyDown = e.shiftKey
         break
@@ -71,8 +69,7 @@ const makeDraggable = function ({
         keyDown = true
         break
     }
-    
-   
+
     if (keyDown) {
       e.stopPropagation()
       //if clicking on a checkbox don't drag
@@ -98,16 +95,15 @@ const makeDraggable = function ({
       position.dragStartY = clientY - position.y
       position.isDragging = true
 
-      if(details.mouseDownDetails){
-        details.mouseDownDetails({store, detailArguments, position, props})
-    }
+      if (details && details.mouseDownDetails) {
+        details.mouseDownDetails({ store, detailArguments, position, props })
+      }
 
       document.addEventListener('pointermove', onMouseMove)
       document.addEventListener('pointerup', onMouseUp)
-    } 
+    }
   }
 
-  
   //when the element appears then add the event listeners and find the size of the shape
   watch(element, (element) => {
     // if (!element instanceof HTMLElement) return;
@@ -118,14 +114,11 @@ const makeDraggable = function ({
     // position.y = Math.round(rect.y)
     position.width = Math.round(rect.width)
     position.height = Math.round(rect.height)
-    if(handlers.click){
-      element.addEventListener('click',handlers.click)
+    if (handlers && handlers.click) {
+      element.addEventListener('click', handlers.click)
     }
     element.addEventListener('pointerdown', onMouseDown)
   })
 }
 
 export { makeDraggable, keyEnum }
-
-
-

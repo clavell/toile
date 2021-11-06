@@ -1,6 +1,8 @@
 import { getters } from '@/store/getters.js'
 import { v4 as uuidv4 } from 'uuid'
 
+import { movingEnum, originTypeEnum } from '@/use/enums.js'
+
 // export `mutations` as a named export
 export const mutations = {
   UPDATE_START_TIME(state, { newStartTime, id }) {
@@ -31,7 +33,7 @@ export const mutations = {
       .sort((a, b) => a.rank - b.rank)
     //map them to the right format
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
-      return { id: el.id, type: 'TodoCard' }
+      return { id: el.id, type: originTypeEnum.todoCard }
     })
     //set the
     state.decks[0] = {
@@ -99,7 +101,7 @@ export const mutations = {
             return {
               ...item,
               commitments: newParentCommitments.map((el) => {
-                return { id: el.id, type: 'TodoCard' }
+                return { id: el.id, type: originTypeEnum.todoCard }
               }),
             }
           }
@@ -111,7 +113,7 @@ export const mutations = {
             return {
               ...item,
               commitments: newParentCommitments.map((el) => {
-                return { id: el.id, type: 'TodoCard' }
+                return { id: el.id, type: originTypeEnum.todoCard }
               }),
             }
           }
@@ -126,7 +128,7 @@ export const mutations = {
           return {
             ...item,
             commitments: oldParentCommitments.map((el) => {
-              return { id: el.id, type: 'TodoCard' }
+              return { id: el.id, type: originTypeEnum.todoCard }
             }),
           }
         }
@@ -142,7 +144,7 @@ export const mutations = {
           return {
             ...item,
             commitments: newParentCommitments.map((el) => {
-              return { id: el.id, type: 'TodoCard' }
+              return { id: el.id, type: originTypeEnum.todoCard }
             }),
           }
         }
@@ -161,7 +163,7 @@ export const mutations = {
       })
     }
     state.moving.deckIndex = newDeckIndex
-    //update the parent in the moving object 
+    //update the parent in the moving object
     state.moving.parent = JSON.parse(JSON.stringify(newParent))
   },
 
@@ -220,7 +222,7 @@ export const mutations = {
         .sort((a, b) => a.rank - b.rank)
       // add them as the sub array
       const commitmentsToAdd = commitmentsFromParent.map((el) => {
-        return { id: el.id, type: 'TodoCard' }
+        return { id: el.id, type: originTypeEnum.todoCard }
       })
       return { id: item.id, commitments: commitmentsToAdd }
     })
@@ -239,7 +241,7 @@ export const mutations = {
 
     // add them as the sub array
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
-      return { id: el.id, type: 'TodoCard' }
+      return { id: el.id, type: originTypeEnum.todoCard }
     })
     let newStack = [{ id: commitment.id, commitments: commitmentsToAdd }]
     //set the stack to be the new stack
@@ -254,7 +256,17 @@ export const mutations = {
     //parent is the parent within the current deck that the task is displayed in
     //original is the commitment as it was when picked up (not sure if it is needed)
     if (!deckIndex) deckIndex = 0
-    state.moving = { parent, original, position, deckIndex }
+    state.moving = {
+      parent,
+      original,
+      position,
+      deckIndex,
+      type: movingEnum.todoCard,
+    }
+  },
+
+  SET_PREREQUISITE_CIRCLE_AS_MOVING(state, { original, position }) {
+    state.moving = { original, position, type: movingEnum.prerequisiteCircle }
   },
 
   UPDATE_DRAG_POSITION(state, { e }) {

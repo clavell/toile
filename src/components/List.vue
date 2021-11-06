@@ -5,7 +5,22 @@
       <div class="title">{{ parentCommitment.entrytitle }}</div>
     </div>
     <div id="wrapper">
-      <!-- <EventCard v-for="event in events" :key="event.id" :event="event" /> -->
+      <!-- put the prerequisites here -->
+      <div v-if="prerequisites.length != 0" class="sectionTitle">
+        Prerequisites:
+      </div>
+
+      <TodoCard
+        v-for="prereq in prerequisites"
+        :key="prereq.id"
+        :commitment="prereq"
+        :parentCommitment="parentCommitment"
+        :deckIndex="deckIndex"
+        class="prerequisite"
+      />
+
+      <div class="sectionTitle">Subtasks:</div>
+      <!-- here are the subtasks -->
       <component
         v-for="item in listInfo.commitments"
         :is="item.type"
@@ -13,6 +28,7 @@
         :commitment="item"
         :parentCommitment="parentCommitment"
         :deckIndex="deckIndex"
+        class="todo"
       />
     </div>
     <div class="buttoncontainer">
@@ -52,17 +68,17 @@ export default {
     const listWidth = ref(null)
     const addingEntry = ref(false)
     const store = useStore()
-    // const commitmentsList = computed(() => {
-    //   return store.state.commitments.filter((el) => {
-    //     return el.parent.id === props.listInfo.id
-    //   })
-    // })
 
     const parentCommitment = store.getters.commitmentById(props.listInfo.id)
     // store.commit('UPDATE_DISPLAY')
     // watch(commitmentsList, () => {
     //   store.commit('UPDATE_DISPLAY')
     // })
+
+    //get the list of prerequisites
+    const prerequisites = computed(() => {
+      return store.getters.prerequisitesById(props.listInfo.id)
+    })
 
     const canGoBack = computed(() => parentCommitment.parent.id != null)
 
@@ -118,6 +134,7 @@ export default {
       parentCommitment,
       goBack,
       canGoBack,
+      prerequisites,
     }
   },
   computed: {
@@ -162,15 +179,21 @@ export default {
   padding: 0;
 }
 
+.prerequisite {
+  background-color: theme('colors.purple.800');
+}
+
+.todo {
+  background-color: theme('colors.pink.800');
+}
+
 .listentry {
   /* thinking ahead to when going to be using drag and drop */
-  background-color: theme('colors.pink.800');
   border-radius: 5px;
-  display: flex;
+  /* display: flex; */
   /* width: 100%; */
   /* margin: 0 auto; */
   justify-content: center;
-  flex-direction: column;
 }
 
 .title {
@@ -183,5 +206,12 @@ export default {
 .listheader {
   display: flex;
   flex-direction: row;
+}
+
+.sectionTitle {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  grid-column: 1 / span 2;
 }
 </style>

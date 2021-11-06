@@ -1,5 +1,6 @@
 import { mutations } from '@/store/mutations.js'
 import { getters } from '@/store/getters.js'
+import { originTypeEnum } from '@/use/enums.js'
 import {
   generateNewCommitment,
   generateAlteredCommitment,
@@ -111,7 +112,10 @@ describe('mutations', () => {
 
   it('updates the decks array', () => {
     //the entry in the commitmentsdisplayorder will be slightly different
-    const expectedEntry = { id: newCommitment.id, type: 'TodoCard' }
+    const expectedEntry = {
+      id: newCommitment.id,
+      type: originTypeEnum.todoCard,
+    }
 
     //add a new commitment with that parent id
     state.commitments.push(newCommitment)
@@ -130,7 +134,10 @@ describe('mutations', () => {
 
   it('updates the decks array', () => {
     //the entry in the commitmentsdisplayorder will be slightly different
-    const expectedEntry = { id: newCommitment.id, type: 'TodoCard' }
+    const expectedEntry = {
+      id: newCommitment.id,
+      type: originTypeEnum.todoCard,
+    }
 
     //add a new commitment with that parent id
     state.commitments.push(newCommitment)
@@ -255,26 +262,56 @@ describe('mutations', () => {
       {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
-          { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa', type: 'TodoCard' },
-          { id: '601b550c-2c68-4cbe-85b6-a6a61563db1f', type: 'TodoCard' },
-          { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },
-          { id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49', type: 'TodoCard' },
+          {
+            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
       {
         id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
-          { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },
-          { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
-          { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+          {
+            id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
       {
         id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
         commitments: [
-          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+          {
+            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
     ]
@@ -449,9 +486,18 @@ describe('mutations', () => {
           {
             id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
-              { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-              { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-              { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+              {
+                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                type: originTypeEnum.todoCard,
+              },
             ],
           },
         ],
@@ -462,9 +508,15 @@ describe('mutations', () => {
           {
             id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             commitments: [
-              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },//this one is moving
-              { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
-              { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
+              {
+                id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+                type: originTypeEnum.todoCard,
+              },
             ],
           },
         ],
@@ -475,10 +527,22 @@ describe('mutations', () => {
           {
             id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
-              { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-              { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' }, //to here
-              { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-              { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+              {
+                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+                type: originTypeEnum.todoCard,
+              }, //to here
+              {
+                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                type: originTypeEnum.todoCard,
+              },
             ],
           },
         ],
@@ -553,26 +617,56 @@ describe('mutations', () => {
       {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
-          { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa', type: 'TodoCard' },
-          { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },
-          { id: '601b550c-2c68-4cbe-85b6-a6a61563db1f', type: 'TodoCard' },
-          { id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49', type: 'TodoCard' },
+          {
+            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
       {
         id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
-          { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },
-          { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
-          { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+          {
+            id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
       {
         id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
         commitments: [
-          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+          {
+            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
     ]
@@ -590,27 +684,57 @@ describe('mutations', () => {
       {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
-          { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa', type: 'TodoCard' },
-          // { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' },//move this one
-          { id: '601b550c-2c68-4cbe-85b6-a6a61563db1f', type: 'TodoCard' },
-          { id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49', type: 'TodoCard' },
+          {
+            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            type: originTypeEnum.todoCard,
+          },
+          // { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: originTypeEnum.todoCard },//move this one
+          {
+            id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
       {
         id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
-          { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },
-          { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
-          { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+          {
+            id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
       {
         id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
         commitments: [
-          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-          { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: 'TodoCard' }, //final spot
-          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+          {
+            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+            type: originTypeEnum.todoCard,
+          }, //final spot
+          {
+            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
     ]
@@ -654,9 +778,18 @@ describe('mutations', () => {
           {
             id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
-              { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-              { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-              { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+              {
+                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                type: originTypeEnum.todoCard,
+              },
             ],
           },
         ],
@@ -667,9 +800,15 @@ describe('mutations', () => {
           {
             id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             commitments: [
-              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' },//this one is moving
-              { id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9', type: 'TodoCard' },
-              { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428', type: 'TodoCard' },
+              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
+              {
+                id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+                type: originTypeEnum.todoCard,
+              },
             ],
           },
         ],
@@ -680,10 +819,22 @@ describe('mutations', () => {
           {
             id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
-              { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-              { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: 'TodoCard' }, //to here
-              { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-              { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+              {
+                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+                type: originTypeEnum.todoCard,
+              }, //to here
+              {
+                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                type: originTypeEnum.todoCard,
+              },
+              {
+                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                type: originTypeEnum.todoCard,
+              },
             ],
           },
         ],
@@ -760,9 +911,18 @@ describe('mutations', () => {
       {
         ...commitment,
         commitments: [
-          { id: 'e9902504-737d-4195-9168-355d40cdb5b8', type: 'TodoCard' },
-          { id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157', type: 'TodoCard' },
-          { id: 'ebeab534-3364-4109-bd67-fe68bf6c5611', type: 'TodoCard' },
+          {
+            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            type: originTypeEnum.todoCard,
+          },
+          {
+            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            type: originTypeEnum.todoCard,
+          },
         ],
       },
     ]

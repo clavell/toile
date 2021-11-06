@@ -1,10 +1,18 @@
+import { originTypeEnum } from '@/use/enums'
+
 export function generateState() {
   return {
     timeFormat: 'yyyyMMddHHmm',
     currentDate: '20210620',
     // topParent: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
     topParent: [{ id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
-    prerequisites: [],
+    prerequisites: [
+      {
+        id: '6266c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitmentId: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        prerequisiteId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+      },
+    ], //make the store depends on display dummy data in calendar view
     moving: {
       parent: {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
@@ -191,19 +199,19 @@ export function generateState() {
             commitments: [
               {
                 id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-                type: 'TodoCard',
+                type: originTypeEnum.TodoCard,
               },
               {
                 id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
-                type: 'TodoCard',
+                type: originTypeEnum.TodoCard,
               },
               {
                 id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
-                type: 'TodoCard',
+                type: originTypeEnum.TodoCard,
               },
               {
                 id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-                type: 'TodoCard',
+                type: originTypeEnum.TodoCard,
               },
             ],
           },

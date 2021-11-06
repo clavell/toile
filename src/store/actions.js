@@ -42,6 +42,12 @@ export const actions = {
     }
   },
 
+  resetDecks({ state, commit }) {
+    for (let i = 0; i < state.decks.length; i++) {
+      const commitment = JSON.parse(JSON.stringify(state.decks[i].deck[0]))
+      commit('SET_DECK_AS_SINGLE_PARENT', { deckIndex: i, commitment })
+    }
+  },
   // updateDisplayOrder({state, commit},{commitment, newPosition}){
 
   // }

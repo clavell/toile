@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
 
+import { originTypeEnum } from '@/use/enums'
+
 export const getters = {
   //this returns an object so you need to DESTRUCTURE the object to get what you want!!!!
   topParentCommitments(state) {
@@ -71,5 +73,25 @@ export const getters = {
       ancestors.push(commitment.id)
     }
     return ancestors
+  },
+
+  prerequisitesById: (state, getters) => (id) => {
+    const prereqs = state.prerequisites.filter((el) => el.commitmentId == id)
+    if (prereqs.length === 0) return []
+
+    return prereqs.map((prereq) => {
+      const commitment = getters.commitmentById(prereq.prerequisiteId)
+      return { ...commitment, type: originTypeEnum.prerequisite }
+    })
+  },
+  //make one for testing. still not sure how to get around this.. very annoying :(
+  prerequisitesById2(state, id) {
+    const prereqs = state.prerequisites.filter((el) => el.commitmentId == id)
+    if (prereqs.length === 0) return []
+
+    return prereqs.map((prereq) => {
+      const commitment = this.commitmentById2(state, prereq.prerequisiteId)
+      return { ...commitment, type: originTypeEnum.prerequisite }
+    })
   },
 }

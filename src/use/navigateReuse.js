@@ -1,6 +1,6 @@
 //this function navigates to the subtask that has been clicked on
 
-let navigateReuse = ({store,props,fullCommitment}) => {
+let navigateReuse = ({ store, props, fullCommitment }) => {
   return (e) => {
     e.stopPropagation()
     //if clicking on a checkbox don't drag
@@ -14,6 +14,6 @@ let navigateReuse = ({store,props,fullCommitment}) => {
       commitment: commitmentToGoTo,
     })
   }
-} 
+}
 
 export { navigateReuse }

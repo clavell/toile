@@ -5,8 +5,13 @@ import {
   generateAlteredCommitment,
   generateState,
 } from '@/store/stategenerator.js'
-const { addCommitment, setAsComplete, updateCommitment, addPrerequisite } =
-  actions
+const {
+  addCommitment,
+  setAsComplete,
+  updateCommitment,
+  addPrerequisite,
+  resetDecks,
+} = actions
 
 let state
 let newCommitment
@@ -106,6 +111,19 @@ describe('actions', () => {
     addPrerequisite({ state, commit }, { prerequisite, commitment })
 
     expect(commit).toHaveBeenCalledTimes(0)
+  })
+
+  it('fires the SET_DECK_AS_SINGLE_PARENT mutation the appropriate number of times when resetting the decks after non-drop area drop', () => {
+    const numberOfFirings = state.decks.length
+
+    //fire the action
+    resetDecks({ state, commit })
+    //check that the thing was fired the right number of times
+    expect(commit).toHaveBeenCalledTimes(numberOfFirings)
+    expect(commit).toHaveBeenLastCalledWith('SET_DECK_AS_SINGLE_PARENT', {
+      deckIndex: numberOfFirings - 1,
+      commitment: state.decks[numberOfFirings - 1].deck,
+    })
   })
 
   it('commits the UPDATE_RANKS mutation when commitment order has changed', () => {
