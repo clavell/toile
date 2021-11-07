@@ -1,5 +1,5 @@
 <template>
-  <div class="list" ref="el">
+  <div class="list" :class="listid" ref="el">
     <div class="listheader">
       <div v-if="canGoBack" @click="goBack(parentCommitment)">&lt;</div>
       <div class="title">{{ parentCommitment.entrytitle }}</div>
@@ -50,6 +50,7 @@ import AddEntry from '@/components/AddEntry.vue'
 import EmptyListSpace from '@/components/EmptyListSpace.vue'
 import { computed, ref, watch, provide } from 'vue'
 import { useStore } from 'vuex'
+import { classStringEnum } from '@/use/enums.js'
 
 export default {
   name: 'List',
@@ -126,6 +127,10 @@ export default {
       }
     }
 
+    const listid = computed(() => {
+      return classStringEnum.listid + '_' + props.listInfo.id
+    })
+
     return {
       el,
       addingEntry,
@@ -135,16 +140,17 @@ export default {
       goBack,
       canGoBack,
       prerequisites,
+      listid,
     }
   },
-  computed: {
-    commitments() {
-      return this.$store.getters.commitmentsSortedByCompletedStatus
-    },
-    numberOfCommitments() {
-      return this.$store.getters.commitmentsCount
-    },
-  },
+  // computed: {
+  //   commitments() {
+  //     return this.$store.getters.commitmentsSortedByCompletedStatus
+  //   },
+  //   numberOfCommitments() {
+  //     return this.$store.getters.commitmentsCount
+  //   },
+  // },
 }
 </script>
 

@@ -24,6 +24,7 @@ const makeDraggable = function ({
 
   const onMouseMove = (e) => {
     e.stopPropagation()
+    e.preventDefault()
     store.commit('UPDATE_DRAG_POSITION', { e })
 
     let position = store.state.moving.position

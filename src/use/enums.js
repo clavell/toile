@@ -7,3 +7,9 @@ export const originTypeEnum = Object.freeze({
   todoCard: 'todoCard',
   prerequisite: 'prerequisite',
 })
+
+export const classStringEnum = Object.freeze({
+  listid: 'listid',
+  parent: 'parent',
+  deck: 'deck',
+})

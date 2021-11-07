@@ -29,16 +29,18 @@ export const actions = {
     }
   },
   addPrerequisite({ state, commit }, { commitment, prerequisite }) {
+    let fullCommitment = getters.commitmentById2(state, commitment.id)
     let commitmentAncestors = getters.ancestorsById(state, commitment.id)
     let prerequisiteAncestors = getters.ancestorsById(state, prerequisite.id)
     let safeToAdd = !(
       commitmentAncestors.includes(prerequisite.id) ||
       prerequisiteAncestors.includes(commitment.id) ||
-      commitment.parent.id == prerequisite.id ||
-      prerequisite.parent.id == commitment.id
+      fullCommitment.parent.id == prerequisite.id ||
+      prerequisite.parent.id == fullCommitment.id ||
+      prerequisite.id == fullCommitment.id
     )
     if (safeToAdd) {
-      commit('ADD_PREREQUISITE', { commitment, prerequisite })
+      commit('ADD_PREREQUISITE', { commitment: fullCommitment, prerequisite })
     }
   },
 

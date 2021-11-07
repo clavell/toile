@@ -5,8 +5,9 @@
 <script>
 import { makeDraggable, keyEnum } from '@/use/MakeDraggable.js'
 import { useStore } from 'vuex'
-import { movingEnum } from '@/use/enums.js'
+import { movingEnum, classStringEnum } from '@/use/enums.js'
 import { ref, computed } from 'vue'
+
 const key = keyEnum.none
 let details = {
   mouseDownDetails: function ({
@@ -18,6 +19,36 @@ let details = {
       original: commitment,
       position,
     })
+  },
+  mouseUpDetails: function ({
+    leftSide,
+    rightSide,
+    detailArguments: { listidString, commitment },
+    store,
+  }) {
+    if (leftSide || rightSide) {
+      const listidRegex = new RegExp(listidString)
+      const listIdStringFromDom = [...leftSide.classList].find((className) =>
+        listidRegex.test(className)
+      )
+
+      if (listIdStringFromDom) {
+        const listid = listIdStringFromDom.split('_')[1]
+
+        store.dispatch('addPrerequisite', {
+          commitment: { id: listid },
+          prerequisite: commitment,
+        })
+      }
+      // store.commit('SET_RANKS', {
+      //   oldParent: store.state.moving.parent,
+      //   newParent,
+      //   oldDeckIndex: store.state.moving.deckIndex,
+      //   newDeckIndex,
+      // })
+    }
+
+    store.commit('STOP_MOVING')
   },
 }
 
@@ -35,7 +66,10 @@ export default {
       props,
       key,
       details,
-      detailArguments: { commitment: props.commitment },
+      detailArguments: {
+        commitment: props.commitment,
+        listidString: classStringEnum.listid,
+      },
     })
     const isMoving = computed(() => {
       return (

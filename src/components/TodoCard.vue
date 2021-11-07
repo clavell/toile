@@ -50,12 +50,9 @@ import commitmentTextStyleReuse from '@/use/commitmentTextStyleReuse.js'
 import { navigateReuse } from '@/use/navigateReuse.js'
 import { makeDraggable, keyEnum } from '@/use/MakeDraggable.js'
 import PrerequisiteCircle from '@/components/PrerequisiteCircle.vue'
-import { movingEnum, originTypeEnum } from '@/use/enums.js'
+import { movingEnum, originTypeEnum, classStringEnum } from '@/use/enums.js'
 
 const key = keyEnum.shift
-
-const parentString = 'parent'
-const deckString = 'deck'
 
 //details for mouse down event when dragging particular to the list entry
 function mouseDownDetails({
@@ -175,8 +172,8 @@ export default {
       handlers.click = navigateReuse({ store, props, fullCommitment })
 
       let detailArguments = {}
-      detailArguments.deckString = deckString
-      detailArguments.parentString = parentString
+      detailArguments.deckString = classStringEnum.deck
+      detailArguments.parentString = classStringEnum.parent
       detailArguments.fullCommitment = fullCommitment
 
       makeDraggable({
@@ -201,11 +198,11 @@ export default {
     })
 
     const parent = computed(() => {
-      return parentString + '_' + props.parentCommitment.id
+      return classStringEnum.parent + '_' + props.parentCommitment.id
     })
 
     const deck = computed(() => {
-      return deckString + '_' + props.deckIndex
+      return classStringEnum.deck + '_' + props.deckIndex
     })
 
     //mark the entry as complete or not

@@ -113,6 +113,19 @@ describe('actions', () => {
     expect(commit).toHaveBeenCalledTimes(0)
   })
 
+  it('does not commit the ADD_PREQUISITE mutation when the commitments ARE the same thing', () => {
+    //choose two commitments that are not directly related
+    let commitment = state.commitments[5] // setting up (very bottom task)
+    let prerequisite = state.commitments[5] // watch videos ( grandchild of setting up)
+
+    //try one way
+    addPrerequisite({ state, commit }, { commitment, prerequisite })
+    //try the other
+    addPrerequisite({ state, commit }, { prerequisite, commitment })
+
+    expect(commit).toHaveBeenCalledTimes(0)
+  })
+
   it('fires the SET_DECK_AS_SINGLE_PARENT mutation the appropriate number of times when resetting the decks after non-drop area drop', () => {
     const numberOfFirings = state.decks.length
 
@@ -122,7 +135,7 @@ describe('actions', () => {
     expect(commit).toHaveBeenCalledTimes(numberOfFirings)
     expect(commit).toHaveBeenLastCalledWith('SET_DECK_AS_SINGLE_PARENT', {
       deckIndex: numberOfFirings - 1,
-      commitment: state.decks[numberOfFirings - 1].deck,
+      commitment: state.decks[numberOfFirings - 1].deck[0],
     })
   })
 
