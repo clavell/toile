@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="timesegment"
-    :style="[gridRow, borderStyle]"
-    @drop="onDrop($event)"
-  ></div>
+  <div class="timesegment" :style="[gridRow, borderStyle]"></div>
 </template>
 
 <script>
@@ -30,13 +26,6 @@ export default {
       } else {
         return {}
       }
-    },
-  },
-  methods: {
-    onDrop(evt) {
-      var newStartTime = this.rowDelimeters.rowStart
-      var id = evt.dataTransfer.getData('commitmentId')
-      this.$store.dispatch('updateStartTime', { newStartTime, id })
     },
   },
 }

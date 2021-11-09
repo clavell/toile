@@ -72,17 +72,28 @@ describe('mutations', () => {
   })
 
   it('updates start time', () => {
-    //have the commitment already be in the state object
-    state.commitments.push(newCommitment)
-
-    const id = newCommitment.id
+    // let's change the first schedule entry
+    const entryIndex = 0
     const newStartTime = '202506201630'
+    const expectedScheduleEntry = {
+      ...state.schedule[entryIndex],
+      sessionStartTime: newStartTime,
+    }
 
-    UPDATE_START_TIME(state, { newStartTime, id })
+    UPDATE_START_TIME(state, { newStartTime, id: expectedScheduleEntry.id })
 
-    expect(state.commitments[state.commitments.length - 1].startTime).toBe(
-      newStartTime
-    )
+    expect(state.schedule[entryIndex]).toStrictEqual(expectedScheduleEntry)
+    // //have the commitment already be in the state object
+    // state.commitments.push(newCommitment)
+
+    // const id = newCommitment.id
+    // const newStartTime = '202506201630'
+
+    // UPDATE_START_TIME(state, { newStartTime, id })
+
+    // expect(state.commitments[state.commitments.length - 1].startTime).toBe(
+    //   newStartTime
+    // )
   })
 
   it('updates the chosen commitment ', () => {

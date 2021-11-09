@@ -7,7 +7,7 @@ const onMouseUpDetails = function ({ store, position, props }) {
   const newTime = timeSegment.style.gridArea.toString().substring(1, 13)
   store.dispatch('updateStartTime', {
     newStartTime: newTime,
-    id: props.commitment.id,
+    id: props.scheduleEntry.id,
   })
 }
 

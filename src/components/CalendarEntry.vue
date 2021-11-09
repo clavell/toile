@@ -13,7 +13,7 @@
 
 <script>
 import { makeDraggableOld } from '@/use/MakeDraggableOld.js'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { DateTime } from 'luxon'
 import { useStore } from 'vuex'
 import { onMouseUpDetails } from '@/use/OnMouseUpDetailsCalendarEntry.js'
@@ -21,11 +21,16 @@ import { onMouseUpDetails } from '@/use/OnMouseUpDetailsCalendarEntry.js'
 export default {
   name: 'CalendarEntry',
   props: {
-    commitment: Object,
+    scheduleEntry: Object,
   },
   setup(props) {
     const store = useStore()
     const el = ref(null)
+
+    const commitment = computed(() => {
+      return store.getters.commitmentById(props.scheduleEntry.commitmentId)
+    })
+
     const { position, draggableStyle } = makeDraggableOld({
       element: el,
       props,
@@ -37,15 +42,18 @@ export default {
       el,
       position,
       draggableStyle,
+      commitment,
     }
   },
   computed: {
     gridSpot() {
       var startTime = DateTime.fromFormat(
-        this.commitment.startTime,
+        this.scheduleEntry.sessionStartTime,
         this.$store.state.timeFormat
       )
-      var endTime = startTime.plus({ minutes: this.commitment.duration })
+      var endTime = startTime.plus({
+        minutes: this.scheduleEntry.sessionDuration,
+      })
       return {
         gridRow: `d${startTime.toFormat(
           this.$store.state.timeFormat

@@ -6,10 +6,12 @@ import { movingEnum, originTypeEnum } from '@/use/enums.js'
 // export `mutations` as a named export
 export const mutations = {
   UPDATE_START_TIME(state, { newStartTime, id }) {
-    //find the correct commitment in the commitments array
-    const index = getters.indexFromStateArray(id, state, 'commitments')
+    newStartTime
+    id
+    //find the correct schedule entry in the schedule array
+    const index = getters.indexFromStateArray(id, state, 'schedule')
     //set the value of the start time of this commitment to the new start time
-    state.commitments[index].startTime = newStartTime
+    state.schedule[index].sessionStartTime = newStartTime
   },
   ADD_COMMITMENT(state, newCommitment) {
     state.commitments.push(newCommitment)
@@ -246,6 +248,7 @@ export const mutations = {
     let newStack = [{ id: commitment.id, commitments: commitmentsToAdd }]
     //set the stack to be the new stack
     state.decks[deckIndex] = { deck: newStack, id: uuidv4() }
+    // console.log(uuidv4()) //uncomment this line to get some uuids in the console!
   },
 
   SET_TOP_PARENT(state, newTopParent, deckIndex) {

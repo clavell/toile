@@ -29,13 +29,13 @@ export const getters = {
     //find all events on `currentDate`
     var currentDate = DateTime.fromFormat(state.currentDate, 'yyyyMMdd')
 
-    return state.commitments.filter((commitment) => {
-      if (!commitment.startTime) return false
-      var commitmentTime = DateTime.fromFormat(
-        commitment.startTime,
+    return state.schedule.filter((scheduleEntry) => {
+      if (!scheduleEntry.sessionStartTime) return false
+      var scheduleEntryTime = DateTime.fromFormat(
+        scheduleEntry.sessionStartTime,
         state.timeFormat
       )
-      return currentDate.hasSame(commitmentTime, 'day')
+      return currentDate.hasSame(scheduleEntryTime, 'day')
     })
   },
   commitmentsSortedByCompletedStatus(state) {

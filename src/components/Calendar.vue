@@ -24,9 +24,9 @@
           @dragenter.prevent
         />
         <CalendarEntry
-          v-for="commitment in todaysCommitments"
-          :key="commitment.id"
-          :commitment="commitment"
+          v-for="scheduleEntry in todaysScheduleEntries"
+          :key="scheduleEntry.id"
+          :scheduleEntry="scheduleEntry"
         />
       </div>
     </div>
@@ -108,7 +108,7 @@ export default {
       }
       return rows
     },
-    todaysCommitments() {
+    todaysScheduleEntries() {
       return this.$store.getters.commitmentsOnCurrentDate
     },
   },

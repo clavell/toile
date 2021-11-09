@@ -57,7 +57,7 @@ export function generateState() {
       {
         id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         entrytitle: 'set up vuex',
-        startTime: '202106201330',
+        // startTime: '202106201330',
         duration: 45,
         complete: false,
         parent: { id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
@@ -66,7 +66,8 @@ export function generateState() {
       {
         id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
         entrytitle: 'add dummy data to vuex',
-        startTime: '202106200430',
+        // startTime: '202106200430',
+        duedate: '21/07/2021',
         duration: 45,
         complete: false,
         parent: { id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
@@ -75,7 +76,8 @@ export function generateState() {
       {
         id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
         entrytitle: 'display dummy data in list view',
-        startTime: '202106201530',
+        // startTime: '202106201530',
+        duedate: '21/07/2021',
         duration: 45,
         complete: false,
         parent: { id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
@@ -84,7 +86,8 @@ export function generateState() {
       {
         id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
         entrytitle: 'display dummy data in calendar view',
-        startTime: '202106201630',
+        // startTime: '202106201630',
+        duedate: '21/07/2021',
         duration: 45,
         complete: false,
         parent: { id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
@@ -216,6 +219,38 @@ export function generateState() {
             ],
           },
         ],
+      },
+    ],
+    schedule: [
+      {
+        id: '868d1d58-986c-4cd3-98a9-e530d7998228',
+        commitmentId: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+        sessionStartTime: '202106200430',
+        sessionDuration: 45,
+      },
+      {
+        id: '2fb878cc-4cf5-4d86-ac97-037d740bd5e3',
+        commitmentId: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        sessionStartTime: '202106201330',
+        sessionDuration: 45,
+      },
+      {
+        id: '50322481-5b32-4b79-acc5-17677cf0ddea',
+        commitmentId: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+        sessionStartTime: '202106201530',
+        sessionDuration: 45,
+      },
+      {
+        id: '516ffce2-4690-4028-89fa-77b9b8e744a3',
+        commitmentId: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        sessionStartTime: '202106201630',
+        sessionDuration: 45,
+      },
+      {
+        id: 'eab67363-4773-47a0-9661-17253b52d4e8',
+        commitmentId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+        sessionStartTime: '202106211630',
+        sessionDuration: 45,
       },
     ],
   }
