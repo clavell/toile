@@ -5,9 +5,10 @@ import { movingEnum, originTypeEnum } from '@/use/enums.js'
 
 // export `mutations` as a named export
 export const mutations = {
+  UPDATE_CURRENT_DATE(state, { newDate }) {
+    state.currentDate = newDate
+  },
   UPDATE_START_TIME(state, { newStartTime, id }) {
-    newStartTime
-    id
     //find the correct schedule entry in the schedule array
     const index = getters.indexFromStateArray(id, state, 'schedule')
     //set the value of the start time of this commitment to the new start time

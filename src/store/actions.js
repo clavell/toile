@@ -1,6 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getters } from '@/store/getters.js'
 
+import { currentDateChangeEnum } from '@/use/enums.js'
+
+import { DateTime } from 'luxon'
+
 export const actions = {
   updateStartTime({ commit }, { newStartTime, id }) {
     //could become more complex as api calls are added etc.
@@ -48,6 +52,31 @@ export const actions = {
     for (let i = 0; i < state.decks.length; i++) {
       const commitment = JSON.parse(JSON.stringify(state.decks[i].deck[0]))
       commit('SET_DECK_AS_SINGLE_PARENT', { deckIndex: i, commitment })
+    }
+  },
+
+  setCurrentDate({ state, commit }, { instruction }) {
+    const currentDateObject = DateTime.fromFormat(
+      state.currentDate,
+      state.dateFormat
+    )
+    switch (instruction) {
+      //if the type of change is FORWARD commit the change with a date one GREATER than previous date
+      case currentDateChangeEnum.forward:
+        commit('UPDATE_CURRENT_DATE', {
+          newDate: currentDateObject
+            .plus({ day: 1 })
+            .toFormat(state.dateFormat),
+        })
+        break
+      //if the type of change is BACK commit the change with a date one LESS than previous date
+      case currentDateChangeEnum.back:
+        commit('UPDATE_CURRENT_DATE', {
+          newDate: currentDateObject
+            .minus({ day: 1 })
+            .toFormat(state.dateFormat),
+        })
+        break
     }
   },
   // updateDisplayOrder({state, commit},{commitment, newPosition}){

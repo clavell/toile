@@ -13,3 +13,8 @@ export const classStringEnum = Object.freeze({
   parent: 'parent',
   deck: 'deck',
 })
+
+export const currentDateChangeEnum = Object.freeze({
+  back: 'back',
+  forward: 'forward',
+})

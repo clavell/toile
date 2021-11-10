@@ -1,3 +1,7 @@
+import { DateTime } from 'luxon'
+
+import { currentDateChangeEnum } from '@/use/enums.js'
+
 import { getters } from '@/store/getters.js'
 import { actions } from '@/store/actions.js'
 import {
@@ -11,6 +15,7 @@ const {
   updateCommitment,
   addPrerequisite,
   resetDecks,
+  setCurrentDate,
 } = actions
 
 let state
@@ -136,6 +141,25 @@ describe('actions', () => {
     expect(commit).toHaveBeenLastCalledWith('SET_DECK_AS_SINGLE_PARENT', {
       deckIndex: numberOfFirings - 1,
       commitment: state.decks[numberOfFirings - 1].deck[0],
+    })
+  })
+
+  it('commits the UPDATE_CURRENT_DATE mutation when the dateChangeEnum.forward with current date plus one', () => {
+    const instruction = currentDateChangeEnum.forward
+
+    const expectedNewCurrentDate = DateTime.fromFormat(
+      state.currentDate,
+      state.dateFormat
+    )
+      .plus({ day: 1 })
+      .toFormat(state.dateFormat)
+
+    //dispatch the action
+    setCurrentDate({ state, commit }, { instruction })
+
+    // expect(commit).toHaveBeenCalledTimes(1)
+    expect(commit).toHaveBeenCalledWith('UPDATE_CURRENT_DATE', {
+      newDate: expectedNewCurrentDate,
     })
   })
 

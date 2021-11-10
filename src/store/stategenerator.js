@@ -3,6 +3,7 @@ import { originTypeEnum } from '@/use/enums'
 export function generateState() {
   return {
     timeFormat: 'yyyyMMddHHmm',
+    dateFormat: 'yyyyMMdd',
     currentDate: '20210620',
     // topParent: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
     topParent: [{ id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
@@ -249,7 +250,7 @@ export function generateState() {
       {
         id: 'eab67363-4773-47a0-9661-17253b52d4e8',
         commitmentId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-        sessionStartTime: '202106211630',
+        sessionStartTime: '202106210130',
         sessionDuration: 45,
       },
     ],

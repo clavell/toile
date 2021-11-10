@@ -1,5 +1,20 @@
 <template>
   <div class="container">
+    <div class="calendarViewDate">
+      <button
+        class="currentDateChangeButton"
+        @click="changeCurrentDate(backADay)"
+      >
+        &lt;
+      </button>
+      <button
+        class="currentDateChangeButton"
+        @click="changeCurrentDate(forwardADay)"
+      >
+        &gt;
+      </button>
+      {{ todaysDate }}
+    </div>
     <div class="top">
       <div class="left-sidebar top-left"></div>
       <div class="midheader">
@@ -34,7 +49,12 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
 import { DateTime } from 'luxon'
+
+import { currentDateChangeEnum } from '@/use/enums.js'
 
 import SidebarTime from '@/components/SidebarTime.vue'
 import TimeGridUnit from '@/components/TimeGridUnit.vue'
@@ -46,6 +66,23 @@ export default {
     SidebarTime,
     TimeGridUnit,
     CalendarEntry,
+  },
+  setup() {
+    const store = useStore()
+
+    const todaysDate = computed(() => {
+      const fullDate = DateTime.fromFormat(store.state.currentDate, 'yyyyMMdd')
+      return fullDate.toLocaleString(DateTime.DATE_HUGE) //=>  '4/20/2017'
+    })
+
+    const backADay = currentDateChangeEnum.back
+    const forwardADay = currentDateChangeEnum.forward
+
+    const changeCurrentDate = function (instruction) {
+      store.dispatch('setCurrentDate', { instruction })
+    }
+
+    return { todaysDate, backADay, forwardADay, changeCurrentDate }
   },
   data() {
     //make the times on the sidebar
@@ -116,6 +153,11 @@ export default {
 </script>
 
 <style>
+.calendarViewDate {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+}
+
 .container {
   background-color: #101010;
   border-radius: var(--border-radius);
@@ -262,5 +304,9 @@ body {
 
 .commitment > span {
   padding: 3px;
+}
+
+.currentDateChangeButton {
+  padding: 0.5rem;
 }
 </style>

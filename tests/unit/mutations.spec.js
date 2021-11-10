@@ -7,6 +7,7 @@ import {
   generateState,
 } from '@/store/stategenerator.js'
 const {
+  UPDATE_CURRENT_DATE,
   ADD_COMMITMENT,
   SET_AS_COMPLETE,
   UPDATE_START_TIME,
@@ -83,17 +84,6 @@ describe('mutations', () => {
     UPDATE_START_TIME(state, { newStartTime, id: expectedScheduleEntry.id })
 
     expect(state.schedule[entryIndex]).toStrictEqual(expectedScheduleEntry)
-    // //have the commitment already be in the state object
-    // state.commitments.push(newCommitment)
-
-    // const id = newCommitment.id
-    // const newStartTime = '202506201630'
-
-    // UPDATE_START_TIME(state, { newStartTime, id })
-
-    // expect(state.commitments[state.commitments.length - 1].startTime).toBe(
-    //   newStartTime
-    // )
   })
 
   it('updates the chosen commitment ', () => {
@@ -943,5 +933,15 @@ describe('mutations', () => {
       JSON.stringify(expectedStack)
     )
     expect(state.decks[deckIndex].id).toBeDefined()
+  })
+
+  it('changes the currentDate state variable to specified value', () => {
+    const newDate = '20210623'
+
+    //commit the mutation
+    UPDATE_CURRENT_DATE(state, { newDate })
+
+    //expect the currentDate to be the newDate
+    expect(state.currentDate).toBe(newDate)
   })
 })
