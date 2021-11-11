@@ -35,6 +35,7 @@ describe('getters', () => {
   })
 
   it('gets the schedule entries from the current date', () => {
+    state.currentDate = '20210620'
     const expectedSchedule = state.schedule.slice(0, 4) //the first four entries happen to be on the date in the generated state.
 
     //get the schedule entries from the date

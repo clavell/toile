@@ -11,6 +11,13 @@ export const getters = {
     // .sort((a,b)=> a.rank - b.rank)
     return { topParentCommitments, parentIndex }
   },
+  subTasks(state, parent) {
+    return state.commitments
+      .filter((c) => {
+        return c.parent.id === parent.id
+      })
+      .sort((a, b) => a.rank - b.rank)
+  },
   parentCommitmentsByParent(state, parent, deckIndex) {
     //get the current stack
     if (!deckIndex) deckIndex = 0
