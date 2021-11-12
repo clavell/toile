@@ -5,6 +5,12 @@ import { currentDateChangeEnum } from '@/use/enums.js'
 
 import { DateTime } from 'luxon'
 
+import {
+  createSchedule,
+  createScheduleSessions,
+  generateScheduleOrder,
+} from '@/store/helpers.js'
+
 export const actions = {
   updateStartTime({ commit }, { newStartTime, id }) {
     //could become more complex as api calls are added etc.
@@ -78,6 +84,24 @@ export const actions = {
         })
         break
     }
+  },
+
+  setSchedule({ state, commit }) {
+    const sessionLength = 25
+    const timeOfCallToSchedule = DateTime.now().toFormat(state.timeFormat)
+
+    const orderedItemsToSchedule = generateScheduleOrder(state)
+    const orderedSessions = createScheduleSessions({
+      orderedItemsToSchedule,
+      sessionLength,
+    })
+    const schedule = createSchedule({
+      state,
+      orderedSessions,
+      timeOfCallToSchedule,
+    })
+
+    commit('SET_SCHEDULE', { schedule })
   },
   // updateDisplayOrder({state, commit},{commitment, newPosition}){
 

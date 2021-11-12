@@ -4,7 +4,7 @@ export function generateState() {
   return {
     timeFormat: 'yyyyMMddHHmm',
     dateFormat: 'yyyyMMdd',
-    currentDate: '20211110',
+    currentDate: '20211112',
     // topParent: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
     topParent: [{ id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
     prerequisites: [
@@ -14,6 +14,23 @@ export function generateState() {
         prerequisiteId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
       },
     ], //make the store depends on display dummy data in calendar view
+    scheduleTimes: [
+      '0900',
+      '0930',
+      '1000',
+      '1045',
+      '1115',
+      '1145',
+      '1300',
+      '1330',
+      '1400',
+      '1445',
+      '1515',
+      '1545',
+      '1630',
+      '1700',
+      '1730',
+    ],
     moving: {
       parent: {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
@@ -293,31 +310,61 @@ export function generateState() {
     schedule: [
       {
         id: '868d1d58-986c-4cd3-98a9-e530d7998228',
-        commitmentId: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+        commitments: [
+          {
+            commitmentId: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            duration: 25,
+          },
+        ],
         sessionStartTime: '202106200430',
         sessionDuration: 45,
       },
       {
         id: '2fb878cc-4cf5-4d86-ac97-037d740bd5e3',
-        commitmentId: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        commitments: [
+          {
+            commitmentId: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            duration: 20,
+          },
+          { commitmentId: '1616ae3d-78be-4180-8870-2bd685b4e224', duration: 5 },
+        ],
         sessionStartTime: '202106201330',
         sessionDuration: 45,
       },
       {
         id: '50322481-5b32-4b79-acc5-17677cf0ddea',
-        commitmentId: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+        commitments: [
+          {
+            commitmentId: '1616ae3d-78be-4180-8870-2bd685b4e224',
+            duration: 25,
+          },
+        ],
         sessionStartTime: '202106201530',
         sessionDuration: 45,
       },
       {
         id: '516ffce2-4690-4028-89fa-77b9b8e744a3',
-        commitmentId: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        commitments: [
+          {
+            commitmentId: '1616ae3d-78be-4180-8870-2bd685b4e224',
+            duration: 15,
+          },
+          {
+            commitmentId: 'f44660e1-903e-4f5a-ba06-8b6df65bf20a',
+            duration: 10,
+          },
+        ],
         sessionStartTime: '202106201630',
         sessionDuration: 45,
       },
       {
         id: 'eab67363-4773-47a0-9661-17253b52d4e8',
-        commitmentId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+        commitments: [
+          {
+            commitmentId: 'f44660e1-903e-4f5a-ba06-8b6df65bf20a',
+            duration: 25,
+          },
+        ],
         sessionStartTime: '202106210130',
         sessionDuration: 45,
       },

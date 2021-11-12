@@ -38,6 +38,8 @@ export default {
       commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 2,
     })
+    store.dispatch('setSchedule')
+    console.log(store.state.schedule)
     // store.commit('ADD_ANCESTORS_TO_STACK')
     const decks = computed(() => store.state.decks)
     const deckIndices = computed(() => {

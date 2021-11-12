@@ -24,6 +24,61 @@ export function removeBlankHelper(state) {
   return { parentIndex, topParentCommitments }
 }
 
+export function createSchedule({
+  state,
+  orderedSessions,
+  timeOfCallToSchedule,
+}) {
+  //determine first time to schedule at
+  let timeOfCallObject = DateTime.fromFormat(
+    timeOfCallToSchedule,
+    state.timeFormat
+  )
+  const dayOfCall = timeOfCallObject.toFormat(state.dateFormat)
+  const possibleTimesObjects = state.scheduleTimes.map((el) => {
+    return DateTime.fromFormat(dayOfCall + el, state.timeFormat)
+  })
+
+  let firstTimeToScheduleIndex
+  for (let i = 0; i < possibleTimesObjects.length; i++) {
+    if (possibleTimesObjects[i] > timeOfCallObject) {
+      firstTimeToScheduleIndex = i
+      break
+    }
+  }
+
+  //if no times work then schedule for the next day (schedule set after work day)
+  if (firstTimeToScheduleIndex == undefined) {
+    timeOfCallObject = timeOfCallObject.plus({
+      days: 1,
+    })
+
+    firstTimeToScheduleIndex = 0
+  }
+
+  //while there are still ordered sessions to schedule keep cycling through the sessions and adding them to the final array with start times and durations of 30 minutes
+  const schedule = orderedSessions.map((el, index) => {
+    let dayOffSet = Math.floor((index + firstTimeToScheduleIndex) / 15)
+
+    let timeIndex = (index + firstTimeToScheduleIndex) % 15
+
+    let timeOfCallObjectCurrent = timeOfCallObject.plus({ days: dayOffSet })
+
+    let startTime =
+      timeOfCallObjectCurrent.toFormat(state.dateFormat) +
+      state.scheduleTimes[timeIndex]
+
+    return {
+      ...el,
+      sessionStartTime: startTime,
+      sessionDuration: 30,
+      id: uuidv4(),
+    }
+  })
+
+  return schedule
+}
+
 export function createScheduleSessions({
   orderedItemsToSchedule,
   sessionLength,
@@ -39,24 +94,7 @@ export function createScheduleSessions({
       if (orderedSessions[j] == undefined) {
         orderedSessions[j] = { id: uuidv4(), commitments: [] }
       }
-
-      // const sessionsContainingCurrentItem = orderedSessions.filter((el) => {
-      //   let t = el.commitments.filter((el) => {
-      //     return el.commitmentId === orderedItemsToSchedule[i].commitmentId
-      //   })
-      //   return t.length
-      // })
-
-      // let durationOfCurrentItemScheduled = 0
-
-      // if(sessionsContainingCurrentItem.length > 0){
-      //   durationOfCurrentItemScheduled = sessionsContainingCurrentItem.map((el) => {
-      //     return el.duration
-      //   }).reduce((a,b) => a + b)
-      // }
-
       //if there is no time in the item then continue
-      // timeLeftToScheduleInItem = timeLeftToScheduleInItem - durationOfCurrentItemScheduled
       if (timeLeftToScheduleInItem == 0) continue
 
       let timeScheduledInCurrentSession = 0

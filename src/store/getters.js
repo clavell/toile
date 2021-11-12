@@ -45,6 +45,18 @@ export const getters = {
       return currentDate.hasSame(scheduleEntryTime, 'day')
     })
   },
+  commitmentsByScheduleSessionId: (state) => (id) => {
+    const session = state.schedule.find((el) => {
+      return el.id == id
+    })
+
+    return session.commitments.map((el) => {
+      const fullCommitment = state.commitments.find(
+        (commitment) => commitment.id == el.commitmentId
+      )
+      return { ...fullCommitment, duration: el.duration }
+    })
+  },
   commitmentsSortedByCompletedStatus(state) {
     let commitments = state.commitments
     return [...commitments].sort((a, b) => a.complete - b.complete)

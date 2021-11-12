@@ -7,7 +7,11 @@
     @mousedown.prevent
   >
     <div></div>
-    <span>{{ commitment.entrytitle }}</span>
+    <ul>
+      <li v-for="commitment in commitments" :key="commitment.id">
+        {{ commitment.entrytitle }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -27,8 +31,10 @@ export default {
     const store = useStore()
     const el = ref(null)
 
-    const commitment = computed(() => {
-      return store.getters.commitmentById(props.scheduleEntry.commitmentId)
+    const commitments = computed(() => {
+      return store.getters.commitmentsByScheduleSessionId(
+        props.scheduleEntry.id
+      )
     })
 
     const { position, draggableStyle } = makeDraggableOld({
@@ -42,7 +48,7 @@ export default {
       el,
       position,
       draggableStyle,
-      commitment,
+      commitments,
     }
   },
   computed: {

@@ -296,4 +296,8 @@ export const mutations = {
       prerequisiteId: prerequisite.id,
     })
   },
+
+  SET_SCHEDULE(state, { schedule }) {
+    state.schedule = schedule
+  },
 }
