@@ -48,32 +48,34 @@ const makeDraggableOld = function ({
   })
 
   const onMouseDown = (e) => {
-    e.stopPropagation()
-    //if clicking on a checkbox don't drag
-    if (e.target.type == 'checkbox') {
-      return
-    }
-    e.preventDefault()
-    let moving = e.target
-    while (!moving.classList.contains('draggable')) {
-      moving = moving.parentNode
-    }
-    let clientX = e.clientX
-    let clientY = e.clientY
-    const shiftX = e.clientX - moving.getBoundingClientRect().left
-    const shiftY = e.clientY - moving.getBoundingClientRect().top
-    position.x = clientX - shiftX - 7
-    position.y = clientY - shiftY - 7
+    if (e.shiftKey) {
+      e.stopPropagation()
+      //if clicking on a checkbox don't drag
+      if (e.target.type == 'checkbox') {
+        return
+      }
+      e.preventDefault()
+      let moving = e.target
+      while (!moving.classList.contains('draggable')) {
+        moving = moving.parentNode
+      }
+      let clientX = e.clientX
+      let clientY = e.clientY
+      const shiftX = e.clientX - moving.getBoundingClientRect().left
+      const shiftY = e.clientY - moving.getBoundingClientRect().top
+      position.x = clientX - shiftX - 7
+      position.y = clientY - shiftY - 7
 
-    position.dragStartX = clientX - position.x
-    position.dragStartY = clientY - position.y
+      position.dragStartX = clientX - position.x
+      position.dragStartY = clientY - position.y
 
-    position.isDragging = true
-    if (onMouseDownDetails) {
-      onMouseDownDetails({ store, mouseDownArguments })
+      position.isDragging = true
+      if (onMouseDownDetails) {
+        onMouseDownDetails({ store, mouseDownArguments })
+      }
+      document.addEventListener('pointerup', onMouseUp)
+      document.addEventListener('pointermove', onMouseMove)
     }
-    document.addEventListener('pointerup', onMouseUp)
-    document.addEventListener('pointermove', onMouseMove)
   }
 
   const onMouseMove = (e) => {
@@ -100,6 +102,10 @@ const makeDraggableOld = function ({
     document.removeEventListener('pointermove', onMouseMove)
   }
 
+  const handleClick = (e) => {
+    console.log(e)
+  }
+
   watch(element, (element) => {
     // if (!element instanceof HTMLElement) return;
     let rect = element.getBoundingClientRect(element)
@@ -110,6 +116,7 @@ const makeDraggableOld = function ({
     position.height = Math.round(rect.height)
 
     element.addEventListener('pointerdown', onMouseDown)
+    element.addEventListener('click', handleClick)
   })
 
   return {

@@ -1,13 +1,15 @@
 <template>
+  <!--   :style="[draggableStyle, gridSpot, blankSpaceStyle]" -->
   <div
     ref="el"
     class="commitment draggable"
-    :style="[draggableStyle, gridSpot]"
+    :style="[gridSpot, blankSpaceStyle]"
     @touchstart.prevent
     @mousedown.prevent
+    @click="handleClick"
   >
     <div></div>
-    <ul>
+    <ul v-if="scheduleEntry.type == calendarEntryTypeEnum.CalendarEntry">
       <li v-for="commitment in commitments" :key="commitment.id">
         {{ commitment.entrytitle }}
       </li>
@@ -16,11 +18,12 @@
 </template>
 
 <script>
-import { makeDraggableOld } from '@/use/MakeDraggableOld.js'
+// import { makeDraggableOld } from '@/use/MakeDraggableOld.js'
 import { computed, ref } from 'vue'
 import { DateTime } from 'luxon'
 import { useStore } from 'vuex'
-import { onMouseUpDetails } from '@/use/OnMouseUpDetailsCalendarEntry.js'
+// import { onMouseUpDetails } from '@/use/OnMouseUpDetailsCalendarEntry.js'
+import { calendarEntryTypeEnum } from '@/use/enums.js'
 
 export default {
   name: 'CalendarEntry',
@@ -37,18 +40,45 @@ export default {
       )
     })
 
-    const { position, draggableStyle } = makeDraggableOld({
-      element: el,
-      props,
-      store,
-      onMouseUpDetails,
+    // const { position, draggableStyle } = makeDraggableOld({
+    //   element: el,
+    //   props,
+    //   store,
+    //   onMouseUpDetails,
+    // })
+
+    const blankSpaceStyle = computed(() => {
+      if (props.scheduleEntry.type !== calendarEntryTypeEnum.CalendarEntry) {
+        return { opacity: 0.1 }
+      }
+
+      return {}
     })
+
+    const handleClick = () => {
+      if (props.scheduleEntry.type == calendarEntryTypeEnum.CalendarEntry) {
+        console.log('cal')
+        store.commit('ADD_TO_DONT_SCHEDULE_ARRAY', {
+          time: props.scheduleEntry.sessionStartTime,
+        })
+        store.dispatch('setSchedule', { rearrange: false })
+      } else {
+        console.log('blank')
+        store.dispatch('removeFromDontScheduleAtArray', {
+          time: props.scheduleEntry.sessionStartTime,
+        })
+        store.dispatch('setSchedule', { rearrange: false })
+      }
+    }
 
     return {
       el,
-      position,
-      draggableStyle,
+      // position,
+      // draggableStyle,
       commitments,
+      calendarEntryTypeEnum,
+      blankSpaceStyle,
+      handleClick,
     }
   },
   computed: {
@@ -70,6 +100,9 @@ export default {
 }
 </script>
 <style scoped>
+blankSpace {
+}
+
 div {
   /* using tailwind classes will cause the drag and drop to stop working */
   background-color: theme('colors.pink.900');

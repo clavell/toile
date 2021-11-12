@@ -19,3 +19,8 @@ export const currentDateChangeEnum = Object.freeze({
   forward: 'forward',
   today: 'today',
 })
+
+export const calendarEntryTypeEnum = Object.freeze({
+  CalendarEntry: 'CalendarEntry',
+  BlankEntry: 'BlankEntry',
+})

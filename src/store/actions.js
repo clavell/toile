@@ -111,7 +111,12 @@ export const actions = {
 
     commit('SET_SCHEDULE', { schedule })
   },
-
+  removeFromDontScheduleAtArray({ state, commit }, { time }) {
+    const index = state.dontScheduleAt.findIndex((el) => {
+      return el.time == time
+    })
+    commit('REMOVE_FROM_DONT_SCHEDULE_ARRAY', { index })
+  },
   // updateDisplayOrder({state, commit},{commitment, newPosition}){
 
   // }

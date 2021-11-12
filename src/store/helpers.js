@@ -1,6 +1,7 @@
 import { getters } from '@/store/getters.js'
 import { DateTime } from 'luxon'
 import { v4 as uuidv4 } from 'uuid'
+import { calendarEntryTypeEnum } from '@/use/enums.js'
 
 export const blankSpace = {
   id: '',
@@ -39,6 +40,7 @@ export function createSchedule({
     return DateTime.fromFormat(dayOfCall + el, state.timeFormat)
   })
 
+  let sessionDuration = 30
   let firstTimeToScheduleIndex
   for (let i = 0; i < possibleTimesObjects.length; i++) {
     if (possibleTimesObjects[i] > timeOfCallObject) {
@@ -57,26 +59,62 @@ export function createSchedule({
   }
 
   //while there are still ordered sessions to schedule keep cycling through the sessions and adding them to the final array with start times and durations of 30 minutes
-  const schedule = orderedSessions.map((el, index) => {
-    let dayOffSet = Math.floor((index + firstTimeToScheduleIndex) / 15)
+  let noOfSchedulingTimesPerDay = state.scheduleTimes.length
+  let noOfDelayOffsets = 0
 
-    let timeIndex = (index + firstTimeToScheduleIndex) % 15
+  const schedule = orderedSessions.map((el, index) => {
+    let dayOffSet = Math.floor(
+      (index + firstTimeToScheduleIndex + noOfDelayOffsets) /
+        noOfSchedulingTimesPerDay
+    )
+    let timeIndex =
+      (index + firstTimeToScheduleIndex + noOfDelayOffsets) %
+      noOfSchedulingTimesPerDay
 
     let timeOfCallObjectCurrent = timeOfCallObject.plus({ days: dayOffSet })
+    let currentDateString = timeOfCallObjectCurrent.toFormat(state.dateFormat)
+    let startTime = currentDateString + state.scheduleTimes[timeIndex]
 
-    let startTime =
-      timeOfCallObjectCurrent.toFormat(state.dateFormat) +
-      state.scheduleTimes[timeIndex]
+    //while there are times that shouldn't be scheduled at push back the start time
+    while (
+      state.dontScheduleAt.find((el) => {
+        return el.time == startTime
+      })
+    ) {
+      noOfDelayOffsets++
+      dayOffSet = Math.floor(
+        (index + firstTimeToScheduleIndex + noOfDelayOffsets) /
+          noOfSchedulingTimesPerDay
+      )
+      timeIndex =
+        (index + firstTimeToScheduleIndex + noOfDelayOffsets) %
+        noOfSchedulingTimesPerDay
+
+      timeOfCallObjectCurrent = timeOfCallObject.plus({ days: dayOffSet })
+      currentDateString = timeOfCallObjectCurrent.toFormat(state.dateFormat)
+      startTime = currentDateString + state.scheduleTimes[timeIndex]
+    }
 
     return {
       ...el,
       sessionStartTime: startTime,
-      sessionDuration: 30,
+      sessionDuration,
       id: uuidv4(),
+      type: calendarEntryTypeEnum.CalendarEntry,
     }
   })
 
-  return schedule
+  const blankSpaces = state.dontScheduleAt.map((el) => {
+    return {
+      ...el,
+      sessionStartTime: el.time,
+      sessionDuration,
+      id: uuidv4(),
+      type: calendarEntryTypeEnum.BlankEntry,
+    }
+  })
+
+  return schedule.concat(blankSpaces)
 }
 
 export function createScheduleSessions({

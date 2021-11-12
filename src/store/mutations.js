@@ -249,7 +249,7 @@ export const mutations = {
     let newStack = [{ id: commitment.id, commitments: commitmentsToAdd }]
     //set the stack to be the new stack
     state.decks[deckIndex] = { deck: newStack, id: uuidv4() }
-    // console.log(uuidv4()) //uncomment this line to get some uuids in the console!
+    console.log(uuidv4()) //uncomment this line to get some uuids in the console!
   },
 
   SET_TOP_PARENT(state, newTopParent, deckIndex) {
@@ -303,5 +303,13 @@ export const mutations = {
 
   SET_PREVIOUS_REARRANGE(state, { previousRearrange }) {
     state.previousRearrange = previousRearrange
+  },
+
+  ADD_TO_DONT_SCHEDULE_ARRAY(state, { time }) {
+    state.dontScheduleAt.push({ id: uuidv4(), time })
+  },
+
+  REMOVE_FROM_DONT_SCHEDULE_ARRAY(state, { index }) {
+    state.dontScheduleAt.splice(index, 1)
   },
 }

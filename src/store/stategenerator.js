@@ -33,6 +33,10 @@ export function generateState() {
       '1700',
       '1730',
     ],
+    dontScheduleAt: [
+      { id: '9f3df22f-19cd-45cc-aa60-fce46c948a8e', time: '202111121330' },
+      { id: 'c33b4846-82c9-456a-be64-12850e7b8dec', time: '202111121400' },
+    ],
     moving: {
       parent: {
         id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
