@@ -14,6 +14,8 @@ export function generateState() {
         prerequisiteId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
       },
     ], //make the store depends on display dummy data in calendar view
+    previousRearrange: {},
+    sessionLength: 25,
     scheduleTimes: [
       '0900',
       '0930',

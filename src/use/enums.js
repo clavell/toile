@@ -17,4 +17,5 @@ export const classStringEnum = Object.freeze({
 export const currentDateChangeEnum = Object.freeze({
   back: 'back',
   forward: 'forward',
+  today: 'today',
 })

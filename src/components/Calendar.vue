@@ -3,17 +3,37 @@
     <div class="calendarViewDate">
       <button
         class="currentDateChangeButton"
-        @click="changeCurrentDate(backADay)"
+        @click="changeCurrentDate(currentDateChangeEnum.back)"
       >
         &lt;
       </button>
       <button
         class="currentDateChangeButton"
-        @click="changeCurrentDate(forwardADay)"
+        @click="changeCurrentDate(currentDateChangeEnum.forward)"
       >
         &gt;
       </button>
-      {{ todaysDate }}
+      <div class="schedulingButtons">
+        <button
+          class="schedulingButton"
+          @click="setSchedule({ rearrange: false })"
+        >
+          Set Schedule
+        </button>
+        <button
+          class="schedulingButton"
+          @click="setSchedule({ rearrange: true })"
+        >
+          Rearrange schedule
+        </button>
+        <button
+          class="schedulingButton"
+          @click="changeCurrentDate(currentDateChangeEnum.today)"
+        >
+          Today
+        </button>
+      </div>
+      <div>{{ todaysDate }}</div>
     </div>
     <div class="top">
       <div class="left-sidebar top-left"></div>
@@ -75,14 +95,15 @@ export default {
       return fullDate.toLocaleString(DateTime.DATE_HUGE) //=>  '4/20/2017'
     })
 
-    const backADay = currentDateChangeEnum.back
-    const forwardADay = currentDateChangeEnum.forward
-
     const changeCurrentDate = function (instruction) {
       store.dispatch('setCurrentDate', { instruction })
     }
 
-    return { todaysDate, backADay, forwardADay, changeCurrentDate }
+    const setSchedule = function ({ rearrange }) {
+      store.dispatch('setSchedule', { rearrange })
+    }
+
+    return { todaysDate, changeCurrentDate, setSchedule, currentDateChangeEnum }
   },
   data() {
     //make the times on the sidebar
@@ -153,9 +174,25 @@ export default {
 </script>
 
 <style>
+.currentDateChangeButton {
+  padding: 0.2rem;
+}
+
+.schedulingButtons {
+  display: flex;
+  flex-direction: column;
+}
+.schedulingButton {
+  font-size: 0.6rem;
+  padding: 0.2rem;
+}
+
 .calendarViewDate {
   padding: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 4fr 10fr;
+  align-items: end;
 }
 
 .container {
@@ -291,6 +328,7 @@ body {
   opacity: 0.7;
   grid-area: 25 / 1 / 30 / 2;
   color: white;
+  overflow: hidden;
 }
 
 .commitment > div {
@@ -304,9 +342,5 @@ body {
 
 .commitment > span {
   padding: 3px;
-}
-
-.currentDateChangeButton {
-  padding: 0.5rem;
 }
 </style>

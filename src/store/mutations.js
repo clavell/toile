@@ -300,4 +300,8 @@ export const mutations = {
   SET_SCHEDULE(state, { schedule }) {
     state.schedule = schedule
   },
+
+  SET_PREVIOUS_REARRANGE(state, { previousRearrange }) {
+    state.previousRearrange = previousRearrange
+  },
 }

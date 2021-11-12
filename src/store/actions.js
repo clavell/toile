@@ -83,17 +83,25 @@ export const actions = {
             .toFormat(state.dateFormat),
         })
         break
+      case currentDateChangeEnum.today:
+        commit('UPDATE_CURRENT_DATE', {
+          newDate: DateTime.now().toFormat(state.dateFormat),
+        })
+        break
     }
   },
 
-  setSchedule({ state, commit }) {
-    const sessionLength = 25
+  setSchedule({ state, commit }, { rearrange }) {
     const timeOfCallToSchedule = DateTime.now().toFormat(state.timeFormat)
 
-    const orderedItemsToSchedule = generateScheduleOrder(state)
+    const orderedItemsToSchedule = generateScheduleOrder({
+      state,
+      commit,
+      rearrange,
+    })
     const orderedSessions = createScheduleSessions({
       orderedItemsToSchedule,
-      sessionLength,
+      sessionLength: state.sessionLength,
     })
     const schedule = createSchedule({
       state,
@@ -103,6 +111,7 @@ export const actions = {
 
     commit('SET_SCHEDULE', { schedule })
   },
+
   // updateDisplayOrder({state, commit},{commitment, newPosition}){
 
   // }

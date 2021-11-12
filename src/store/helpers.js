@@ -126,17 +126,61 @@ export function createScheduleSessions({
   return orderedSessions
 }
 
-export function generateScheduleOrder(state) {
+export function generateScheduleOrder({ state, rearrange, commit }) {
+  const orderByDueDate = (a, b) => {
+    const aDate = DateTime.fromFormat(a.duedate, state.dateFormat)
+    const bDate = DateTime.fromFormat(b.duedate, state.dateFormat)
+    return aDate.startOf('day') >= bDate.startOf('day')
+  }
   //first order elements by their due dates
   const commitmentsWithDueDatesInOrder = state.commitments
     .filter((el) => {
       return el.duedate //if it has a due date then it is returned
     })
-    .sort((a, b) => {
-      const aDate = DateTime.fromFormat(a.duedate, state.dateFormat)
-      const bDate = DateTime.fromFormat(b.duedate, state.dateFormat)
-      return aDate.startOf('day') >= bDate.startOf('day')
-    })
+    .sort(orderByDueDate)
+
+  const previousRearrange = state.previousRearrange
+  if (rearrange) {
+    //if there was a previously rearranged thing then find its index in the commitments list (ordered by due date)
+    if (previousRearrange.id) {
+      const previousRearrangeIndex = commitmentsWithDueDatesInOrder.findIndex(
+        (el) => {
+          return el.id == previousRearrange.id
+        }
+      )
+      //increment it by one
+      const newRearrangeIndex = previousRearrangeIndex + 1
+      //if the new rearrange index isn't out of bounds and the element is still in the list then get it from where it is and put it at the front
+      if (
+        previousRearrangeIndex >= 0 &&
+        newRearrangeIndex < commitmentsWithDueDatesInOrder.length
+      ) {
+        moveElementToFront(newRearrangeIndex)
+      } else if (
+        previousRearrangeIndex >= 0 &&
+        newRearrangeIndex <= commitmentsWithDueDatesInOrder.length
+      ) {
+        commitmentsWithDueDatesInOrder.sort(orderByDueDate)
+        commit('SET_PREVIOUS_REARRANGE', {
+          previousRearrange: commitmentsWithDueDatesInOrder[0],
+        })
+      } else {
+        //if there isn't a previous rearrange (was removed) or the new rearrange index would be out of bounds then just swap in the second element
+        moveElementToFront(1)
+      }
+    } else {
+      moveElementToFront(1)
+    }
+  } else {
+    if (previousRearrange.id) {
+      const shouldBeFirstIndex = commitmentsWithDueDatesInOrder.findIndex(
+        (el) => {
+          return el.id == previousRearrange.id
+        }
+      )
+      moveElementToFront(shouldBeFirstIndex)
+    }
+  }
 
   let itemsToSchedule = []
 
@@ -145,6 +189,13 @@ export function generateScheduleOrder(state) {
   })
 
   return itemsToSchedule
+
+  function moveElementToFront(newRearrangeIndex) {
+    const newRearrange = commitmentsWithDueDatesInOrder[newRearrangeIndex]
+    commitmentsWithDueDatesInOrder.splice(newRearrange, 1)
+    commitmentsWithDueDatesInOrder.unshift(newRearrange)
+    commit('SET_PREVIOUS_REARRANGE', { previousRearrange: newRearrange })
+  }
 }
 
 function recursiveScheduleOrderer({ state, itemsToSchedule, commitment }) {

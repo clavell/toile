@@ -173,7 +173,7 @@ describe('helpers', () => {
       },
     ]
     generatedListBeforeChange //put this here so can keep this documentation without errors in linter, etc.
-    const generatedList = generateScheduleOrder(state)
+    const generatedList = generateScheduleOrder({ state })
 
     for (let i = 0; i < generatedList.length; i++) {
       expect(generatedList[i].commitmentId === expectedList[i].commitmentId)
@@ -2438,5 +2438,19 @@ describe('helpers', () => {
         expectedSchedule[i].sessionStartTime
       )
     }
+  })
+
+  it('runs the generate schedule order with rearrange is true', () => {
+    const commit = jest.fn()
+    state.previousRearrange = {
+      entrytitle: 'Special Topics Project',
+      duedate: '18/11/2021',
+      parent: { id: '55f5eccd-5fb9-4976-88f7-4376e0af0ac8' },
+      id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e',
+      complete: false,
+      rank: 1,
+    }
+
+    generateScheduleOrder({ state, commit, rearrange: true })
   })
 })
