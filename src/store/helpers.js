@@ -1,5 +1,6 @@
 import { getters } from '@/store/getters.js'
 import { DateTime } from 'luxon'
+import { v4 as uuidv4 } from 'uuid'
 
 export const blankSpace = {
   id: '',
@@ -23,68 +24,115 @@ export function removeBlankHelper(state) {
   return { parentIndex, topParentCommitments }
 }
 
+export function createScheduleSessions({
+  orderedItemsToSchedule,
+  sessionLength,
+  // breakLength,
+}) {
+  let orderedSessions = []
+  let j = 0
+
+  for (let i = 0; i < orderedItemsToSchedule.length; i++) {
+    let timeLeftToScheduleInItem = orderedItemsToSchedule[i].duration
+
+    do {
+      if (orderedSessions[j] == undefined) {
+        orderedSessions[j] = { id: uuidv4(), commitments: [] }
+      }
+
+      // const sessionsContainingCurrentItem = orderedSessions.filter((el) => {
+      //   let t = el.commitments.filter((el) => {
+      //     return el.commitmentId === orderedItemsToSchedule[i].commitmentId
+      //   })
+      //   return t.length
+      // })
+
+      // let durationOfCurrentItemScheduled = 0
+
+      // if(sessionsContainingCurrentItem.length > 0){
+      //   durationOfCurrentItemScheduled = sessionsContainingCurrentItem.map((el) => {
+      //     return el.duration
+      //   }).reduce((a,b) => a + b)
+      // }
+
+      //if there is no time in the item then continue
+      // timeLeftToScheduleInItem = timeLeftToScheduleInItem - durationOfCurrentItemScheduled
+      if (timeLeftToScheduleInItem == 0) continue
+
+      let timeScheduledInCurrentSession = 0
+      if (orderedSessions[j].commitments.length > 0) {
+        timeScheduledInCurrentSession = orderedSessions[j].commitments
+          .map((el) => {
+            return el.duration
+          })
+          .reduce((a, b) => a + b)
+      }
+      let timeLeftInCurrentSession =
+        sessionLength - timeScheduledInCurrentSession
+      if (timeLeftToScheduleInItem >= timeLeftInCurrentSession) {
+        orderedSessions[j].commitments.push({
+          commitmentId: orderedItemsToSchedule[i].commitmentId,
+          duration: timeLeftInCurrentSession,
+        })
+        timeLeftToScheduleInItem -= timeLeftInCurrentSession
+        j++
+      } else {
+        orderedSessions[j].commitments.push({
+          commitmentId: orderedItemsToSchedule[i].commitmentId,
+          duration: timeLeftToScheduleInItem,
+        })
+        timeLeftToScheduleInItem = 0
+      }
+    } while (timeLeftToScheduleInItem > 0)
+  }
+  return orderedSessions
+}
+
 export function generateScheduleOrder(state) {
   //first order elements by their due dates
   const commitmentsWithDueDatesInOrder = state.commitments
     .filter((el) => {
-      return el.duedate
+      return el.duedate //if it has a due date then it is returned
     })
     .sort((a, b) => {
       const aDate = DateTime.fromFormat(a.duedate, state.dateFormat)
       const bDate = DateTime.fromFormat(b.duedate, state.dateFormat)
       return aDate.startOf('day') >= bDate.startOf('day')
     })
-    .map((element) => {
-      return { ...element, commitmentId: element.id }
-    })
 
-  let scheduleList = []
+  let itemsToSchedule = []
 
   commitmentsWithDueDatesInOrder.forEach((element) => {
-    recursiveScheduleOrderer({ state, scheduleList, commitment: element })
+    recursiveScheduleOrderer({ state, itemsToSchedule, commitment: element })
   })
 
-  return scheduleList
+  return itemsToSchedule
 }
 
-function recursiveScheduleOrderer({
-  state,
-  scheduleList,
-  commitment,
-  parentDuration,
-}) {
+function recursiveScheduleOrderer({ state, itemsToSchedule, commitment }) {
   //if the item is already in the list do nothing
-  if (
-    scheduleList.find((element) => {
-      return element.commitmentId === commitment.commitmentId
-    })
-  ) {
-    return
+  const existingEntry = itemsToSchedule.find((element) => {
+    return element.commitmentId === commitment.id
+  })
+  if (existingEntry) {
+    // return 0
+    return existingEntry.totalTaskDuration
   }
   //if there are prerequisites add them to the list
-  const fullPrereqs = getters.prerequisitesById2(state, commitment.commitmentId)
-  if (fullPrereqs.length !== 0) {
-    const prereqs = fullPrereqs.map((commitment) => {
-      return { ...commitment, commitmentId: commitment.id }
-    })
+  const prereqs = getters.prerequisitesById2(state, commitment.id)
+  if (prereqs.length !== 0) {
     prereqs.forEach((prereq) => {
-      recursiveScheduleOrderer({ state, scheduleList, commitment: prereq })
+      recursiveScheduleOrderer({ state, itemsToSchedule, commitment: prereq })
     })
   }
   //if there are subtasks add them to the list
-  const fullSubTasks = getters.subTasks(state, commitment)
+  const subTasks = getters.subTasks(state, commitment)
   let totalSubtaskDuration = 0
-  if (fullSubTasks.length !== 0) {
-    const subTasks = fullSubTasks.map((commitment) => {
-      return { ...commitment, commitmentId: commitment.id }
-    })
+  if (subTasks.length !== 0) {
     subTasks.forEach((subTask) => {
-      if (subTask.duration && subTask.duration !== '') {
-        totalSubtaskDuration += subTask.duration
-      }
       totalSubtaskDuration += recursiveScheduleOrderer({
         state,
-        scheduleList,
+        itemsToSchedule,
         commitment: subTask,
       })
     })
@@ -95,10 +143,17 @@ function recursiveScheduleOrderer({
     duration = commitment.duration - totalSubtaskDuration
     totalTaskDuration = commitment.duration
   }
-  if (commitment.duration < totalSubtaskDuration) {
+  if (!commitment.duration || commitment.duration < totalSubtaskDuration) {
     totalTaskDuration = totalSubtaskDuration
   }
+  // if(!commitment.duration){
+  //   totalTaskDuration = totalSubtaskDuration
+  // }
 
-  scheduleList.push({ commitmentId: commitment.commitmentId, duration })
+  itemsToSchedule.push({
+    commitmentId: commitment.id,
+    duration,
+    totalTaskDuration,
+  })
   return totalTaskDuration
 }

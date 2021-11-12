@@ -102,6 +102,7 @@ export function generateState() {
       },
       {
         entrytitle: 'Install Vuex',
+        duration: 100,
         parent: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
         id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
         complete: false,
@@ -198,6 +199,7 @@ export function generateState() {
       },
       {
         entrytitle: 'Research',
+        duration: 200,
         parent: { id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e' },
         id: '584fe4b7-dc93-40b3-8b72-31cccd997df6',
         complete: false,
