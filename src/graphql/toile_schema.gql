@@ -3,3 +3,27 @@ type Crouleur {
   name: String
   email: String @unique
 }
+
+type Commitment {
+  id: ID! 
+  entrytitle: String!
+  duedate: String
+  complete: Boolean!
+  parent: Commitment
+  rank: Int
+  crouleur: Crouleur
+}
+
+type Prerequisite {
+        id: String! @unique
+        commitmentId: String!
+        prerequisiteId: String!
+        commitment: Commitment!
+        prerequisite: Commitment!
+        crouleur: Crouleur!
+}
+
+type Query {
+  allCrouleurs: [Crouleur!]
+  allCommitments: [Commitment!]
+}
