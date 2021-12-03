@@ -23,7 +23,7 @@ const {
 
 let state
 let newCommitment
-//this function should return the commitment at the old position based on the parent id
+//this function should return the commitment at the old position based on the parent _id
 function setup_UPDATE_DISPLAY_LIST_test_reuse(
   oldPosition,
   newPosition,
@@ -58,7 +58,7 @@ describe('mutations', () => {
   it('sets item as complete', () => {
     //have the commitment already be in the state object
     state.commitments.push(newCommitment)
-    SET_AS_COMPLETE(state, newCommitment.id)
+    SET_AS_COMPLETE(state, newCommitment._id)
     expect(state.commitments[state.commitments.length - 1].complete).toBe(true)
   })
 
@@ -68,7 +68,7 @@ describe('mutations', () => {
     state.commitments.push(newCommitment)
 
     //run the mutation
-    SET_AS_COMPLETE(state, newCommitment.id)
+    SET_AS_COMPLETE(state, newCommitment._id)
     expect(state.commitments[state.commitments.length - 1].complete).toBe(false)
   })
 
@@ -81,7 +81,7 @@ describe('mutations', () => {
       sessionStartTime: newStartTime,
     }
 
-    UPDATE_START_TIME(state, { newStartTime, id: expectedScheduleEntry.id })
+    UPDATE_START_TIME(state, { newStartTime, _id: expectedScheduleEntry._id })
 
     expect(state.schedule[entryIndex]).toStrictEqual(expectedScheduleEntry)
   })
@@ -95,7 +95,7 @@ describe('mutations', () => {
     const edittedCommitment = generateAlteredCommitment()
 
     const index = getters.indexFromStateArray(
-      newCommitment.id,
+      newCommitment._id,
       state,
       'commitments'
     )
@@ -103,7 +103,7 @@ describe('mutations', () => {
 
     //expect there to be only one of the editted commitment
     expect(
-      state.commitments.filter((el) => el.id === edittedCommitment.id)
+      state.commitments.filter((el) => el._id === edittedCommitment._id)
         .length === 1
     )
 
@@ -114,11 +114,11 @@ describe('mutations', () => {
   it('updates the decks array', () => {
     //the entry in the commitmentsdisplayorder will be slightly different
     const expectedEntry = {
-      id: newCommitment.id,
+      _id: newCommitment._id,
       type: originTypeEnum.todoCard,
     }
 
-    //add a new commitment with that parent id
+    //add a new commitment with that parent _id
     state.commitments.push(newCommitment)
 
     //run the mutation
@@ -126,7 +126,7 @@ describe('mutations', () => {
     //does the new display array contain the new element?
 
     const newTopParentDisplay = state.decks[0].deck.filter((el) => {
-      return el.id === state.topParent[0].id && typeof el.id !== 'undefined'
+      return el._id === state.topParent[0]._id && typeof el._id !== 'undefined'
     })[0].commitments
     expect(newTopParentDisplay[newTopParentDisplay.length - 1]).toStrictEqual(
       expectedEntry
@@ -136,11 +136,11 @@ describe('mutations', () => {
   it('updates the decks array', () => {
     //the entry in the commitmentsdisplayorder will be slightly different
     const expectedEntry = {
-      id: newCommitment.id,
+      _id: newCommitment._id,
       type: originTypeEnum.todoCard,
     }
 
-    //add a new commitment with that parent id
+    //add a new commitment with that parent _id
     state.commitments.push(newCommitment)
 
     //run the mutation
@@ -148,7 +148,7 @@ describe('mutations', () => {
     //does the new display array contain the new element?
 
     const newTopParentDisplay = state.decks[0].deck.filter((el) => {
-      return el.id === state.topParent[0].id && typeof el.id !== 'undefined'
+      return el._id === state.topParent[0]._id && typeof el._id !== 'undefined'
     })[0].commitments
     expect(newTopParentDisplay[newTopParentDisplay.length - 1]).toStrictEqual(
       expectedEntry
@@ -159,10 +159,10 @@ describe('mutations', () => {
     //choose a new rank to set
     const newRank = 10
     const commitmentPosition = 1
-    const id = state.commitments[commitmentPosition].id
+    const _id = state.commitments[commitmentPosition]._id
 
     //set the rank
-    SET_RANK(state, id, newRank)
+    SET_RANK(state, _id, newRank)
 
     //expect it to be change in the state
     expect(state.commitments[commitmentPosition].rank).toBe(newRank)
@@ -170,7 +170,7 @@ describe('mutations', () => {
 
   //UPDATE_DISPLAY_LIST
   it('updates the display list order when the new position is below the old one', () => {
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 0
     //choose a place to move it to
     let newPositionIdentifier = 2
@@ -189,18 +189,18 @@ describe('mutations', () => {
       newParent: parent,
     })
 
-    //get the list and expect the commitment id to be at the new position
+    //get the list and expect the commitment _id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
     expect(
       updatedTopParentCommitments.findIndex((el) => {
-        return el.id === commitment.id
+        return el._id === commitment._id
       })
     ).toBe(newPosition)
   })
 
   it('updates the display list order when the new position is above the old one (and first in the list)', () => {
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 2
     //choose a place to move it to
     let newPositionIdentifier = 0
@@ -219,18 +219,18 @@ describe('mutations', () => {
       newParent: parent,
     })
 
-    //get the list and expect the commitment id to be at the new position
+    //get the list and expect the commitment _id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
     expect(
       updatedTopParentCommitments.findIndex((el) => {
-        return el.id === commitment.id
+        return el._id === commitment._id
       })
     ).toBe(newPosition)
   })
 
   it('updates the display list order when the new position is at the end of the list', () => {
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 2
     //choose a place to move it to
     let newPositionIdentifier = -1
@@ -248,12 +248,12 @@ describe('mutations', () => {
       newParent: parent,
     })
 
-    //get the list and expect the commitment id to be at the new position
+    //get the list and expect the commitment _id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
     expect(
       updatedTopParentCommitments.findIndex((el) => {
-        return el.id === commitment.id
+        return el._id === commitment._id
       })
     ).toBe(newPosition)
   })
@@ -263,71 +263,71 @@ describe('mutations', () => {
     //will need to update the stack.. need a expectedStack Generator function maybe?
     const expectedStack = [
       {
-        id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
           {
-            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+            _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+            _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+            _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
             type: originTypeEnum.todoCard,
           },
         ],
       },
       {
-        id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
           {
-            id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+            _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             type: originTypeEnum.todoCard,
           },
         ],
       },
       {
-        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
         commitments: [
           {
-            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
             type: originTypeEnum.todoCard,
           },
         ],
       },
     ]
     //create the desired stack
-    state.topParent[0] = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    state.topParent[0] = { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     ADD_ANCESTORS_TO_STACK(state)
 
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 2
     // //choose a place to move it to
     let newPositionIdentifier = 1
     const parent = {
-      id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+      _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
     }
     //get the commitment based on the parent and which position it was at
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
@@ -349,7 +349,7 @@ describe('mutations', () => {
 
   it('updates the ranks of the commitments when they changed in the top parent', () => {
     //get the display array for the current parent
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 2
     let { topParentCommitments } = getters.topParentCommitments(state)
     const commitment = topParentCommitments[oldPosition]
@@ -363,12 +363,12 @@ describe('mutations', () => {
       oldParent: state.topParent[0],
       newParent: state.topParent[0],
     })
-    //get the list and expect the commitment id to be at the new position
+    //get the list and expect the commitment _id to be at the new position
     const { topParentCommitments: updatedTopParentCommitments } =
       getters.topParentCommitments(state)
     expect(
       updatedTopParentCommitments.findIndex((el) => {
-        return el.id === commitment.id
+        return el._id === commitment._id
       })
     ).toBe(newPosition)
     //now if the user were to let go we would want these to be recorded in the state
@@ -378,23 +378,23 @@ describe('mutations', () => {
     })
 
     const fullCommitments = state.commitments.filter((el) => {
-      return el.parent.id == state.topParent[0].id
+      return el.parent._id == state.topParent[0]._id
     })
-    expect(fullCommitments.filter((el) => el.id == commitment.id)[0].rank).toBe(
+    expect(fullCommitments.filter((el) => el._id == commitment._id)[0].rank).toBe(
       newPosition
     )
   })
 
   it('updates the ranks of the commitments when they are in different parents of the same deck', () => {
     //get the display array for the current parent
-    //choose an id from the list to move
+    //choose an _id from the list to move
     //move from "Make the store" the first entry to one level up to "set up vuex"
 
     //first make the deck
     SET_TOP_PARENT(
       state,
       {
-        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
       },
       0
     )
@@ -403,8 +403,8 @@ describe('mutations', () => {
       entrytitle: 'Make the Store',
       duedate: '21/07/2021',
       duration: 45,
-      parent: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+      parent: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
       complete: false,
       rank: 2,
     }
@@ -418,12 +418,12 @@ describe('mutations', () => {
 
     //choose a place to move it to (up one level)
     const newParent = {
-      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+      _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
       entrytitle: 'set up vuex',
       startTime: '202106201330',
       duration: 45,
       complete: false,
-      parent: { id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
+      parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
       rank: 0,
     }
     const newPosition = 1
@@ -441,7 +441,7 @@ describe('mutations', () => {
       oldParent,
       newParent,
     })
-    //get the list and expect the commitment id to be at the new position
+    //get the list and expect the commitment _id to be at the new position
     // const { parentCommitments: updatedOldParentCommitments } =
     //   getters.parentCommitmentsByParent(state,oldParent)
 
@@ -450,34 +450,34 @@ describe('mutations', () => {
 
     expect(
       updatedNewParentCommitments.findIndex((el) => {
-        return el.id === commitment.id
+        return el._id === commitment._id
       })
     ).toBe(newPosition)
     //now if the user were to let go we would want these to be recorded in the state
     SET_RANKS(state, { oldParent, newParent })
 
     const fullNewParentCommitments = state.commitments.filter((el) => {
-      return el.parent.id == newParent.id
+      return el.parent._id == newParent._id
     })
 
     //expect the commitment that was in that place to be one down from where it was
     expect(
       fullNewParentCommitments.filter(
-        (el) => el.id == commitmentmentToBeUnderNewPostion.id
+        (el) => el._id == commitmentmentToBeUnderNewPostion._id
       )[0].rank
     ).toBe(newPosition + 1)
     //expect the commitment that was below the moved commitment in the old position to be where the moved commitment used to be
     const fullOldParentCommitments = state.commitments.filter((el) => {
-      return el.parent.id == oldParent.id
+      return el.parent._id == oldParent._id
     })
     expect(
       fullOldParentCommitments.filter(
-        (el) => el.id == commitmentExpectedToBeInOldPosition.id
+        (el) => el._id == commitmentExpectedToBeInOldPosition._id
       )[0].rank
     ).toBe(oldPosition)
     // expect the moved commitment to be in the new postion in the new parent
     expect(
-      fullNewParentCommitments.filter((el) => el.id == commitment.id)[0].rank
+      fullNewParentCommitments.filter((el) => el._id == commitment._id)[0].rank
     ).toBe(newPosition)
   })
 
@@ -487,103 +487,103 @@ describe('mutations', () => {
       {
         deck: [
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
               {
-                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
                 type: originTypeEnum.todoCard,
               },
             ],
           },
         ],
-        id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
+        _id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
       },
       {
         deck: [
           {
-            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             commitments: [
-              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
+              // { _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
               {
-                id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+                _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+                _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
                 type: originTypeEnum.todoCard,
               },
             ],
           },
         ],
-        id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
+        _id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
       },
       {
         deck: [
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
               {
-                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+                _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
                 type: originTypeEnum.todoCard,
               }, //to here
               {
-                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
                 type: originTypeEnum.todoCard,
               },
             ],
           },
         ],
-        id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
+        _id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
       },
     ]
 
     // const deckParents = [
-    //   { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    //   { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-    //   { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+    //   { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
     // ]
 
     //create the desired stack
     SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 0,
     })
     SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      commitment: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
       deckIndex: 1,
     })
     SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 2,
     })
 
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 0
     const oldParent = {
-      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+      _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
     }
     const oldDeckIndex = 1
 
     // //choose a place to move it to
     let newPositionIdentifier = 1
     const newParent = {
-      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+      _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
     }
     const newDeckIndex = 2
 
@@ -619,63 +619,63 @@ describe('mutations', () => {
     //currently irrelevant
     const expectedStack = [
       {
-        id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
           {
-            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+            _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+            _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+            _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
             type: originTypeEnum.todoCard,
           },
         ],
       },
       {
-        id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
           {
-            id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+            _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             type: originTypeEnum.todoCard,
           },
         ],
       },
       {
-        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
         commitments: [
           {
-            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
             type: originTypeEnum.todoCard,
           },
         ],
       },
     ]
     //set the top parent
-    state.topParent[0] = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    state.topParent[0] = { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     ADD_ANCESTORS_TO_STACK(state)
     expect(JSON.stringify(state.decks[0].deck)).toBe(
       JSON.stringify(expectedStack)
@@ -687,75 +687,75 @@ describe('mutations', () => {
     //this needs to be rewritten and not currently relevant
     const expectedStack = [
       {
-        id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
           {
-            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             type: originTypeEnum.todoCard,
           },
-          // { id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: originTypeEnum.todoCard },//move this one
+          // { _id: 'b018ade0-a120-4d59-8a72-92b2c5072411', type: originTypeEnum.todoCard },//move this one
           {
-            id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+            _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+            _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
             type: originTypeEnum.todoCard,
           },
         ],
       },
       {
-        id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
         commitments: [
           {
-            id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+            _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+            _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
             type: originTypeEnum.todoCard,
           },
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             type: originTypeEnum.todoCard,
           },
         ],
       },
       {
-        id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+        _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
         commitments: [
           {
-            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+            _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
             type: originTypeEnum.todoCard,
           }, //final spot
           {
-            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
             type: originTypeEnum.todoCard,
           },
         ],
       },
     ]
     //create the desired stack
-    state.topParent[0] = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    state.topParent[0] = { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     ADD_ANCESTORS_TO_STACK(state)
 
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 1
     const oldParent = {
-      id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+      _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
     }
     // //choose a place to move it to
     let newPositionIdentifier = 2
     const newParent = {
-      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+      _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
     }
     //get the commitment based on the parent and which position it was at
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
@@ -781,103 +781,103 @@ describe('mutations', () => {
       {
         deck: [
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
               {
-                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
                 type: originTypeEnum.todoCard,
               },
             ],
           },
         ],
-        id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
+        _id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
       },
       {
         deck: [
           {
-            id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
             commitments: [
-              // { id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
+              // { _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
               {
-                id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
+                _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+                _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
                 type: originTypeEnum.todoCard,
               },
             ],
           },
         ],
-        id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
+        _id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
       },
       {
         deck: [
           {
-            id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
             commitments: [
               {
-                id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
+                _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
                 type: originTypeEnum.todoCard,
               }, //to here
               {
-                id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
                 type: originTypeEnum.todoCard,
               },
               {
-                id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
                 type: originTypeEnum.todoCard,
               },
             ],
           },
         ],
-        id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
+        _id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
       },
     ]
 
     // const deckParents = [
-    //   { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    //   { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-    //   { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+    //   { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
     // ]
 
     //create the desired stack
     SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 0,
     })
     SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      commitment: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
       deckIndex: 1,
     })
     SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 2,
     })
 
-    //choose an id from the list to move
+    //choose an _id from the list to move
     const oldPosition = 0
     const oldParent = {
-      id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+      _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
     }
     const oldDeckIndex = 1
 
     // //choose a place to move it to
     let newPositionIdentifier = 1
     const newParent = {
-      id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+      _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
     }
     const newDeckIndex = 2
 
@@ -910,22 +910,22 @@ describe('mutations', () => {
   })
 
   it('sets the zeroth deck as the desired deck', () => {
-    const commitment = { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    const commitment = { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
     const deckIndex = 0
     const expectedStack = [
       {
         ...commitment,
         commitments: [
           {
-            id: 'e9902504-737d-4195-9168-355d40cdb5b8',
+            _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
+            _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
             type: originTypeEnum.todoCard,
           },
           {
-            id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
+            _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
             type: originTypeEnum.todoCard,
           },
         ],
@@ -936,7 +936,7 @@ describe('mutations', () => {
     expect(JSON.stringify(state.decks[deckIndex].deck)).toBe(
       JSON.stringify(expectedStack)
     )
-    expect(state.decks[deckIndex].id).toBeDefined()
+    expect(state.decks[deckIndex]._id).toBeDefined()
   })
 
   it('changes the currentDate state variable to specified value', () => {

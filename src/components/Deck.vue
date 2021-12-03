@@ -2,7 +2,7 @@
   <!-- <div class="Lists"> -->
   <List
     v-for="list in lists"
-    :key="list.id"
+    :key="list._id"
     :listInfo="list"
     :deckIndex="deckIndex"
   />

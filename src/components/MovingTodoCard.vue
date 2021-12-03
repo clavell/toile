@@ -14,7 +14,7 @@
     >
       <input
         type="checkbox"
-        :id="movingTask.original.id"
+        :id="movingTask.original._id"
         v-model="checked"
         :checked="checked"
       />
@@ -24,7 +24,7 @@
       class="flex items-center"
       :style="commitmentTextStyle"
     >
-      <label @click.prevent :for="movingTask.original.id">{{
+      <label @click.prevent :for="movingTask.original._id">{{
         movingTask.original.entrytitle
       }}</label>
     </div>

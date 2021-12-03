@@ -6,7 +6,7 @@ describe('Add Entry', () => {
   const wrapperHtml = wrapper.html()
   it(`renders the form`, () => {
     // const event = {
-    //   id: 1,
+    //   _id: 1,
     //   time: '12:00PM',
     //   date: 'September 29th, 2022',
     //   title: 'Coaching Little League'

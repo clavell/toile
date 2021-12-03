@@ -60,7 +60,7 @@
         />
         <CalendarEntry
           v-for="scheduleEntry in todaysScheduleEntries"
-          :key="scheduleEntry.id"
+          :key="scheduleEntry._id"
           :scheduleEntry="scheduleEntry"
         />
       </div>

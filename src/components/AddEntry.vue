@@ -45,7 +45,7 @@ export default {
         entrytitle: this.entrytitle,
         duedate: this.duedate,
         duration: this.duration,
-        parent: { id: newParent.id },
+        parent: { _id: newParent._id },
       })
       this.$emit('submitted', true)
     },

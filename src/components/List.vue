@@ -12,7 +12,7 @@
 
       <TodoCard
         v-for="prereq in prerequisites"
-        :key="prereq.id"
+        :key="prereq._id"
         :commitment="prereq"
         :parentCommitment="parentCommitment"
         :deckIndex="deckIndex"
@@ -24,7 +24,7 @@
       <component
         v-for="item in listInfo.commitments"
         :is="item.type"
-        :key="item.id"
+        :key="item._id"
         :commitment="item"
         :parentCommitment="parentCommitment"
         :deckIndex="deckIndex"
@@ -70,7 +70,7 @@ export default {
     const addingEntry = ref(false)
     const store = useStore()
 
-    const parentCommitment = store.getters.commitmentById(props.listInfo.id)
+    const parentCommitment = store.getters.commitmentById(props.listInfo._id)
     // store.commit('UPDATE_DISPLAY')
     // watch(commitmentsList, () => {
     //   store.commit('UPDATE_DISPLAY')
@@ -78,10 +78,10 @@ export default {
 
     //get the list of prerequisites
     const prerequisites = computed(() => {
-      return store.getters.prerequisitesById(props.listInfo.id)
+      return store.getters.prerequisitesById(props.listInfo._id)
     })
 
-    const canGoBack = computed(() => parentCommitment.parent.id != null)
+    const canGoBack = computed(() => parentCommitment.parent._id != null)
 
     const entryWidth = computed(() => {
       if (listWidth.value) {
@@ -118,8 +118,8 @@ export default {
     }
 
     const goBack = function (parent) {
-      if (parent.parent.id != null) {
-        const previousParent = store.getters.commitmentById(parent.parent.id)
+      if (parent.parent._id != null) {
+        const previousParent = store.getters.commitmentById(parent.parent._id)
         store.commit('SET_DECK_AS_SINGLE_PARENT', {
           deckIndex: props.deckIndex,
           commitment: previousParent,
@@ -128,7 +128,7 @@ export default {
     }
 
     const listid = computed(() => {
-      return classStringEnum.listid + '_' + props.listInfo.id
+      return classStringEnum.listid + '_' + props.listInfo._id
     })
 
     return {

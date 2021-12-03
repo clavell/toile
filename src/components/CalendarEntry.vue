@@ -10,7 +10,7 @@
   >
     <div></div>
     <ul v-if="scheduleEntry.type == calendarEntryTypeEnum.CalendarEntry">
-      <li v-for="commitment in commitments" :key="commitment.id">
+      <li v-for="commitment in commitments" :key="commitment._id">
         {{ commitment.entrytitle }}
       </li>
     </ul>
@@ -36,7 +36,7 @@ export default {
 
     const commitments = computed(() => {
       return store.getters.commitmentsByScheduleSessionId(
-        props.scheduleEntry.id
+        props.scheduleEntry._id
       )
     })
 

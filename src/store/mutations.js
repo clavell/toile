@@ -8,18 +8,18 @@ export const mutations = {
   UPDATE_CURRENT_DATE(state, { newDate }) {
     state.currentDate = newDate
   },
-  UPDATE_START_TIME(state, { newStartTime, id }) {
+  UPDATE_START_TIME(state, { newStartTime, _id }) {
     //find the correct schedule entry in the schedule array
-    const index = getters.indexFromStateArray(id, state, 'schedule')
+    const index = getters.indexFromStateArray(_id, state, 'schedule')
     //set the value of the start time of this commitment to the new start time
     state.schedule[index].sessionStartTime = newStartTime
   },
   ADD_COMMITMENT(state, newCommitment) {
     state.commitments.push(newCommitment)
   },
-  SET_AS_COMPLETE(state, id) {
+  SET_AS_COMPLETE(state, _id) {
     //find the correct commitment in the commitments array
-    const index = getters.indexFromStateArray(id, state, 'commitments')
+    const index = getters.indexFromStateArray(_id, state, 'commitments')
     //set complete to be true
     state.commitments[index].complete = !state.commitments[index].complete
   },
@@ -31,22 +31,22 @@ export const mutations = {
     //find the commitments from a particular parent
     const commitmentsFromParent = state.commitments
       .filter((el) => {
-        return el.parent.id === state.topParent[0].id
+        return el.parent._id === state.topParent[0]._id
       })
       .sort((a, b) => a.rank - b.rank)
     //map them to the right format
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
-      return { id: el.id, type: originTypeEnum.todoCard }
+      return { _id: el._id, type: originTypeEnum.todoCard }
     })
     //set the
     state.decks[0] = {
-      deck: [{ id: state.topParent[0].id, commitments: commitmentsToAdd }],
+      deck: [{ _id: state.topParent[0]._id, commitments: commitmentsToAdd }],
     }
   },
 
-  SET_RANK(state, id, newRank) {
+  SET_RANK(state, _id, newRank) {
     state.commitments[
-      getters.indexFromStateArray(id, state, 'commitments')
+      getters.indexFromStateArray(_id, state, 'commitments')
     ].rank = newRank
   },
 
@@ -73,7 +73,7 @@ export const mutations = {
     //remove the original commitment
     // if(JSON.stringify(oldParent) === JSON.stringify(newParent)){
     const indexToRemove = oldParentCommitments.findIndex((el) => {
-      return el.id === commitment.id
+      return el._id === commitment._id
     })
     oldParentCommitments.splice(indexToRemove, 1)
     // // }
@@ -99,24 +99,24 @@ export const mutations = {
 
     if (newDeckIndex == oldDeckIndex) {
       let newCommitmentsStack = oldCommitmentsStack.map((item) => {
-        if (oldParent.id == newParent.id) {
-          if (item.id == newParent.id) {
+        if (oldParent._id == newParent._id) {
+          if (item._id == newParent._id) {
             return {
               ...item,
               commitments: newParentCommitments.map((el) => {
-                return { id: el.id, type: originTypeEnum.todoCard }
+                return { _id: el._id, type: originTypeEnum.todoCard }
               }),
             }
           }
         } else {
-          if (item.id == oldParent.id) {
+          if (item._id == oldParent._id) {
             return { ...item, commitments: oldParentCommitments }
           }
-          if (item.id == newParent.id) {
+          if (item._id == newParent._id) {
             return {
               ...item,
               commitments: newParentCommitments.map((el) => {
-                return { id: el.id, type: originTypeEnum.todoCard }
+                return { _id: el._id, type: originTypeEnum.todoCard }
               }),
             }
           }
@@ -127,11 +127,11 @@ export const mutations = {
       state.decks[oldDeckIndex].deck = newCommitmentsStack
     } else {
       let updatedOldCommitmentsStack = oldCommitmentsStack.map((item) => {
-        if (item.id == oldParent.id) {
+        if (item._id == oldParent._id) {
           return {
             ...item,
             commitments: oldParentCommitments.map((el) => {
-              return { id: el.id, type: originTypeEnum.todoCard }
+              return { _id: el._id, type: originTypeEnum.todoCard }
             }),
           }
         }
@@ -143,11 +143,11 @@ export const mutations = {
       )
 
       let updatedNewCommitmentsStack = newCommitmentsStack.map((item) => {
-        if (item.id == newParent.id) {
+        if (item._id == newParent._id) {
           return {
             ...item,
             commitments: newParentCommitments.map((el) => {
-              return { id: el.id, type: originTypeEnum.todoCard }
+              return { _id: el._id, type: originTypeEnum.todoCard }
             }),
           }
         }
@@ -185,13 +185,13 @@ export const mutations = {
     const newlyRankedCommitments = allCommitments.map((item) => {
       //if it's in the new commitments or if it is the moving commitment then look in the newCommitments array
       if (
-        item.parent.id == newParent.id ||
-        item.id == state.moving.original.id
+        item.parent._id == newParent._id ||
+        item._id == state.moving.original._id
       ) {
-        let newRank = newParentCommitments.findIndex((el) => el.id == item.id)
+        let newRank = newParentCommitments.findIndex((el) => el._id == item._id)
         return { ...item, rank: newRank, parent: newParent }
-      } else if (item.parent.id == oldParent.id) {
-        let newRank = oldParentCommitments.findIndex((el) => el.id == item.id)
+      } else if (item.parent._id == oldParent._id) {
+        let newRank = oldParentCommitments.findIndex((el) => el._id == item._id)
         return { ...item, rank: newRank }
       }
       return item
@@ -207,11 +207,11 @@ export const mutations = {
     // stackIds.unshift(topParent)2
     //iterate back through the ancestors and unshift them into the array (UPDATE_DISPLAY (above) should help)
     //maybe map from an initial array of just the IDs into an array with the commitments for each
-    let ancestor = getters.commitmentById2(state, topParent.id)
+    let ancestor = getters.commitmentById2(state, topParent._id)
     stackIds.unshift(ancestor)
 
-    while (ancestor.parent.id != null) {
-      ancestor = getters.commitmentById2(state, ancestor.parent.id)
+    while (ancestor.parent._id != null) {
+      ancestor = getters.commitmentById2(state, ancestor.parent._id)
       stackIds.unshift(ancestor)
     }
 
@@ -220,17 +220,17 @@ export const mutations = {
       //get the commitments from the current parent
       const commitmentsFromParent = state.commitments
         .filter((el) => {
-          return item.id === el.parent.id
+          return item._id === el.parent._id
         })
         .sort((a, b) => a.rank - b.rank)
       // add them as the sub array
       const commitmentsToAdd = commitmentsFromParent.map((el) => {
-        return { id: el.id, type: originTypeEnum.todoCard }
+        return { _id: el._id, type: originTypeEnum.todoCard }
       })
-      return { id: item.id, commitments: commitmentsToAdd }
+      return { _id: item._id, commitments: commitmentsToAdd }
     })
     //set the stack to be the new stack
-    state.decks[0] = { deck: newStack, id: uuidv4() }
+    state.decks[0] = { deck: newStack, _id: uuidv4() }
   },
   //set a particular deck as only being one parent deep
   SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment }) {
@@ -238,22 +238,22 @@ export const mutations = {
     const commitments = JSON.parse(JSON.stringify(state.commitments))
     const commitmentsFromParent = commitments
       .filter((el) => {
-        return commitment.id === el.parent.id
+        return commitment._id === el.parent._id
       })
       .sort((a, b) => a.rank - b.rank)
 
     // add them as the sub array
     const commitmentsToAdd = commitmentsFromParent.map((el) => {
-      return { id: el.id, type: originTypeEnum.todoCard }
+      return { _id: el._id, type: originTypeEnum.todoCard }
     })
-    let newStack = [{ id: commitment.id, commitments: commitmentsToAdd }]
+    let newStack = [{ _id: commitment._id, commitments: commitmentsToAdd }]
     //set the stack to be the new stack
-    state.decks[deckIndex] = { deck: newStack, id: uuidv4() }
+    state.decks[deckIndex] = { deck: newStack, _id: uuidv4() }
     console.log(uuidv4()) //uncomment this line to get some uuids in the console!
   },
 
   SET_TOP_PARENT(state, newTopParent, deckIndex) {
-    state.topParent[deckIndex] = getters.commitmentById2(state, newTopParent.id)
+    state.topParent[deckIndex] = getters.commitmentById2(state, newTopParent._id)
   },
 
   SET_AS_MOVING(state, { parent, original, position, deckIndex }) {
@@ -291,9 +291,9 @@ export const mutations = {
 
   ADD_PREREQUISITE(state, { commitment, prerequisite }) {
     state.prerequisites.push({
-      id: uuidv4(),
-      commitmentId: commitment.id,
-      prerequisiteId: prerequisite.id,
+      _id: uuidv4(),
+      commitmentId: commitment._id,
+      prerequisiteId: prerequisite._id,
     })
   },
 
@@ -306,7 +306,7 @@ export const mutations = {
   },
 
   ADD_TO_DONT_SCHEDULE_ARRAY(state, { time }) {
-    state.dontScheduleAt.push({ id: uuidv4(), time })
+    state.dontScheduleAt.push({ _id: uuidv4(), time })
   },
 
   REMOVE_FROM_DONT_SCHEDULE_ARRAY(state, { index }) {

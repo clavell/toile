@@ -35,14 +35,14 @@ describe('actions', () => {
   })
 
   it('commits the SET_AS_COMPLETE mutation when complete is false', () => {
-    setAsComplete({ commit }, newCommitment.id)
-    expect(commit).toHaveBeenCalledWith('SET_AS_COMPLETE', newCommitment.id)
+    setAsComplete({ commit }, newCommitment._id)
+    expect(commit).toHaveBeenCalledWith('SET_AS_COMPLETE', newCommitment._id)
   })
 
   it('commits the SET_AS_COMPLETE mutation when complete is true', () => {
     newCommitment.complete = true
-    setAsComplete({ commit }, newCommitment.id)
-    expect(commit).toHaveBeenCalledWith('SET_AS_COMPLETE', newCommitment.id)
+    setAsComplete({ commit }, newCommitment._id)
+    expect(commit).toHaveBeenCalledWith('SET_AS_COMPLETE', newCommitment._id)
   })
 
   it('commits the UPDATE_COMMITMENT mutation when commitment has changed', () => {
@@ -57,7 +57,7 @@ describe('actions', () => {
     )
 
     const index = getters.indexFromStateArray(
-      newCommitment.id,
+      newCommitment._id,
       state,
       'commitments'
     )
@@ -165,12 +165,12 @@ describe('actions', () => {
 
   it('commits the UPDATE_RANKS mutation when commitment order has changed', () => {
     //get the commitments from the current parent
-    //get an id of the moving thing
+    //get an _id of the moving thing
     //get the position of the blank space
   })
 
   it('commits the UPDATE_DISPLAY_POSITIONS mutation when commitment order has changed superficially (while still dragging)', () => {
     //get the commitments from the current parent
-    //get an id of the moving thing
+    //get an _id of the moving thing
   })
 })

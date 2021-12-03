@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { calendarEntryTypeEnum } from '@/use/enums.js'
 
 export const blankSpace = {
-  id: '',
+  _id: '',
   type: 'EmptyListSpace',
 }
 
@@ -99,7 +99,7 @@ export function createSchedule({
       ...el,
       sessionStartTime: startTime,
       sessionDuration,
-      id: uuidv4(),
+      _id: uuidv4(),
       type: calendarEntryTypeEnum.CalendarEntry,
     }
   })
@@ -109,7 +109,7 @@ export function createSchedule({
       ...el,
       sessionStartTime: el.time,
       sessionDuration,
-      id: uuidv4(),
+      _id: uuidv4(),
       type: calendarEntryTypeEnum.BlankEntry,
     }
   })
@@ -130,7 +130,7 @@ export function createScheduleSessions({
 
     do {
       if (orderedSessions[j] == undefined) {
-        orderedSessions[j] = { id: uuidv4(), commitments: [] }
+        orderedSessions[j] = { _id: uuidv4(), commitments: [] }
       }
       //if there is no time in the item then continue
       if (timeLeftToScheduleInItem == 0) continue
@@ -180,10 +180,10 @@ export function generateScheduleOrder({ state, rearrange, commit }) {
   const previousRearrange = state.previousRearrange
   if (rearrange) {
     //if there was a previously rearranged thing then find its index in the commitments list (ordered by due date)
-    if (previousRearrange.id) {
+    if (previousRearrange._id) {
       const previousRearrangeIndex = commitmentsWithDueDatesInOrder.findIndex(
         (el) => {
-          return el.id == previousRearrange.id
+          return el._id == previousRearrange._id
         }
       )
       //increment it by one
@@ -210,10 +210,10 @@ export function generateScheduleOrder({ state, rearrange, commit }) {
       moveElementToFront(1)
     }
   } else {
-    if (previousRearrange.id) {
+    if (previousRearrange._id) {
       const shouldBeFirstIndex = commitmentsWithDueDatesInOrder.findIndex(
         (el) => {
-          return el.id == previousRearrange.id
+          return el._id == previousRearrange._id
         }
       )
       moveElementToFront(shouldBeFirstIndex)
@@ -239,14 +239,14 @@ export function generateScheduleOrder({ state, rearrange, commit }) {
 function recursiveScheduleOrderer({ state, itemsToSchedule, commitment }) {
   //if the item is already in the list do nothing
   const existingEntry = itemsToSchedule.find((element) => {
-    return element.commitmentId === commitment.id
+    return element.commitmentId === commitment._id
   })
   if (existingEntry) {
     // return 0
     return existingEntry.totalTaskDuration
   }
   //if there are prerequisites add them to the list
-  const prereqs = getters.prerequisitesById2(state, commitment.id)
+  const prereqs = getters.prerequisitesById2(state, commitment._id)
   if (prereqs.length !== 0) {
     prereqs.forEach((prereq) => {
       recursiveScheduleOrderer({ state, itemsToSchedule, commitment: prereq })
@@ -278,7 +278,7 @@ function recursiveScheduleOrderer({ state, itemsToSchedule, commitment }) {
   // }
 
   itemsToSchedule.push({
-    commitmentId: commitment.id,
+    commitmentId: commitment._id,
     duration,
     totalTaskDuration,
   })

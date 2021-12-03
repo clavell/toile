@@ -14,7 +14,7 @@ export const getters = {
   subTasks(state, parent) {
     return state.commitments
       .filter((c) => {
-        return c.parent.id === parent.id
+        return c.parent._id === parent._id
       })
       .sort((a, b) => a.rank - b.rank)
   },
@@ -26,7 +26,7 @@ export const getters = {
     //get the commitments for chosen parent
     let parentCommitments = JSON.parse(
       JSON.stringify(
-        currentStack.filter((el) => el.id == parent.id)[0].commitments
+        currentStack.filter((el) => el._id == parent._id)[0].commitments
       )
     )
     return { parentCommitments }
@@ -45,14 +45,14 @@ export const getters = {
       return currentDate.hasSame(scheduleEntryTime, 'day')
     })
   },
-  commitmentsByScheduleSessionId: (state) => (id) => {
+  commitmentsByScheduleSessionId: (state) => (_id) => {
     const session = state.schedule.find((el) => {
-      return el.id == id
+      return el._id == _id
     })
 
     return session.commitments.map((el) => {
       const fullCommitment = state.commitments.find(
-        (commitment) => commitment.id == el.commitmentId
+        (commitment) => commitment._id == el.commitmentId
       )
       return { ...fullCommitment, duration: el.duration }
     })
@@ -61,41 +61,41 @@ export const getters = {
     let commitments = state.commitments
     return [...commitments].sort((a, b) => a.complete - b.complete)
   },
-  commitmentById2(state, id) {
-    return state.commitments.find((commitment) => commitment.id === id)
+  commitmentById2(state, _id) {
+    return state.commitments.find((commitment) => commitment._id === _id)
   },
-  commitmentById: (state) => (id) => {
-    return state.commitments.find((commitment) => commitment.id === id)
+  commitmentById: (state) => (_id) => {
+    return state.commitments.find((commitment) => commitment._id === _id)
   },
-  indexFromStateArray(id, state, stateAttribute) {
+  indexFromStateArray(_id, state, stateAttribute) {
     //use this function to find an index from an array found in the state
     var index = state[stateAttribute].findIndex((el) => {
-      return el.id === id
+      return el._id === _id
     })
     return index
   },
   topParentIndex(state) {
     // return getters.indexFromStateArray(
-    //   state.topParent.id,
+    //   state.topParent._id,
     //   state,
     //   'decks'
     // )
     return state.decks[0].deck.findIndex((el) => {
-      return el.id === state.topParent[0].id
+      return el._id === state.topParent[0]._id
     })
   },
-  ancestorsById(state, id) {
+  ancestorsById(state, _id) {
     let ancestors = []
-    let commitment = this.commitmentById2(state, id)
-    while (commitment.parent.id !== null) {
-      commitment = this.commitmentById2(state, commitment.parent.id)
-      ancestors.push(commitment.id)
+    let commitment = this.commitmentById2(state, _id)
+    while (commitment.parent._id !== null) {
+      commitment = this.commitmentById2(state, commitment.parent._id)
+      ancestors.push(commitment._id)
     }
     return ancestors
   },
 
-  prerequisitesById: (state, getters) => (id) => {
-    const prereqs = state.prerequisites.filter((el) => el.commitmentId == id)
+  prerequisitesById: (state, getters) => (_id) => {
+    const prereqs = state.prerequisites.filter((el) => el.commitmentId == _id)
     if (prereqs.length === 0) return []
 
     return prereqs.map((prereq) => {
@@ -104,8 +104,8 @@ export const getters = {
     })
   },
   //make one for testing. still not sure how to get around this.. very annoying :(
-  prerequisitesById2(state, id) {
-    const prereqs = state.prerequisites.filter((el) => el.commitmentId == id)
+  prerequisitesById2(state, _id) {
+    const prereqs = state.prerequisites.filter((el) => el.commitmentId == _id)
     if (prereqs.length === 0) return []
 
     return prereqs.map((prereq) => {

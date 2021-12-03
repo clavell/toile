@@ -3,7 +3,7 @@
     <Calendar />
     <Deck
       v-for="index in deckIndices"
-      :key="decks[index].id"
+      :key="decks[index]._id"
       :deckIndex="index"
     />
     <MovingTodoCard class="todo" />
@@ -27,15 +27,15 @@ export default {
   setup() {
     const store = useStore()
     store.commit('SET_DECK_AS_SINGLE_PARENT', {
-      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 0,
     })
     store.commit('SET_DECK_AS_SINGLE_PARENT', {
-      commitment: { id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
+      commitment: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
       deckIndex: 1,
     })
     store.commit('SET_DECK_AS_SINGLE_PARENT', {
-      commitment: { id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
+      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 2,
     })
     // store.dispatch('setSchedule')

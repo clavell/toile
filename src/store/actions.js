@@ -12,26 +12,26 @@ import {
 } from '@/store/helpers.js'
 
 export const actions = {
-  updateStartTime({ commit }, { newStartTime, id }) {
+  updateStartTime({ commit }, { newStartTime, _id }) {
     //could become more complex as api calls are added etc.
     if (newStartTime !== '') {
-      commit('UPDATE_START_TIME', { newStartTime, id })
+      commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
   addCommitment({ commit }, newCommitment) {
     if (newCommitment && newCommitment.entrytitle) {
-      newCommitment.id = uuidv4()
+      newCommitment._id = uuidv4()
       newCommitment.complete = false
       commit('ADD_COMMITMENT', newCommitment)
     }
   },
-  setAsComplete({ commit }, id) {
-    commit('SET_AS_COMPLETE', id)
+  setAsComplete({ commit }, _id) {
+    commit('SET_AS_COMPLETE', _id)
   },
   updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
     if (JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment)) {
       const index = getters.indexFromStateArray(
-        oldCommitment.id,
+        oldCommitment._id,
         state,
         'commitments'
       )
@@ -39,15 +39,15 @@ export const actions = {
     }
   },
   addPrerequisite({ state, commit }, { commitment, prerequisite }) {
-    let fullCommitment = getters.commitmentById2(state, commitment.id)
-    let commitmentAncestors = getters.ancestorsById(state, commitment.id)
-    let prerequisiteAncestors = getters.ancestorsById(state, prerequisite.id)
+    let fullCommitment = getters.commitmentById2(state, commitment._id)
+    let commitmentAncestors = getters.ancestorsById(state, commitment._id)
+    let prerequisiteAncestors = getters.ancestorsById(state, prerequisite._id)
     let safeToAdd = !(
-      commitmentAncestors.includes(prerequisite.id) ||
-      prerequisiteAncestors.includes(commitment.id) ||
-      fullCommitment.parent.id == prerequisite.id ||
-      prerequisite.parent.id == fullCommitment.id ||
-      prerequisite.id == fullCommitment.id
+      commitmentAncestors.includes(prerequisite._id) ||
+      prerequisiteAncestors.includes(commitment._id) ||
+      fullCommitment.parent._id == prerequisite._id ||
+      prerequisite.parent._id == fullCommitment._id ||
+      prerequisite._id == fullCommitment._id
     )
     if (safeToAdd) {
       commit('ADD_PREREQUISITE', { commitment: fullCommitment, prerequisite })

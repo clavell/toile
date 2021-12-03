@@ -36,7 +36,7 @@ let details = {
         const listid = listIdStringFromDom.split('_')[1]
 
         store.dispatch('addPrerequisite', {
-          commitment: { id: listid },
+          commitment: { _id: listid },
           prerequisite: commitment,
         })
       }
@@ -74,7 +74,7 @@ export default {
     const isMoving = computed(() => {
       return (
         store.state.moving.type == movingEnum.prerequisiteCircle &&
-        store.state.moving.original.id == props.commitment.id &&
+        store.state.moving.original._id == props.commitment._id &&
         store.state.moving.position.isDragging
       )
     })

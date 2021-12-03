@@ -19,17 +19,17 @@ describe('getters', () => {
     expect(sortedCommitments[sortedCommitments.length - 1].complete).toBe(true)
   })
 
-  it('returns the prerequisites of the specified id', () => {
+  it('returns the prerequisites of the specified _id', () => {
     //getter should return an array of commitments. there should be one entry in the array and it should be the "display dummy data in calendar view"
     const expectedCommitment = {
       ...state.commitments[4],
       type: originTypeEnum.prerequisite,
     } //this should be the display dummy data in calendar view commitment
 
-    const id = '91f281f4-b8dc-429a-8e21-6b9d72ce8428' //this is the make the store id
+    const _id = '91f281f4-b8dc-429a-8e21-6b9d72ce8428' //this is the make the store _id
 
     //run the getter and hope for the best
-    const prereqs = getters.prerequisitesById2(state, id)
+    const prereqs = getters.prerequisitesById2(state, _id)
 
     expect(prereqs[0]).toStrictEqual(expectedCommitment)
   })

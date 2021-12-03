@@ -5,7 +5,6 @@ type Crouleur {
 }
 
 type Commitment {
-  id: ID! 
   entrytitle: String!
   duedate: String
   complete: Boolean!
@@ -15,7 +14,6 @@ type Commitment {
 }
 
 type Prerequisite {
-        id: String! @unique
         commitmentId: String!
         prerequisiteId: String!
         commitment: Commitment!

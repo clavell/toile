@@ -18,13 +18,13 @@
     <div class="flex items-center justify-center">
       <input
         type="checkbox"
-        :id="commitment.id"
+        :id="commitment._id"
         v-model="checked"
         :checked="checked"
       />
     </div>
     <div class="flex items-center" :style="commitmentTextStyle">
-      <label @click.prevent :for="commitment.id">{{
+      <label @click.prevent :for="commitment._id">{{
         fullCommitment.entrytitle
       }}</label>
     </div>
@@ -62,7 +62,7 @@ function mouseDownDetails({
   props,
 }) {
   const movingParent = JSON.parse(
-    JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent.id))
+    JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent._id))
   )
 
   const original = JSON.parse(JSON.stringify(fullCommitment.value))
@@ -85,7 +85,7 @@ function mouseMoveDetails({
     if (!isNaN(leftSide.id) && leftSide.id !== '') {
       const parentRegex = new RegExp(parentString)
       const newParent = {
-        id: [...leftSide.classList]
+        _id: [...leftSide.classList]
           .filter((className) => parentRegex.test(className))[0]
           .split('_')[1],
       }
@@ -96,14 +96,14 @@ function mouseMoveDetails({
 
       const oldParent = JSON.parse(
         JSON.stringify(
-          store.getters.commitmentById(store.state.moving.parent.id)
+          store.getters.commitmentById(store.state.moving.parent._id)
         )
       )
       store.commit('UPDATE_DISPLAY_LIST_POSITIONS', {
         commitment: JSON.parse(JSON.stringify(store.state.moving.original)),
         newPosition: JSON.parse(JSON.stringify(leftSide.id)),
         newParent: JSON.parse(
-          JSON.stringify(store.getters.commitmentById(newParent.id))
+          JSON.stringify(store.getters.commitmentById(newParent._id))
         ),
         oldParent,
         oldDeckIndex: store.state.moving.deckIndex,
@@ -124,7 +124,7 @@ function mouseUpDetails({
       //(!isNaN(rightSide.id) && rightSide.id !== '')
       const parentRegex = new RegExp(parentString)
       const newParent = {
-        id: [...leftSide.classList]
+        _id: [...leftSide.classList]
           .filter((className) => parentRegex.test(className))[0]
           .split('_')[1],
       }
@@ -161,9 +161,9 @@ export default {
     //needed for attaching the mouseDown event for dragging
     const el = ref(null)
 
-    //only get the id from the parent so need to get the full entry
+    //only get the _id from the parent so need to get the full entry
     const fullCommitment = computed(() => {
-      return store.getters.commitmentById(props.commitment.id)
+      return store.getters.commitmentById(props.commitment._id)
     })
 
     //make the entry draggable
@@ -198,7 +198,7 @@ export default {
     })
 
     const parent = computed(() => {
-      return classStringEnum.parent + '_' + props.parentCommitment.id
+      return classStringEnum.parent + '_' + props.parentCommitment._id
     })
 
     const deck = computed(() => {
@@ -214,7 +214,7 @@ export default {
     const isMoving = computed(() => {
       return (
         store.state.moving.type == movingEnum.todoCard &&
-        store.state.moving.original.id == fullCommitment.value.id &&
+        store.state.moving.original._id == fullCommitment.value._id &&
         store.state.moving.position.isDragging
       )
     })
