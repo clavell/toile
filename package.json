@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.5",
-    "@tailwindcss/postcss7-compat": "^2.2.6",
+    "@tailwindcss/postcss7-compat": "npm:@tailwindcss/postcss7-compat",
     "@vue/apollo-composable": "^4.0.0-alpha.16",
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
