@@ -5,6 +5,10 @@ import { currentDateChangeEnum } from '@/use/enums.js'
 
 import { DateTime } from 'luxon'
 
+//Apollo stuff
+import { useQuery, useResult } from '@vue/apollo-composable'
+import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
+
 import {
   createSchedule,
   createScheduleSessions,
@@ -12,6 +16,18 @@ import {
 } from '@/store/helpers.js'
 
 export const actions = {
+  setCrouleur({commit}, ){
+    commit
+    try{
+      const {result} = useQuery(allCrouleursQuery)
+      const crouleurs = useResult(result, [], data => data.allCrouleurs.data)
+      console.log(crouleurs)
+      // commit('SET_PLANETS', {crouleurs}) 
+    }catch(err){
+      console.log(err)
+    }
+  },
+
   updateStartTime({ commit }, { newStartTime, _id }) {
     //could become more complex as api calls are added etc.
     if (newStartTime !== '') {

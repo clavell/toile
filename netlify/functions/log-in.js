@@ -30,8 +30,7 @@ var faunadb = require('faunadb'),
         ttl: TimeAdd(Now(), 1, 'hour')}
       )
     ).then((response) => {
-      console.log(response)
-      console.log(response.ref)
+      console.log(response.secret)
       /* Success! return the response with statusCode 200 */
       return  callback(null, {
         statusCode: 200,

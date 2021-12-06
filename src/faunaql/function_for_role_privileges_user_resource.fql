@@ -1,0 +1,12 @@
+CreateFunction({
+  name: 'limitAccessToOwnCrouleur',
+  body: Query(
+    Lambda(
+      'crouleurRef',
+      Equals(
+        CurrentIdentity(),
+        Var('crouleurRef')
+      )  
+    )
+  )
+})

@@ -1,0 +1,57 @@
+Update(
+  Role("User"),
+  {
+    privileges: [
+      { resource: Collection("Crouleur"), 
+        actions: { 
+          read: Query(
+            Lambda(
+              'commitmentRef',
+              Call(
+                Function('limitAccessToOwnCrouleur'),
+                Var('commitmentRef')
+              )
+            )
+          ),
+          create: true, 
+          delete: Query(
+            Lambda(
+              'commitmentRef',
+              Call(
+                Function('limitAccessToOwnCrouleur'),
+                Var('commitmentRef')
+              )
+            )
+          ), 
+          write: true,
+          } 
+        },
+      { resource: Collection("Commitment"), 
+        actions: { 
+          read: Query(
+            Lambda(
+              'commitmentRef',
+              Call(
+                Function('limitAccessToOwnCommitments'),
+                Var('commitmentRef')
+              )
+            )
+          ),
+          create: true, 
+          delete: Query(
+            Lambda(
+              'commitmentRef',
+              Call(
+                Function('limitAccessToOwnCommitments'),
+                Var('commitmentRef')
+              )
+            )
+          ), 
+          write: true,
+          } 
+        },
+      { resource: Index("allCommitments"), actions: { read: true } },
+      { resource: Index("allCrouleurs"), actions: { read: true } },
+    ]
+  }
+)

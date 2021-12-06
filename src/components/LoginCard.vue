@@ -23,10 +23,12 @@
 <script>
 import { useRouter } from 'vue-router'
 import { reactive } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   setup() {
     const router = useRouter()
+    const store = useStore()
 
   const data = reactive({
     username: '',
@@ -39,12 +41,17 @@ export default {
         method: 'POST'
       })
 
-      console.log(response)
+      // console.log(response)
 
       
       // console.log(sessionStorage.token)
       if(response.ok){
+        //store token so that apollo can access it
         sessionStorage.token = await response.text()
+
+        //store logged in user for queries
+        store.dispatch('setCrouleur')
+
         // console.log(sessionStorage.token)
         router.push({name: 'HomeRoute'})
       } else{

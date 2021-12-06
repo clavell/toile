@@ -1,0 +1,18 @@
+CreateFunction({
+  name: 'limitAccessToOwnCommitments',
+  body: Query(
+    Lambda(
+      'commitmentRef',
+      Let(
+        {
+          commitmentDoc: Get(Var('commitmentRef')),
+          userRef: Select(['data', 'crouleur'], Var('commitmentDoc'))
+        },
+        Equals(
+          CurrentIdentity(),
+          Var('userRef')
+        )
+      )  
+    )
+  )
+})

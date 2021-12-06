@@ -2,12 +2,12 @@ Create(
   Collection('Crouleur'),
   {
     data:{
-      identifier: 'testuser1',
-      name: 'testuser1',
-      email:"testuser1@test.com",
+      identifier: 'testuser2',
+      name: 'testuser2',
+      email:"testuser2@test.com",
     },
     credentials:{
-      password: "fnEEZebcUKACUARiqV5QcAZCEA7OgF3CcvtkgONgsuvN3LBHXSw"
+      password: "testuser2UARiqV5QcAZCEA7OgF"
     }
   }
 )

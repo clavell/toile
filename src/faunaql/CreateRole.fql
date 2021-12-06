@@ -1,0 +1,9 @@
+CreateRole({
+  name: "User",
+  membership: {
+    resource: Collection("Crouleur")
+  },
+  privileges: [
+    {resource: Collection("Commitment"), actions: {read: true}}
+  ]
+})

@@ -312,4 +312,8 @@ export const mutations = {
   REMOVE_FROM_DONT_SCHEDULE_ARRAY(state, { index }) {
     state.dontScheduleAt.splice(index, 1)
   },
+
+  SET_CROULEUR(state, {_id}){
+    state.crouleur._id = _id
+  }
 }

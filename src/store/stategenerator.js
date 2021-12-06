@@ -2,6 +2,7 @@ import { originTypeEnum } from '@/use/enums'
 
 export function generateState() {
   return {
+    crouleur: {_id: null},
     timeFormat: 'yyyyMMddHHmm',
     dateFormat: 'yyyyMMdd',
     currentDate: '20211112',

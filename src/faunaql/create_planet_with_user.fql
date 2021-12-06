@@ -1,0 +1,18 @@
+CreateFunction(
+  {
+    "name": "create_planet_planet_with_user",
+    "body": Query(
+      Lambda(["input"],
+        Create(Collection("Planet"),{
+          data: {
+            name: Select("name", Var("input")),
+            type: Select("type", Var("input")),
+            color: Select("color", Var("input")),
+            user: Select("user", Var("input")),
+          }
+        })
+      )  
+    )
+  }
+  
+)

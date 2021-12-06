@@ -8,10 +8,18 @@ type Commitment {
   entrytitle: String!
   duedate: String
   complete: Boolean!
-  parent: Commitment
+  selfAsParent: ParentToChildren! @relation(name:"self")
+  parent: ParentToChildren @relation(name:"parent-child")
   rank: Int
   crouleur: Crouleur
 }
+
+type ParentToChildren {
+  link: Commitment! @relation(name:"self")
+  children: [Commitment] @relation(name:"parent-child")
+  crouleur: Crouleur
+}
+
 
 type Prerequisite {
         commitmentId: String!
