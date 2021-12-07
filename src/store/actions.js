@@ -90,6 +90,9 @@ export const actions = {
     )
     if (safeToAdd) {
       commit('ADD_PREREQUISITE', { commitment: fullCommitment, prerequisite })
+      mixpanel.track('successful prerequisite setting', {user: state.crouleur._id})
+    } else{
+      mixpanel.track('prerequisiste setting rejected', {user: state.crouleur._id})
     }
   },
 

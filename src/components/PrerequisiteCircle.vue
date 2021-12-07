@@ -7,6 +7,7 @@ import { makeDraggable, keyEnum } from '@/use/MakeDraggable.js'
 import { useStore } from 'vuex'
 import { movingEnum, classStringEnum } from '@/use/enums.js'
 import { ref, computed } from 'vue'
+import mixpanel from 'mixpanel-browser'
 
 const key = keyEnum.none
 let details = {
@@ -26,6 +27,7 @@ let details = {
     detailArguments: { listidString, commitment },
     store,
   }) {
+    mixpanel.track('attempted prereq set',{user: store.state.crouleur._id})
     if (leftSide || rightSide) {
       const listidRegex = new RegExp(listidString)
       const listIdStringFromDom = [...leftSide.classList].find((className) =>
