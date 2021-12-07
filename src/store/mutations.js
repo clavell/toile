@@ -249,7 +249,7 @@ export const mutations = {
     let newStack = [{ _id: commitment._id, commitments: commitmentsToAdd }]
     //set the stack to be the new stack
     state.decks[deckIndex] = { deck: newStack, _id: uuidv4() }
-    console.log(uuidv4()) //uncomment this line to get some uuids in the console!
+    // console.log(uuidv4()) //uncomment this line to get some uuids in the console!
   },
 
   SET_TOP_PARENT(state, newTopParent, deckIndex) {

@@ -29,7 +29,18 @@ type Prerequisite {
         crouleur: Crouleur!
 }
 
+type CustomCommitment @embedded{
+  entrytitle: String!
+  duedate: String
+  complete: Boolean!
+  parent: Commitment
+  rank: Int
+  crouleur: Crouleur
+}
+
 type Query {
+  getCustomCommitments: [CustomCommitment!] @resolver(name: "get_custom_commitments")
   allCrouleurs: [Crouleur!]
   allCommitments: [Commitment!]
+  allParentsToChilren: [ParentToChildren!]
 }

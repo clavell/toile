@@ -23,12 +23,19 @@
 <script>
 import { useRouter } from 'vue-router'
 import { reactive } from 'vue'
-import { useStore } from 'vuex'
+// import { useStore } from 'vuex'
+
+//Apollo stuff
+// import { ApolloClient, createHttpLink, InMemoryCache, } from '@apollo/client'
+// import { setContext } from '@apollo/client/link/context';
+
+// import { useQuery, useResult, provideApolloClient } from '@vue/apollo-composable'
+// import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
 
 export default {
   setup() {
     const router = useRouter()
-    const store = useStore()
+    // const store = useStore()
 
   const data = reactive({
     username: '',
@@ -50,9 +57,41 @@ export default {
         sessionStorage.token = await response.text()
 
         //store logged in user for queries
-        store.dispatch('setCrouleur')
+        // TRYING TO PUT IN THE APOLLO CLIENT HERE INSTEAD OF MAIN.JS
 
-        // console.log(sessionStorage.token)
+        // const online = true
+        // //HERE WE CREATE AN APOLLO CLIENT THAT WORKS
+        // const httpLink = createHttpLink({
+        //   uri: online ? 'https://graphql.fauna.com/graphql' : 'http://localhost:8084/graphql',
+        // });
+
+        // const authLink = setContext ((_, { headers }) => {
+        //   // get the authentication token from local storage if it exists
+        //   const token = sessionStorage.token
+        //   console.log(token)
+        //   // console.log(sessionStorage)
+        //   // return the headers to the context so httpLink can read them
+        //   return {
+        //     headers: {
+        //       ...headers,
+        //       authorization: `Bearer ${token}`,
+        //     }
+        //   }
+        // });
+
+        // const defaultClient = new ApolloClient({
+        // link: authLink.concat(httpLink),
+        // cache: new InMemoryCache()
+        // })
+
+        // provideApolloClient(defaultClient);
+
+
+        // const {result} = useQuery(allCrouleursQuery)
+        // console.log(result)
+        // const loggedinUser = useResult(result, [], data => data)
+        // console.log(loggedinUser)
+        console.log(sessionStorage.token)
         router.push({name: 'HomeRoute'})
       } else{
         console.log('please try again')

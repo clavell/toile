@@ -2,6 +2,7 @@ query allCrouleurs{
       allCrouleurs{
         data {
           _id
+          identifier
         }
       }
     }

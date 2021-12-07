@@ -26,6 +26,9 @@ export default {
   },
   setup() {
     const store = useStore()
+    store.dispatch('setCrouleur')
+
+
     store.commit('SET_DECK_AS_SINGLE_PARENT', {
       commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
       deckIndex: 0,

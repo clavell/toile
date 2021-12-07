@@ -5,9 +5,13 @@ import { currentDateChangeEnum } from '@/use/enums.js'
 
 import { DateTime } from 'luxon'
 
-//Apollo stuff
+// import { ApolloClient, createHttpLink, InMemoryCache, } from '@apollo/client'
+// import { setContext } from '@apollo/client/link/context';
+
 import { useQuery, useResult } from '@vue/apollo-composable'
 import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
+
+// import { watch } from 'vue'
 
 import {
   createSchedule,
@@ -16,13 +20,31 @@ import {
 } from '@/store/helpers.js'
 
 export const actions = {
-  setCrouleur({commit}, ){
+  setCrouleur({ state, commit}, ){
     commit
     try{
-      const {result} = useQuery(allCrouleursQuery)
+      const {result, onResult} = useQuery(allCrouleursQuery)
+      console.log(result)
       const crouleurs = useResult(result, [], data => data.allCrouleurs.data)
-      console.log(crouleurs)
-      // commit('SET_PLANETS', {crouleurs}) 
+      console.log(crouleurs.value)
+
+      onResult(()=>{
+        console.log(result)
+        commit('SET_CROULEUR', {_id: crouleurs.value[0]._id}) 
+        console.log(state)
+      })
+
+      // watch(crouleurs,()=>{
+      //   //product.value.value is undefined now
+
+      //   commit('SET_CROULEUR', {_id: crouleurs.value[0]._id}) 
+      //   console.log('product changed:',crouleurs.value)
+      //   //later when I run window.product.value.product.id in the console
+      //   //  I get the id of the product
+      //   // window.product = product.value;
+      //   console.log(state)
+      // },{deep:true})
+
     }catch(err){
       console.log(err)
     }
