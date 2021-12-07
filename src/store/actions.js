@@ -11,7 +11,7 @@ import { DateTime } from 'luxon'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
 
-// import { watch } from 'vue'
+import mixpanel from 'mixpanel-browser'
 
 import {
   createSchedule,
@@ -56,11 +56,12 @@ export const actions = {
       commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
-  addCommitment({ commit }, newCommitment) {
+  addCommitment({ commit,state }, newCommitment) {
     if (newCommitment && newCommitment.entrytitle) {
       newCommitment._id = uuidv4()
       newCommitment.complete = false
       commit('ADD_COMMITMENT', newCommitment)
+      mixpanel.track('added task', {user: state.crouleur._id})
     }
   },
   setAsComplete({ commit }, _id) {

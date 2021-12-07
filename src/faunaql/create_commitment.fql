@@ -1,0 +1,22 @@
+//NOT SURE WHAT IS CHANGED HERE, BUT THIS FUNCTION IS PROBABLY NOT NEEDED  
+ 
+
+Create(
+  Collection('Commitment'),
+  {
+    data:{
+
+      entrytitle: "test user 2's final project"
+      complete: false
+      
+      parent: 
+      duedate: "20211203"
+      crouleur: {
+        connect: "316977333995045441"
+      }
+    
+
+    }
+    
+  }
+)

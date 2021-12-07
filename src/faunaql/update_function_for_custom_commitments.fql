@@ -1,43 +1,88 @@
+//UNFINISHED FUNCTION THAT PROBABLY WON'T BE NEEDED
+
 Update(
   Function("get_custom_commitments"), 
   {
-    "body": Query(
-      Lambda([],
-        Map(
-          Paginate(Match(Index("allCommitments"))),
-          Lambda("ref",
-            Let(
-              {
-                commitmentDoc: Get(Var("ref")),
-                // parentToChildrenRef: Select(['data','crouleur'],Var('commitmentDoc'))
-                crouleurRef: If(
-                  ContainsField('crouleur',Select(['data'],Var('commitmentDoc'))),
-                  Select(['data','crouleur'],Var('commitmentDoc')),
-                  null
-                ),
-                parentRef: If(
-                  ContainsField('parent',Select(['data'],Var('commitmentDoc'))),
-                  Select(['data','parent'],Var('commitmentDoc')),
-                  null
-                )
-              },
-              {
-                id: Select(["ref"], Var("commitmentDoc")),
-                name: Select(["data", "entrytitle"], Var("commitmentDoc")),
-                // parent: Select(["data", "parent"], Var("commitmentDoc"))
-                // parent: Get(Select(['data','link'],Var('parentToChildrenDoc')))
-                crouleur: If(
-                  IsNull(Var('crouleurRef')),
-                  null,
-                  Get(Var('crouleurRef'))
-                ),
-                parent: Var('parentRef')
+    "body": 
 
-              }
-            )
-          )
-        )
+    Query(
+  Lambda(
+    [],
+    Map(
+      Paginate(Match(Index("allCommitments"))),
+      Lambda(
+        "pageRef",
+        Var('pageRef')
+        // Let(
+        //   {
+        //     dePaginated: Select(['ref'], Var('pageRef')),
+        //     commitmentDoc: Get(Var("dePaginated")),
+        //     crouleurRef: If(
+        //       ContainsField("crouleur", Select(["data"], Var("commitmentDoc"))),
+        //       Select(["data", "crouleur"], Var("commitmentDoc")),
+        //       null
+        //     ),
+        //     parentRef: If(
+        //       ContainsField("parent", Select(["data"], Var("commitmentDoc"))),
+        //       Select(["data", "parent"], Var("commitmentDoc")),
+        //       null
+        //     )
+        //   },
+        //   {
+        //     id: Select(["ref"], Var("commitmentDoc")),
+        //     name: Select(["data", "entrytitle"], Var("commitmentDoc")),
+        //     crouleur: If(
+        //       IsNull(Var("crouleurRef")),
+        //       null,
+        //       Get(Var("crouleurRef"))
+        //     ),
+        //     parent: Var("parentRef")
+        //   }
+        // )
       )
     )
+  )
+)
+    // Query(
+    //   Lambda([],
+    //     Map(
+    //       Paginate(Match(Index("allCommitments"))),
+    //       Lambda("ref",
+    //         Let(
+    //           {
+    //             commitmentDoc: Get(Var("ref")),
+    //             // parentToChildrenRef: Select(['data','crouleur'],Var('commitmentDoc'))
+    //             crouleurRef: If(
+    //               ContainsField('crouleur',Select(['data'],Var('commitmentDoc'))),
+    //               Select(['data','crouleur'],Var('commitmentDoc')),
+    //               null
+    //             ),
+    //             parentRef: If(
+    //               ContainsField('parent',Select(['data'],Var('commitmentDoc'))),
+    //               Select(['data','parent'],Var('commitmentDoc')),
+    //               null
+    //             )
+    //           },
+    //           {
+    //             data:{
+
+    //             id: Select(["ref", "id"], Var("commitmentDoc")),
+    //             name: Select(["data", "entrytitle"], Var("commitmentDoc")),
+    //             // parent: Select(["data", "parent"], Var("commitmentDoc"))
+    //             // parent: Get(Select(['data','link'],Var('parentToChildrenDoc')))
+    //             crouleur: If(
+    //               IsNull(Var('crouleurRef')),
+    //               null,
+    //               Get(Var('crouleurRef'))
+    //             ),
+    //             parent: Var('parentRef')
+    //             }
+
+    //           }
+    //         )
+    //       )
+    //     )
+    //   )
+    // )
   }
 )  
