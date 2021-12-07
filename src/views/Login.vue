@@ -16,7 +16,7 @@ export default {
     LoginCard,
   },
   setup() {
-    mixpanel.init('dd3fbaff75d61e2be21ead3f81a37343', {debug: true})
+    mixpanel.init('dd3fbaff75d61e2be21ead3f81a37343', {debug: true, cross_subdomain_cookie:false})
     mixpanel.track('Sign up')
   }
   
