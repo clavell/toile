@@ -324,4 +324,8 @@ export const mutations = {
   SET_COMMITMENTS(state, { commitments }) {
     state.commitments = commitments
   },
+
+  SET_INITIALIZING(state, {setting}){
+    state.initializing = setting
+  }
 }

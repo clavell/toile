@@ -21,7 +21,6 @@ import {
 
 export const actions = {
   setCrouleur({ commit }) {
-    commit
     try {
       const { result, onResult } = useQuery(allCrouleursQuery)
       const crouleurs = useResult(result, [], (data) => data.allCrouleurs.data)
@@ -56,19 +55,22 @@ export const actions = {
         })
         commit('SET_COMMITMENTS', { commitments: mappedCommitments })
         // console.log(state)
-        console.log(JSON.stringify(state.commitments))
-        commit('SET_DECK_AS_SINGLE_PARENT', {
-          commitment: { _id: state.commitments[0]._id },
-          deckIndex: 0,
-        })
-        commit('SET_DECK_AS_SINGLE_PARENT', {
-          commitment: { _id: state.commitments[0]._id },
-          deckIndex: 1,
-        })
-        commit('SET_DECK_AS_SINGLE_PARENT', {
-          commitment: { _id: state.commitments[0]._id },
-          deckIndex: 2,
-        })
+
+          console.log(state.commitments)
+          commit('SET_DECK_AS_SINGLE_PARENT', {
+            commitment: { _id: state.initializing ? state.commitments[0]._id : state.decks[0].deck[0]._id },
+            deckIndex: 0,
+          })
+          commit('SET_DECK_AS_SINGLE_PARENT', {
+            commitment: { _id: state.initializing ? state.commitments[0]._id : state.decks[1].deck[0]._id },
+            deckIndex: 1,
+          })
+          commit('SET_DECK_AS_SINGLE_PARENT', {
+            commitment: { _id: state.initializing ? state.commitments[0]._id : state.decks[2].deck[0]._id },
+            deckIndex: 2,
+          })
+          commit('SET_INITIALIZING', {setting:false})
+
       })
     } catch (err) {
       console.log(err)
@@ -81,28 +83,36 @@ export const actions = {
       commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
-  addCommitment({ state }, { newCommitment, createCommitment }) {
+  addCommitment({ state, getters}, { newCommitment, createCommitment }) {
     if (newCommitment && newCommitment.entrytitle) {
       // newCommitment._id = uuidv4()
       console.log('adding commitment')
       // newCommitment.complete = false
       // commit('ADD_COMMITMENT', newCommitment)
+      const parent = getters.commitmentById(newCommitment.parent._id)
 
+
+      state
+      createCommitment
       createCommitment({
         commitment: {
-          entrytitle: 'testuser1 subtask 4',
+          entrytitle: newCommitment.entrytitle,
           parent: {
-            connect: '317239077004902992',
+            connect: parent.selfAsParent._id,
           },
           complete: false,
           selfAsParent: {
             create: {
               crouleur: {
-                connect: '316916005992399439',
+                connect: state.crouleur._id,
               },
             },
           },
-          duration: 25,
+          duedate: newCommitment.duedate,
+          duration: newCommitment.duration,
+          crouleur: {
+            connect: state.crouleur._id,
+          },
         },
       })
       mixpanel.track('added task', { user: state.crouleur._id })

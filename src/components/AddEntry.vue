@@ -63,6 +63,7 @@ export default {
 
     const addEntry = () => {
       const newParent = JSON.parse(JSON.stringify(props.parent))
+      console.log(newParent)
       store.dispatch('addCommitment', {
         newCommitment: {
           entrytitle: entrytitle.value,

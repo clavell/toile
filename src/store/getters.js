@@ -113,4 +113,10 @@ export const getters = {
       return { ...commitment, type: originTypeEnum.prerequisite }
     })
   },
+
+  // selfAsParent: (state) => (_id) => {
+  //   return state.commitments.find((el) => {
+  //     return el.parent._id === _id
+  //   })
+  // },
 }

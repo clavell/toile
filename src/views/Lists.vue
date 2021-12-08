@@ -26,7 +26,7 @@ export default {
   },
   setup() {
     const store = useStore()
-    // store.dispatch('setCrouleur')
+    store.dispatch('setCrouleur')
     store.dispatch('getCommitments')
 
     //   store.commit('SET_DECK_AS_SINGLE_PARENT', {
@@ -42,7 +42,6 @@ export default {
     //   deckIndex: 2,
     // })
 
-    console.log(JSON.stringify(store.state.commitments))
     // store.dispatch('setSchedule')
     // console.log(store.state.schedule)
     // store.commit('ADD_ANCESTORS_TO_STACK')
