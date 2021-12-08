@@ -1,6 +1,6 @@
 <template>
   <div id="entry-form">
-    <form @submit.prevent="addEntry">
+    <form @submit.prevent="handleSubmission">
       <input
         type="text"
         v-model="entrytitle"
@@ -20,7 +20,11 @@
         <label>Due Date (dd/mm/yyyy)</label>
         <input type="text" v-model="duedate" class="field" />
       </div>
-      <button type="submit">Add</button>
+      <button v-if="entryToEdit._id" type="submit">Update</button>
+      <button v-else type="submit">Add</button>
+    </form>
+    <form @submit.prevent="deleteEntry">
+      <button type="submit">Delete</button>
     </form>
   </div>
 </template>
@@ -30,19 +34,30 @@ import { ref } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import { useMutation } from '@vue/apollo-composable'
 import createCommitmentMutation from '@/graphql/createCommitment.mutation.gql'
+import updateCommitmentMutation from '@/graphql/updateCommitment.mutation.gql'
+import deleteCommitmentMutation from '@/graphql/deleteCommitment.mutation.gql'
 import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
 
 export default {
   props: {
     parent: Object,
+    entryToEdit: Object,
   },
   name: 'AddEntry',
   setup(props, context) {
     const store = useStore()
 
-    const entrytitle = ref('')
-    const duedate = ref('21/07/2021')
-    const duration = ref(45)
+    const entryToEdit = JSON.parse(JSON.stringify(props.entryToEdit))
+
+    const entrytitle = entryToEdit._id ? ref(entryToEdit.entrytitle) : ref('')
+    const duedate =
+      entryToEdit._id && entryToEdit.duedate
+        ? ref(entryToEdit.duedate)
+        : ref('21/07/2021')
+    const duration =
+      entryToEdit._id && entryToEdit.duration
+        ? ref(entryToEdit.duration)
+        : ref(45)
 
     const { mutate: createCommitment } = useMutation(
       createCommitmentMutation,
@@ -61,6 +76,8 @@ export default {
       })
     )
 
+    const { mutate: updateCommitment } = useMutation(updateCommitmentMutation)
+
     const addEntry = () => {
       const newParent = JSON.parse(JSON.stringify(props.parent))
       console.log(newParent)
@@ -73,9 +90,50 @@ export default {
         },
         createCommitment,
       })
+    }
+
+    const handleSubmission = () => {
+      if (entryToEdit._id) {
+        const updatedCommitment = {
+          ...entryToEdit,
+          entrytitle: entrytitle.value,
+          duedate: duedate.value,
+          duration: duration.value,
+        }
+        store.dispatch('updateCommitment', {
+          updatedCommitment,
+          updateCommitment,
+        })
+      } else {
+        addEntry()
+      }
+      store.commit('SET_ENTRY_TO_EDIT', { entryToEdit: {} })
       context.emit('submitted', true)
     }
-    return { addEntry, duedate, duration, entrytitle }
+
+    const { mutate: deleteCommitment } = useMutation(
+      deleteCommitmentMutation,
+      () => ({
+        update: (cache, { data: { deleteCommitment } }) => {
+          const data = cache.readQuery({ query: allCommitmentsQuery })
+          const newData = data.allCommitments.data.filter(
+            (commitment) => commitment._id != deleteCommitment._id
+          )
+          const newAllPlanets = { ...data.allCommitments, data: newData }
+          cache.writeQuery({
+            query: allCommitmentsQuery,
+            data: { ...data, allCommitments: newAllPlanets },
+          })
+        },
+      })
+    )
+    const deleteEntry = () => {
+      store.dispatch('deleteCommitment', {
+        commitmentToDelete: entryToEdit,
+        deleteCommitment,
+      })
+    }
+    return { handleSubmission, duedate, duration, entrytitle, deleteEntry }
   },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-show="!isMoving" ref="el" class="circle draggable"></div>
+  <button v-show="!isMoving" ref="el" class="circle draggable"></button>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ import { movingEnum, classStringEnum } from '@/use/enums.js'
 import { ref, computed } from 'vue'
 import mixpanel from 'mixpanel-browser'
 
-const key = keyEnum.none
+const key = keyEnum.shift
 let details = {
   mouseDownDetails: function ({
     store,
@@ -42,12 +42,6 @@ let details = {
           prerequisite: commitment,
         })
       }
-      // store.commit('SET_RANKS', {
-      //   oldParent: store.state.moving.parent,
-      //   newParent,
-      //   oldDeckIndex: store.state.moving.deckIndex,
-      //   newDeckIndex,
-      // })
     }
 
     store.commit('STOP_MOVING')
@@ -62,7 +56,18 @@ export default {
   setup(props) {
     const store = useStore()
     const el = ref(null)
+
+    const handlers = {
+      click: (e) => {
+        e.stopPropagation()
+        console.log('circle clicked')
+        store.commit('SET_ENTRY_TO_EDIT', { entryToEdit: props.commitment })
+        // console.log(store.state.entryToEdit)
+      },
+    }
+
     makeDraggable({
+      handlers,
       store,
       element: el,
       props,

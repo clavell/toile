@@ -56,21 +56,32 @@ export const actions = {
         commit('SET_COMMITMENTS', { commitments: mappedCommitments })
         // console.log(state)
 
-          console.log(state.commitments)
-          commit('SET_DECK_AS_SINGLE_PARENT', {
-            commitment: { _id: state.initializing ? state.commitments[0]._id : state.decks[0].deck[0]._id },
-            deckIndex: 0,
-          })
-          commit('SET_DECK_AS_SINGLE_PARENT', {
-            commitment: { _id: state.initializing ? state.commitments[0]._id : state.decks[1].deck[0]._id },
-            deckIndex: 1,
-          })
-          commit('SET_DECK_AS_SINGLE_PARENT', {
-            commitment: { _id: state.initializing ? state.commitments[0]._id : state.decks[2].deck[0]._id },
-            deckIndex: 2,
-          })
-          commit('SET_INITIALIZING', {setting:false})
-
+        console.log(state.commitments)
+        commit('SET_DECK_AS_SINGLE_PARENT', {
+          commitment: {
+            _id: state.initializing
+              ? state.commitments[0]._id
+              : state.decks[0].deck[0]._id,
+          },
+          deckIndex: 0,
+        })
+        commit('SET_DECK_AS_SINGLE_PARENT', {
+          commitment: {
+            _id: state.initializing
+              ? state.commitments[0]._id
+              : state.decks[1].deck[0]._id,
+          },
+          deckIndex: 1,
+        })
+        commit('SET_DECK_AS_SINGLE_PARENT', {
+          commitment: {
+            _id: state.initializing
+              ? state.commitments[0]._id
+              : state.decks[2].deck[0]._id,
+          },
+          deckIndex: 2,
+        })
+        commit('SET_INITIALIZING', { setting: false })
       })
     } catch (err) {
       console.log(err)
@@ -83,14 +94,13 @@ export const actions = {
       commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
-  addCommitment({ state, getters}, { newCommitment, createCommitment }) {
+  addCommitment({ state, getters }, { newCommitment, createCommitment }) {
     if (newCommitment && newCommitment.entrytitle) {
       // newCommitment._id = uuidv4()
       console.log('adding commitment')
       // newCommitment.complete = false
       // commit('ADD_COMMITMENT', newCommitment)
       const parent = getters.commitmentById(newCommitment.parent._id)
-
 
       state
       createCommitment
@@ -121,16 +131,51 @@ export const actions = {
   setAsComplete({ commit }, _id) {
     commit('SET_AS_COMPLETE', _id)
   },
-  updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
-    if (JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment)) {
-      const index = getters.indexFromStateArray(
-        oldCommitment._id,
-        state,
-        'commitments'
-      )
-      commit('UPDATE_COMMITMENT', { newCommitment, index })
-    }
+
+  updateCommitment(
+    { state, getters },
+    { updatedCommitment, updateCommitment }
+  ) {
+    updateCommitment
+    const parent = getters.commitmentById(updatedCommitment.parent._id)
+    console.log(parent)
+
+    updateCommitment({
+      id: updatedCommitment._id,
+      commitmentData: {
+        entrytitle: updatedCommitment.entrytitle,
+        parent: {
+          connect: parent.selfAsParent._id,
+        },
+        complete: false,
+        selfAsParent: {
+          connect: updatedCommitment.selfAsParent._id,
+        },
+        duedate: updatedCommitment.duedate,
+        duration: updatedCommitment.duration,
+        crouleur: {
+          connect: state.crouleur._id,
+        },
+      },
+    })
   },
+  // updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
+  //   if (JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment)) {
+  //     const index = getters.indexFromStateArray(
+  //       oldCommitment._id,
+  //       state,
+  //       'commitments'
+  //     )
+  //     commit('UPDATE_COMMITMENT', { newCommitment, index })
+  //   }
+  // },
+
+  deleteCommitment({ state }, { commitmentToDelete, deleteCommitment }) {
+    state
+    console.log(commitmentToDelete)
+    deleteCommitment(commitmentToDelete)
+  },
+
   addPrerequisite({ state, commit }, { commitment, prerequisite }) {
     let fullCommitment = getters.commitmentById2(state, commitment._id)
     let commitmentAncestors = getters.ancestorsById(state, commitment._id)

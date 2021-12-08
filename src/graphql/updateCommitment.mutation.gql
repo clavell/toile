@@ -1,0 +1,24 @@
+mutation updateCommitment($id:ID!, $commitmentData:CommitmentInput!){
+  updateCommitment(id: $id, data: $commitmentData){
+   _id
+   	entrytitle
+    parent{
+      _id
+      link{
+        _id
+        entrytitle
+      }
+    }
+    duedate
+    duration
+    complete
+    rank
+    selfAsParent{
+      _id
+      link{
+        _id
+        entrytitle
+      }
+    }
+  }
+}

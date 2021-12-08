@@ -7,6 +7,7 @@ export function generateState() {
     timeFormat: 'yyyyMMddHHmm',
     dateFormat: 'yyyyMMdd',
     currentDate: '20211112',
+    entryToEdit: {},
     // topParent: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
     // topParent: [{ _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
     prerequisites: [

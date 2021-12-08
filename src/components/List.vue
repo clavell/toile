@@ -36,6 +36,7 @@
         v-if="addingEntry"
         @submitted="hideAddCard"
         :parent="parentCommitment"
+        :entryToEdit="entryToEdit"
       />
       <AddButton v-else @press="showAddCard" />
     </div>
@@ -99,11 +100,15 @@ export default {
 
     const hideAddCard = () => {
       addingEntry.value = false
+      console.log('hiding')
+      store.commit('SET_ENTRY_TO_EDIT', { entryToEdit: {} })
       store.commit('SET_DECK_AS_SINGLE_PARENT', {
         deckIndex: props.deckIndex,
         commitment: parentCommitment,
       })
     }
+
+    const entryToEdit = computed(() => store.state.entryToEdit)
 
     const showAddCard = () => {
       addingEntry.value = true
@@ -116,6 +121,12 @@ export default {
         }
       })
     }
+
+    watch(entryToEdit, (entryToEdit) => {
+      if (entryToEdit._id) {
+        showAddCard()
+      }
+    })
 
     const goBack = function (parent) {
       if (parent.parent._id != null) {
@@ -133,6 +144,7 @@ export default {
 
     return {
       el,
+      entryToEdit,
       addingEntry,
       showAddCard,
       hideAddCard,

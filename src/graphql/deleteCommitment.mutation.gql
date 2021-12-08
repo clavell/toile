@@ -1,0 +1,5 @@
+mutation deleteCommitment ($_id:ID!) {
+  deleteCommitment (id: $_id){
+    _id
+  }
+}

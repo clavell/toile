@@ -2575,6 +2575,6 @@ describe('helpers', () => {
 
     state.commitments = databaseData
 
-    generateScheduleOrder({state})
+    generateScheduleOrder({ state })
   })
 })

@@ -325,7 +325,11 @@ export const mutations = {
     state.commitments = commitments
   },
 
-  SET_INITIALIZING(state, {setting}){
+  SET_INITIALIZING(state, { setting }) {
     state.initializing = setting
-  }
+  },
+
+  SET_ENTRY_TO_EDIT(state, { entryToEdit }) {
+    state.entryToEdit = entryToEdit
+  },
 }
