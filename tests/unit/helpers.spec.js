@@ -2453,4 +2453,128 @@ describe('helpers', () => {
 
     generateScheduleOrder({ state, commit, rearrange: true })
   })
+
+  it.only('runs the generateScheudleOrder function with the new database data', () => {
+    const databaseData = [
+      {
+        __typename: 'Commitment',
+        _id: '317239000319394384',
+        entrytitle: 'Projects',
+        parent: { _id: null },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317239000329880144',
+        },
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '317239077003854416',
+        entrytitle: "test user 1's final project",
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239000319394384',
+          entrytitle: 'Projects',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317239077004902992',
+        },
+        duedate: '20211203',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '317259928110629441',
+        entrytitle: 'testuser1 subtask 1',
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239077003854416',
+          entrytitle: "test user 1's final project",
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317259928111678017',
+        },
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '317259988602978880',
+        entrytitle: 'testuser1 subtask 2',
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239077003854416',
+          entrytitle: "test user 1's final project",
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317259988950057536',
+        },
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '317359415048012354',
+        entrytitle: 'testuser1 subtask 3',
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239077003854416',
+          entrytitle: "test user 1's final project",
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317359415159161410',
+        },
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '317364316839871057',
+        entrytitle: 'testuser1 subtask 4',
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239077003854416',
+          entrytitle: "test user 1's final project",
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317364316841968209',
+        },
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '317364337206362704',
+        entrytitle: 'testuser1 subtask 4',
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239077003854416',
+          entrytitle: "test user 1's final project",
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317364337207411280',
+        },
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+    ]
+
+    state.commitments = databaseData
+
+    generateScheduleOrder({state})
+  })
 })

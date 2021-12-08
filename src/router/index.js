@@ -7,8 +7,8 @@ const routes = [
     name: 'HomeRoute',
     component: Lists,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: '/login',
@@ -18,7 +18,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => {
       return import(/* webpackChunkName: "about" */ '../views/Login.vue')
-    }, 
+    },
   },
 ]
 
@@ -27,14 +27,14 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to,from,next) => {
+router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (sessionStorage.token !== "null") {
+    if (sessionStorage.token !== 'null') {
       // console.log(sessionStorage)
       // console.log('should be checkig')
       next()
     } else {
-      next({name:'Login'})
+      next({ name: 'Login' })
     }
   } else {
     next()

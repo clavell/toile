@@ -254,7 +254,10 @@ export const mutations = {
   },
 
   SET_TOP_PARENT(state, newTopParent, deckIndex) {
-    state.topParent[deckIndex] = getters.commitmentById2(state, newTopParent._id)
+    state.topParent[deckIndex] = getters.commitmentById2(
+      state,
+      newTopParent._id
+    )
   },
 
   SET_AS_MOVING(state, { parent, original, position, deckIndex }) {
@@ -314,11 +317,11 @@ export const mutations = {
     state.dontScheduleAt.splice(index, 1)
   },
 
-  SET_CROULEUR(state, {_id}){
+  SET_CROULEUR(state, { _id }) {
     state.crouleur._id = _id
   },
 
-  SET_COMMITMENTS(state, {commitments}){
+  SET_COMMITMENTS(state, { commitments }) {
     state.commitments = commitments
-  }
+  },
 }

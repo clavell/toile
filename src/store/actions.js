@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 // import { ApolloClient, createHttpLink, InMemoryCache, } from '@apollo/client'
 // import { setContext } from '@apollo/client/link/context';
 
-import { useQuery, useResult, } from '@vue/apollo-composable'
+import { useQuery, useResult } from '@vue/apollo-composable'
 import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
 import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
 
@@ -19,41 +19,44 @@ import {
   generateScheduleOrder,
 } from '@/store/helpers.js'
 
-
-
 export const actions = {
-  setCrouleur({ commit}, ){
+  setCrouleur({ commit }) {
     commit
-    try{
-      const {result, onResult} = useQuery(allCrouleursQuery)
-      const crouleurs = useResult(result, [], data => data.allCrouleurs.data)
+    try {
+      const { result, onResult } = useQuery(allCrouleursQuery)
+      const crouleurs = useResult(result, [], (data) => data.allCrouleurs.data)
 
-      onResult(()=>{
+      onResult(() => {
         // console.log(crouleurs)
-        commit('SET_CROULEUR', {_id: crouleurs.value[0]._id}) 
+        commit('SET_CROULEUR', { _id: crouleurs.value[0]._id })
       })
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   },
 
-  getCommitments({commit,state},){
-    try{
-      const {result, onResult} = useQuery(allCommitmentsQuery)
+  getCommitments({ commit, state }) {
+    try {
+      const { result, onResult } = useQuery(allCommitmentsQuery)
       // console.log(result)
-      const commitments = useResult(result, [], data => data.allCommitments.data)
+      const commitments = useResult(
+        result,
+        [],
+        (data) => data.allCommitments.data
+      )
       // console.log(commitments.value)
 
-      onResult(()=>{
+      onResult(() => {
         // console.log(result)
         const mappedCommitments = commitments.value.map((el) => {
-          if(el.parent !== null){
-            return {...el, parent: el.parent.link}
+          if (el.parent !== null) {
+            return { ...el, parent: el.parent.link }
           }
-          return { ...el, parent:{ _id: null}} 
+          return { ...el, parent: { _id: null } }
         })
-        commit('SET_COMMITMENTS', {commitments: mappedCommitments}) 
+        commit('SET_COMMITMENTS', { commitments: mappedCommitments })
         // console.log(state)
+        console.log(JSON.stringify(state.commitments))
         commit('SET_DECK_AS_SINGLE_PARENT', {
           commitment: { _id: state.commitments[0]._id },
           deckIndex: 0,
@@ -67,7 +70,7 @@ export const actions = {
           deckIndex: 2,
         })
       })
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   },
@@ -78,35 +81,31 @@ export const actions = {
       commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
-  addCommitment({ state }, {newCommitment, createCommitment}) {
+  addCommitment({ state }, { newCommitment, createCommitment }) {
     if (newCommitment && newCommitment.entrytitle) {
       // newCommitment._id = uuidv4()
       console.log('adding commitment')
       // newCommitment.complete = false
       // commit('ADD_COMMITMENT', newCommitment)
-      
 
       createCommitment({
-        "commitment": {
-          
-          "entrytitle": "testuser1 subtask 4",
-          "parent": {
-            "connect": "317239077004902992"
+        commitment: {
+          entrytitle: 'testuser1 subtask 4',
+          parent: {
+            connect: '317239077004902992',
           },
-          "complete": false,
-          "selfAsParent": {
-            "create": {
-              "crouleur": {
-                "connect": "316916005992399439"
-              }
-            }
+          complete: false,
+          selfAsParent: {
+            create: {
+              crouleur: {
+                connect: '316916005992399439',
+              },
+            },
           },
-          "duration": 25
-          
-          
-        }
+          duration: 25,
+        },
       })
-      mixpanel.track('added task', {user: state.crouleur._id})
+      mixpanel.track('added task', { user: state.crouleur._id })
     }
   },
   setAsComplete({ commit }, _id) {
@@ -135,9 +134,13 @@ export const actions = {
     )
     if (safeToAdd) {
       commit('ADD_PREREQUISITE', { commitment: fullCommitment, prerequisite })
-      mixpanel.track('successful prerequisite setting', {user: state.crouleur._id})
-    } else{
-      mixpanel.track('prerequisiste setting rejected', {user: state.crouleur._id})
+      mixpanel.track('successful prerequisite setting', {
+        user: state.crouleur._id,
+      })
+    } else {
+      mixpanel.track('prerequisiste setting rejected', {
+        user: state.crouleur._id,
+      })
     }
   },
 

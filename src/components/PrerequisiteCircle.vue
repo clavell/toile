@@ -27,7 +27,7 @@ let details = {
     detailArguments: { listidString, commitment },
     store,
   }) {
-    mixpanel.track('attempted prereq set',{user: store.state.crouleur._id})
+    mixpanel.track('attempted prereq set', { user: store.state.crouleur._id })
     if (leftSide || rightSide) {
       const listidRegex = new RegExp(listidString)
       const listIdStringFromDom = [...leftSide.classList].find((className) =>

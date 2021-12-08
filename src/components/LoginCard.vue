@@ -27,38 +27,36 @@ import { reactive } from 'vue'
 //mixpanel
 import mixpanel from 'mixpanel-browser'
 
-
 export default {
   setup() {
     const router = useRouter()
     // const store = useStore()
 
-  const data = reactive({
-    username: '',
-    password: ''
-  })    
+    const data = reactive({
+      username: '',
+      password: '',
+    })
 
     const login = async () => {
-      const response = await fetch('/.netlify/functions/log-in',{
+      const response = await fetch('/.netlify/functions/log-in', {
         body: JSON.stringify(data),
-        method: 'POST'
+        method: 'POST',
       })
 
       // console.log(response)
 
-      
       // console.log(sessionStorage.token)
-      if(response.ok){
+      if (response.ok) {
         //store token so that apollo can access it
         sessionStorage.token = await response.text()
 
         mixpanel.track('Sign Up', {
-          'source': "Toile Web App",
-          'logged in' : true
+          source: 'Toile Web App',
+          'logged in': true,
         })
         console.log(sessionStorage.token)
-        router.push({name: 'HomeRoute'})
-      } else{
+        router.push({ name: 'HomeRoute' })
+      } else {
         console.log('please try again')
       }
     }
@@ -67,7 +65,6 @@ export default {
   },
 }
 </script>
-
 
 <style scoped>
 #entry-form {

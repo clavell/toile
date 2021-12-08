@@ -3,6 +3,7 @@ query getCommitments {
     data {
       _id
       entrytitle
+      duration
       parent {
         _id
 				link{

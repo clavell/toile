@@ -380,9 +380,9 @@ describe('mutations', () => {
     const fullCommitments = state.commitments.filter((el) => {
       return el.parent._id == state.topParent[0]._id
     })
-    expect(fullCommitments.filter((el) => el._id == commitment._id)[0].rank).toBe(
-      newPosition
-    )
+    expect(
+      fullCommitments.filter((el) => el._id == commitment._id)[0].rank
+    ).toBe(newPosition)
   })
 
   it('updates the ranks of the commitments when they are in different parents of the same deck', () => {

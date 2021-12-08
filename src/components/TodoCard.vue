@@ -62,7 +62,9 @@ function mouseDownDetails({
   props,
 }) {
   const movingParent = JSON.parse(
-    JSON.stringify(store.getters.commitmentById(fullCommitment.value.parent._id))
+    JSON.stringify(
+      store.getters.commitmentById(fullCommitment.value.parent._id)
+    )
   )
 
   const original = JSON.parse(JSON.stringify(fullCommitment.value))
