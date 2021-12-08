@@ -236,6 +236,7 @@ export const mutations = {
   SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment }) {
     //add the children of the desired parent as subcommitments
     const commitments = JSON.parse(JSON.stringify(state.commitments))
+    // console.log(commitments)
     const commitmentsFromParent = commitments
       .filter((el) => {
         return commitment._id === el.parent._id
@@ -315,5 +316,9 @@ export const mutations = {
 
   SET_CROULEUR(state, {_id}){
     state.crouleur._id = _id
+  },
+
+  SET_COMMITMENTS(state, {commitments}){
+    state.commitments = commitments
   }
 }

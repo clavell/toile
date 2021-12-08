@@ -12,6 +12,7 @@ type Commitment {
   parent: ParentToChildren @relation(name:"parent-child")
   rank: Int
   crouleur: Crouleur
+  duration: Int
 }
 
 type ParentToChildren {
@@ -36,6 +37,7 @@ type CustomCommitment @embedded{
   parent: Commitment
   rank: Int
   crouleur: Crouleur
+  
 }
 
 type Query {

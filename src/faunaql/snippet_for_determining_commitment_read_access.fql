@@ -1,0 +1,15 @@
+Let(
+  {
+  commitmentDoc: Get(Ref(Collection("Commitment"), "317259928110629441")),
+  userRef: If(
+    ContainsField("crouleur", Select(["data"], Var("commitmentDoc"))),
+    Select(["data", "crouleur"], Var("commitmentDoc")),
+    null
+    )
+  },
+    Or(
+      Not(ContainsField("crouleur", Select(["data"], Var("commitmentDoc")))),
+      Equals(Ref(Collection("Crouleur"), "316916005992399439"), Var("userRef")),
+    )
+  
+)

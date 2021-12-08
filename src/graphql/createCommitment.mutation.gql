@@ -1,0 +1,24 @@
+mutation createCommitment ($commitment: CommitmentInput!){
+  createCommitment( data: $commitment) {
+    _id
+   	entrytitle
+    parent{
+      _id
+      link{
+        _id
+        entrytitle
+      }
+    }
+    duedate
+    duration
+    complete
+    rank
+    selfAsParent{
+      _id
+      link{
+        _id
+        entrytitle
+      }
+    }
+  }
+}

@@ -26,29 +26,54 @@
 </template>
 
 <script>
+import { ref } from '@vue/reactivity'
+import { useStore } from 'vuex'
+import { useMutation } from '@vue/apollo-composable'
+import createCommitmentMutation from '@/graphql/createCommitment.mutation.gql'
+import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
+
+
 export default {
   props: {
     parent: Object,
   },
   name: 'AddEntry',
-  data() {
-    return {
-      entrytitle: '',
-      duedate: '21/07/2021',
-      duration: 45,
+  setup(props, context) {
+    const store = useStore()
+
+    const entrytitle = ref('')
+    const duedate = ref('21/07/2021')
+    const duration = ref(45)
+
+    const { mutate: createCommitment } = useMutation(createCommitmentMutation, () => ({
+        update: (cache, { data: { createCommitment } }) => {
+          const data = cache.readQuery({ query: allCommitmentsQuery })
+          const newData = [...data.allCommitments.data].concat([createCommitment])
+          const newAllCommitments = {...data.allCommitments,data:newData}
+          cache.writeQuery({ query: allCommitmentsQuery, data: {...data, allCommitments:newAllCommitments}})
+        }
+      }))
+
+
+    const addEntry = () => {
+      
+      const newParent = JSON.parse(JSON.stringify(props.parent))
+      store.dispatch('addCommitment', 
+        {
+          newCommitment: {
+            entrytitle: entrytitle.value,
+            duedate: duedate.value,
+            duration: duration.value,
+            parent: { _id: newParent._id },
+          },
+          createCommitment
+
+        }
+      )
+      context.emit('submitted', true)
     }
-  },
-  methods: {
-    addEntry() {
-      const newParent = JSON.parse(JSON.stringify(this.parent))
-      this.$store.dispatch('addCommitment', {
-        entrytitle: this.entrytitle,
-        duedate: this.duedate,
-        duration: this.duration,
-        parent: { _id: newParent._id },
-      })
-      this.$emit('submitted', true)
-    },
+    return{addEntry, duedate,duration,entrytitle}
+
   },
 }
 </script>

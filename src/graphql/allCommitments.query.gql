@@ -1,0 +1,21 @@
+query getCommitments {
+  allCommitments{
+    data {
+      _id
+      entrytitle
+      parent {
+        _id
+				link{
+          _id
+          entrytitle
+        }
+      }
+      selfAsParent{
+        _id
+      }
+      duedate
+      complete
+      rank
+    }
+  }
+}

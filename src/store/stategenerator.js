@@ -1,4 +1,4 @@
-import { originTypeEnum } from '@/use/enums'
+// import { originTypeEnum } from '@/use/enums'
 
 export function generateState() {
   return {
@@ -7,13 +7,13 @@ export function generateState() {
     dateFormat: 'yyyyMMdd',
     currentDate: '20211112',
     // topParent: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
-    topParent: [{ _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
+    // topParent: [{ _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
     prerequisites: [
-      {
-        _id: '6266c8ed-4ab0-425a-8a88-02335ba51baa',
-        commitmentId: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-        prerequisiteId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-      },
+      // {
+      //   _id: '6266c8ed-4ab0-425a-8a88-02335ba51baa',
+      //   commitmentId: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
+      //   prerequisiteId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+      // },
     ], //make the store depends on display dummy data in calendar view
     previousRearrange: {},
     sessionLength: 25,
@@ -39,8 +39,26 @@ export function generateState() {
       { _id: 'c33b4846-82c9-456a-be64-12850e7b8dec', time: '202111121400' },
     ],
     moving: {
+      // parent: {
+      //   _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+      //   entrytitle: 'setting up',
+      //   // startTime: '202106201330',
+      //   // duration: 45,
+      //   complete: false,
+      //   parent: { _id: null },
+      //   rank: 0,
+      // },
+      // original: {
+      //   _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+      //   entrytitle: 'set up vuex',
+      //   startTime: '202106201330',
+      //   // duration: 45,
+      //   complete: false,
+      //   parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
+      //   rank: 0,
+      // },
       parent: {
-        _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: "317239000319394384",
         entrytitle: 'setting up',
         // startTime: '202106201330',
         // duration: 45,
@@ -49,14 +67,15 @@ export function generateState() {
         rank: 0,
       },
       original: {
-        _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+        _id: "317239077003854416",
         entrytitle: 'set up vuex',
         startTime: '202106201330',
         // duration: 45,
         complete: false,
-        parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
+        parent: { _id: "317239000319394384" },
         rank: 0,
       },
+
       position: {
         init: false,
         x: 0,
@@ -69,7 +88,9 @@ export function generateState() {
       },
     },
     blankSpacePosition: null,
-    commitments: [
+    commitments: 
+    // [],
+    [
       {
         _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
         entrytitle: 'scheduler app',
@@ -287,32 +308,32 @@ export function generateState() {
       },
     ],
     decks: [
-      {
-        _id: '9225c8ed-4ab0-425a-8a88-02335ba51baa',
-        deck: [
-          {
-            _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
-            commitments: [
-              {
-                _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-                type: originTypeEnum.TodoCard,
-              },
-              {
-                _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
-                type: originTypeEnum.TodoCard,
-              },
-              {
-                _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
-                type: originTypeEnum.TodoCard,
-              },
-              {
-                _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-                type: originTypeEnum.TodoCard,
-              },
-            ],
-          },
-        ],
-      },
+      // {
+      //   _id: '9225c8ed-4ab0-425a-8a88-02335ba51baa',
+      //   deck: [
+      //     {
+      //       _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
+      //       commitments: [
+      //         {
+      //           _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
+      //           type: originTypeEnum.TodoCard,
+      //         },
+      //         {
+      //           _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
+      //           type: originTypeEnum.TodoCard,
+      //         },
+      //         {
+      //           _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
+      //           type: originTypeEnum.TodoCard,
+      //         },
+      //         {
+      //           _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
+      //           type: originTypeEnum.TodoCard,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
     ],
     schedule: [
       {

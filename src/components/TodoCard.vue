@@ -204,7 +204,6 @@ export default {
     const deck = computed(() => {
       return classStringEnum.deck + '_' + props.deckIndex
     })
-
     //mark the entry as complete or not
     const { checked } = checkedReuse(store, props.commitment)
 

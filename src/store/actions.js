@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import { getters } from '@/store/getters.js'
 
 import { currentDateChangeEnum } from '@/use/enums.js'
@@ -8,8 +7,9 @@ import { DateTime } from 'luxon'
 // import { ApolloClient, createHttpLink, InMemoryCache, } from '@apollo/client'
 // import { setContext } from '@apollo/client/link/context';
 
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, } from '@vue/apollo-composable'
 import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
+import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
 
 import mixpanel from 'mixpanel-browser'
 
@@ -19,32 +19,54 @@ import {
   generateScheduleOrder,
 } from '@/store/helpers.js'
 
+
+
 export const actions = {
-  setCrouleur({ state, commit}, ){
+  setCrouleur({ commit}, ){
     commit
     try{
       const {result, onResult} = useQuery(allCrouleursQuery)
-      console.log(result)
       const crouleurs = useResult(result, [], data => data.allCrouleurs.data)
-      console.log(crouleurs.value)
 
       onResult(()=>{
-        console.log(result)
+        // console.log(crouleurs)
         commit('SET_CROULEUR', {_id: crouleurs.value[0]._id}) 
-        console.log(state)
       })
+    }catch(err){
+      console.log(err)
+    }
+  },
 
-      // watch(crouleurs,()=>{
-      //   //product.value.value is undefined now
+  getCommitments({commit,state},){
+    try{
+      const {result, onResult} = useQuery(allCommitmentsQuery)
+      // console.log(result)
+      const commitments = useResult(result, [], data => data.allCommitments.data)
+      // console.log(commitments.value)
 
-      //   commit('SET_CROULEUR', {_id: crouleurs.value[0]._id}) 
-      //   console.log('product changed:',crouleurs.value)
-      //   //later when I run window.product.value.product.id in the console
-      //   //  I get the id of the product
-      //   // window.product = product.value;
-      //   console.log(state)
-      // },{deep:true})
-
+      onResult(()=>{
+        // console.log(result)
+        const mappedCommitments = commitments.value.map((el) => {
+          if(el.parent !== null){
+            return {...el, parent: el.parent.link}
+          }
+          return { ...el, parent:{ _id: null}} 
+        })
+        commit('SET_COMMITMENTS', {commitments: mappedCommitments}) 
+        // console.log(state)
+        commit('SET_DECK_AS_SINGLE_PARENT', {
+          commitment: { _id: state.commitments[0]._id },
+          deckIndex: 0,
+        })
+        commit('SET_DECK_AS_SINGLE_PARENT', {
+          commitment: { _id: state.commitments[0]._id },
+          deckIndex: 1,
+        })
+        commit('SET_DECK_AS_SINGLE_PARENT', {
+          commitment: { _id: state.commitments[0]._id },
+          deckIndex: 2,
+        })
+      })
     }catch(err){
       console.log(err)
     }
@@ -56,11 +78,34 @@ export const actions = {
       commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
-  addCommitment({ commit,state }, newCommitment) {
+  addCommitment({ state }, {newCommitment, createCommitment}) {
     if (newCommitment && newCommitment.entrytitle) {
-      newCommitment._id = uuidv4()
-      newCommitment.complete = false
-      commit('ADD_COMMITMENT', newCommitment)
+      // newCommitment._id = uuidv4()
+      console.log('adding commitment')
+      // newCommitment.complete = false
+      // commit('ADD_COMMITMENT', newCommitment)
+      
+
+      createCommitment({
+        "commitment": {
+          
+          "entrytitle": "testuser1 subtask 4",
+          "parent": {
+            "connect": "317239077004902992"
+          },
+          "complete": false,
+          "selfAsParent": {
+            "create": {
+              "crouleur": {
+                "connect": "316916005992399439"
+              }
+            }
+          },
+          "duration": 25
+          
+          
+        }
+      })
       mixpanel.track('added task', {user: state.crouleur._id})
     }
   },

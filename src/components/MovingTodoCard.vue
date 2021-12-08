@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
-import checkedReuse from '@/use/checkedReuse.js'
-import commitmentTextStyleReuse from '@/use/commitmentTextStyleReuse.js'
+// import checkedReuse from '@/use/checkedReuse.js'
+// import commitmentTextStyleReuse from '@/use/commitmentTextStyleReuse.js'
 import { movingEnum } from '@/use/enums.js'
 
 export default {
@@ -74,16 +74,16 @@ export default {
     })
     //seems to be tied to the value of the checked thing in the stategenerator
     //maybe something to do with all of the proxies etc..
-    const { checked } = checkedReuse(store, movingTask.value.original)
+    // const { checked } = checkedReuse(store, movingTask.value.original)
     //this doesn't work for some reason can't get the text to be crossed out..
-    const { commitmentTextStyle } = commitmentTextStyleReuse(checked)
-    watch(checked, (task) => task)
+    // const { commitmentTextStyle } = commitmentTextStyleReuse(checked)
+    // watch(checked, (task) => task)
 
     return {
       draggableStyle,
       movingTask,
-      checked,
-      commitmentTextStyle,
+      // checked,
+      // commitmentTextStyle,
       appearance,
       movingEnum,
     }

@@ -40,6 +40,7 @@ export default {
       )
     })
 
+    console.log(props)
     // const { position, draggableStyle } = makeDraggableOld({
     //   element: el,
     //   props,
