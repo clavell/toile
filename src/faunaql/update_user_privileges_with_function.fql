@@ -74,6 +74,8 @@ Update(
           write: true,
         } 
       },
+      { resource: Index("parent-child_by_parentToChildren"), actions: { read: true } },
+      { resource: Index("self_by_commitment"), actions: { read: true } },
       { resource: Index("allCommitments"), actions: { read: true } },
       { resource: Index("allCrouleurs"), actions: { read: true } },
     ]

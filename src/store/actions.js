@@ -119,7 +119,7 @@ export const actions = {
             },
           },
           duedate: newCommitment.duedate,
-          duration: newCommitment.duration,
+          duration: parseInt(newCommitment.duration),
           crouleur: {
             connect: state.crouleur._id,
           },
@@ -152,7 +152,7 @@ export const actions = {
           connect: updatedCommitment.selfAsParent._id,
         },
         duedate: updatedCommitment.duedate,
-        duration: updatedCommitment.duration,
+        duration: parseInt(updatedCommitment.duration),
         crouleur: {
           connect: state.crouleur._id,
         },

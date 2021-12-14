@@ -53,7 +53,7 @@ export default {
     const duedate =
       entryToEdit._id && entryToEdit.duedate
         ? ref(entryToEdit.duedate)
-        : ref('21/07/2021')
+        : ref('')
     const duration =
       entryToEdit._id && entryToEdit.duration
         ? ref(entryToEdit.duration)
