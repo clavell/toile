@@ -19,7 +19,7 @@
         class="prerequisite"
       />
 
-      <div class="sectionTitle">Subtasks:</div>
+      <div v-if="canGoBack && listInfo.commitments.length>0" class="sectionTitle">Subtasks:</div>
       <!-- here are the subtasks -->
       <component
         v-for="item in listInfo.commitments"

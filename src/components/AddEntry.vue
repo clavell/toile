@@ -17,7 +17,7 @@
         />
       </div>
       <div>
-        <label>Due Date (dd/mm/yyyy)</label>
+        <label>Due Date (yyyymmdd)</label>
         <input type="text" v-model="duedate" class="field" />
       </div>
       <button v-if="entryToEdit._id" type="submit">Update</button>

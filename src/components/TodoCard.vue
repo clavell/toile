@@ -1,7 +1,6 @@
 <template>
   <div
     :style="commitmentSideBarStyle"
-    class="listEntrySideBar"
     :id="currentDisplayPosition"
     :class="[parent, deck]"
   ></div>
