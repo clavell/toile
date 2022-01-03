@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="commitmentSideBarStyle"
+    class="listsidebar"
     :id="currentDisplayPosition"
     :class="[parent, deck]"
   ></div>
@@ -33,6 +33,7 @@
   </div>
   <div
     v-if="isMoving"
+    style="grid-row: auto / span 2;"
     :id="currentDisplayPosition"
     :class="[parent, deck]"
   ></div>
@@ -42,7 +43,6 @@
 import { inject } from '@vue/runtime-core'
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import commitmentSideBarStyleReuse from '@/use/commitmentSideBarStyleReuse.js'
 import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'
 import checkedReuse from '@/use/checkedReuse.js'
 import commitmentTextStyleReuse from '@/use/commitmentTextStyleReuse.js'
@@ -191,7 +191,6 @@ export default {
     const entryWidth = inject('entryWidth')
 
     //sidebar indicator for when the element is being dragged over a particular spot
-    const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
 
     const { currentDisplayPosition } = currentDisplayPositionReuse({
       store,
@@ -223,7 +222,6 @@ export default {
       entryWidth,
       commitmentTextStyle,
       el,
-      commitmentSideBarStyle,
       checked,
       fullCommitment,
       currentDisplayPosition,
@@ -236,3 +234,12 @@ export default {
 
 //   complete: Boober,
 </script>
+<style scoped>
+.listsidebar{
+  background-color: var(--sidebar-color);
+  border-radius: 3px;
+  opacity: 0.2;
+  grid-row: auto / span 2;
+}
+
+</style>
