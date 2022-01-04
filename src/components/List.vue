@@ -16,7 +16,7 @@
         :commitment="prereq"
         :parentCommitment="parentCommitment"
         :deckIndex="deckIndex"
-        class="prerequisite"
+        class="todo"
       />
 
       <div v-if="canGoBack && listInfo.commitments.length>0" class="sectionTitle">Subtasks:</div>
@@ -196,10 +196,6 @@ export default {
   grid-template-columns: 1fr 20fr;
   scrollbar-color: rgba(255, 255, 255, 0.2) theme('colors.pink.900');
   padding: 0;
-}
-
-.prerequisite {
-  background-color: theme('colors.pink.800');
 }
 
 .todo {
