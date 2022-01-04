@@ -5,13 +5,13 @@ Toile is a tool to help you manage your time. You enter what you want to do, how
 First is a list of a couple of projects I'm working on. There's this project - Toile - and then there is a [hush box](https://thehometheaterdiy.com/projector-hush-box/) that I'm going to make for my projector. Let's look at what I've entered already for the hush box. Clicking on the circle on the right gives us:
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/147998289-145a91fd-1224-4efc-8a3c-6585b12a3088.png">
 I've guessed here that it will take 250 minutes to complete as a starting point. The due date is set for a little later on in the month. Going back to the main view and clicking on the card anywhere but the circle opens up the list of subtasks:<img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/147998763-440e4f90-a8a4-4438-b7b8-a46c7079ecf9.png">
-There are none there yet, but with the 250 minutes earmarked for the project if the "Set Schedule" button is clicked, then a schedule will be layed out for the project in 25 minute [pomoderos](https://francescocirillo.com/pages/pomodoro-technique):
+There are none there yet, but with the 250 minutes earmarked for the project if the "Set Schedule" button is clicked, then a schedule will be layed out for the project in 25 minute [pomodoros](https://francescocirillo.com/pages/pomodoro-technique):
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/147999072-cf5f7452-81e7-4b45-b752-d6c09650b4d8.png">
 More specific tasks can be added by clicking the "+" button. Doing some planning is a good starting point:
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/148000441-b4e58c52-05a2-41e1-b258-952fe346f659.png">
 After adding the task, clicking "Set Schedule" again gives a more descriptive schedule:
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/148000269-f171b58c-cbf3-4146-8cfe-1f09d5a81331.png">
-Adding specific subtasks to the "Plan" subtask with appropriate durations and setting the schedule:
+Adding specific subtasks:
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/148001112-1d614b81-3533-4098-b934-88b76d9e2e4b.png">
 Oops. Buying materials isn't really part of the planning phase, so we can rearrange the list, (currently by scrolling down to where there are two navigable lists, pressing shift and dragging and dropping):
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/148002350-8bfc6111-6a18-47f6-8c27-a340a0dda0bd.png">
@@ -26,9 +26,9 @@ Then pressing shift to drag and drop the circle sets "Get things back from Larry
 Then setting the schedule:
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/148010315-acbba059-4347-49b2-bcd5-7ac1e4fb927e.png">
 
-This is a bit of a contrived example, (and you'd probably need to work out a good time with Larry) but illustrates how to create more of a web of tasks (or [toile](https://www.wikiwand.com/fr/Toile_d%27araign%C3%A9e) in french) 
+This is a bit of a contrived example, (and you'd probably need to work out a good time with Larry) but it illustrates how to create more of a web of tasks (or [toile](https://www.wikiwand.com/fr/Toile_d%27araign%C3%A9e) in french) 
 
-Another feature of the software implemented as of yet is indicating that a time slot should not be scheduled in. Right now this is done by clicking on the timeslot:
+It is also possible to indicate that a timeslot should be left empty. Right now this is done by clicking on the timeslot:
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/12875280/148012318-9e25f930-9c3d-4a51-baf7-baffc15f2e6a.png">
 
 
