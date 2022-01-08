@@ -8,7 +8,7 @@
         class="field"
       />
       <div>
-        <label for="duration">Duration</label>
+        <label for="duration">Duration (minutes)</label>
         <input
           type="Number"
           v-model="duration"
@@ -17,13 +17,13 @@
         />
       </div>
       <div>
-        <label>Due Date (dd/mm/yyyy)</label>
+        <label>Due Date (yyyymmdd)</label>
         <input type="text" v-model="duedate" class="field" />
       </div>
       <button v-if="entryToEdit._id" type="submit">Update</button>
       <button v-else type="submit">Add</button>
     </form>
-    <form @submit.prevent="deleteEntry">
+    <form v-if="entryToEdit._id" @submit.prevent="deleteEntry">
       <button type="submit">Delete</button>
     </form>
   </div>
@@ -154,7 +154,7 @@ export default {
 #entry-form form {
   display: grid;
   gap: 10px;
-  grid-template-rows: 30px;
+  grid-template-rows: auto;
   padding: 20px;
 }
 

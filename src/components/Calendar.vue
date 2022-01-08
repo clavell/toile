@@ -90,6 +90,10 @@ export default {
   setup() {
     const store = useStore()
 
+    store.commit('UPDATE_CURRENT_DATE', {
+      newDate: DateTime.now().toFormat(store.state.dateFormat),
+    })
+
     const todaysDate = computed(() => {
       const fullDate = DateTime.fromFormat(store.state.currentDate, 'yyyyMMdd')
       return fullDate.toLocaleString(DateTime.DATE_HUGE) //=>  '4/20/2017'

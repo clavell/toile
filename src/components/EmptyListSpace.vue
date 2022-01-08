@@ -4,7 +4,6 @@
 </template>
 
 <script>
-import commitmentSideBarStyleReuse from '@/use/commitmentSideBarStyleReuse.js'
 import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'
 
 import { useStore } from 'vuex'
@@ -16,10 +15,9 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    const { commitmentSideBarStyle } = commitmentSideBarStyleReuse()
 
     const { currentDisplayPosition } = currentDisplayPositionReuse(store, props)
-    return { currentDisplayPosition, commitmentSideBarStyle }
+    return { currentDisplayPosition }
   },
 }
 </script>

@@ -1,7 +1,13 @@
 <template>
   <div class="list" :class="listid" ref="el">
     <div class="listheader">
-      <div v-if="canGoBack" @click="goBack(parentCommitment)">&lt;</div>
+      <button
+        class="backbutton"
+        v-if="canGoBack"
+        @click="goBack(parentCommitment)"
+      >
+        &lt;
+      </button>
       <div class="title">{{ parentCommitment.entrytitle }}</div>
     </div>
     <div id="wrapper">
@@ -16,10 +22,18 @@
         :commitment="prereq"
         :parentCommitment="parentCommitment"
         :deckIndex="deckIndex"
-        class="prerequisite"
+        class="todo"
       />
 
-      <div class="sectionTitle">Subtasks:</div>
+      <div
+        v-if="canGoBack && listInfo.commitments.length > 0"
+        class="sectionTitle"
+      >
+        Subtasks:
+      </div>
+      <div v-if="listInfo.commitments.length == 0" class="sectionTitle">
+        No Subtasks. Click + to add.
+      </div>
       <!-- here are the subtasks -->
       <component
         v-for="item in listInfo.commitments"
@@ -191,18 +205,15 @@ export default {
   display: grid;
   overflow-y: auto;
   gap: 2px;
-  grid-auto-rows: var(--entry-size);
+  grid-auto-rows: calc(var(--entry-size) * 0.4);
   grid-template-columns: 1fr 20fr;
   scrollbar-color: rgba(255, 255, 255, 0.2) theme('colors.pink.900');
   padding: 0;
 }
 
-.prerequisite {
-  background-color: theme('colors.purple.800');
-}
-
 .todo {
   background-color: theme('colors.pink.800');
+  grid-row: auto / span 2;
 }
 
 .listentry {
@@ -215,15 +226,23 @@ export default {
 }
 
 .title {
-  text-align: center;
+  text-align: start;
   display: flex;
   justify-content: center;
   flex-direction: column;
 }
 
 .listheader {
+  display: grid;
+  font-size: 1.2rem;
+  grid-template-columns: 1fr 8fr;
+}
+
+.backbutton {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .sectionTitle {

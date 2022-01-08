@@ -60,9 +60,10 @@ export default {
 
 <style>
 .Lists {
+  margin-left: 2em;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 2em;
   color: var(--list-font-colour);
 }
 </style>
