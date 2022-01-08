@@ -1,7 +1,13 @@
 <template>
   <div class="list" :class="listid" ref="el">
     <div class="listheader">
-      <button class="backbutton" v-if="canGoBack" @click="goBack(parentCommitment)">&lt;</button>
+      <button
+        class="backbutton"
+        v-if="canGoBack"
+        @click="goBack(parentCommitment)"
+      >
+        &lt;
+      </button>
       <div class="title">{{ parentCommitment.entrytitle }}</div>
     </div>
     <div id="wrapper">
@@ -19,8 +25,15 @@
         class="todo"
       />
 
-      <div v-if="canGoBack && listInfo.commitments.length>0" class="sectionTitle">Subtasks:</div>
-      <div v-if="listInfo.commitments.length==0" class="sectionTitle">No Subtasks. Click + to add.</div>
+      <div
+        v-if="canGoBack && listInfo.commitments.length > 0"
+        class="sectionTitle"
+      >
+        Subtasks:
+      </div>
+      <div v-if="listInfo.commitments.length == 0" class="sectionTitle">
+        No Subtasks. Click + to add.
+      </div>
       <!-- here are the subtasks -->
       <component
         v-for="item in listInfo.commitments"
@@ -225,8 +238,8 @@ export default {
   grid-template-columns: 1fr 8fr;
 }
 
-.backbutton{
-  display:flex;
+.backbutton {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;

@@ -17,7 +17,7 @@ export default {
     const store = useStore()
 
     const { currentDisplayPosition } = currentDisplayPositionReuse(store, props)
-    return { currentDisplayPosition,  }
+    return { currentDisplayPosition }
   },
 }
 </script>

@@ -33,7 +33,7 @@
   </div>
   <div
     v-if="isMoving"
-    style="grid-row: auto / span 2;"
+    style="grid-row: auto / span 2"
     :id="currentDisplayPosition"
     :class="[parent, deck]"
   ></div>
@@ -235,11 +235,10 @@ export default {
 //   complete: Boober,
 </script>
 <style scoped>
-.listsidebar{
+.listsidebar {
   background-color: var(--sidebar-color);
   border-radius: 3px;
   opacity: 0.2;
   grid-row: auto / span 2;
 }
-
 </style>
