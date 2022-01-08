@@ -44,30 +44,6 @@ It is also possible to indicate that a timeslot should be left empty. Right now 
 - Items checked off of list are still scheduled
 - persistence of order changes/prerequisite setting
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
