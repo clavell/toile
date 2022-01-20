@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils' // we'll use this soon!
 import AddEntry from '@/components/AddEntry.vue'
 
-describe('Add Entry', () => {
+describe.skip('Add Entry', () => {
   const wrapper = mount(AddEntry)
   const wrapperHtml = wrapper.html()
   it(`renders the form`, () => {

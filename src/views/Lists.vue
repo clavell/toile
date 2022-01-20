@@ -17,6 +17,9 @@ import Calendar from '@/components/Calendar.vue'
 import MovingTodoCard from '@/components/MovingTodoCard.vue'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
+import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
+import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
+
 export default {
   name: 'Lists',
   components: {
@@ -26,8 +29,8 @@ export default {
   },
   setup() {
     const store = useStore()
-    store.dispatch('setCrouleur')
-    store.dispatch('getCommitments')
+    store.dispatch('setCrouleur', { allCrouleursQuery })
+    store.dispatch('getCommitments', { allCommitmentsQuery })
 
     //   store.commit('SET_DECK_AS_SINGLE_PARENT', {
     //   commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },

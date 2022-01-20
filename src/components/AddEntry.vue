@@ -36,6 +36,7 @@ import { useMutation } from '@vue/apollo-composable'
 import createCommitmentMutation from '@/graphql/createCommitment.mutation.gql'
 import updateCommitmentMutation from '@/graphql/updateCommitment.mutation.gql'
 import deleteCommitmentMutation from '@/graphql/deleteCommitment.mutation.gql'
+import mixpanel from 'mixpanel-browser'
 import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
 
 export default {
@@ -89,6 +90,7 @@ export default {
           parent: { _id: newParent._id },
         },
         createCommitment,
+        mixpanel,
       })
     }
 

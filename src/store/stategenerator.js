@@ -11,11 +11,11 @@ export function generateState() {
     // topParent: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428'},
     // topParent: [{ _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' }],
     prerequisites: [
-      // {
-      //   _id: '6266c8ed-4ab0-425a-8a88-02335ba51baa',
-      //   commitmentId: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-      //   prerequisiteId: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-      // },
+      {
+        _id: '319821920153392837',
+        commitmentId: '319821440143589970',
+        prerequisiteId: '319821920153371219',
+      },
     ], //make the store depends on display dummy data in calendar view
     previousRearrange: {},
     sessionLength: 25,
@@ -41,24 +41,6 @@ export function generateState() {
       { _id: 'c33b4846-82c9-456a-be64-12850e7b8dec', time: '202111121400' },
     ],
     moving: {
-      // parent: {
-      //   _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
-      //   entrytitle: 'setting up',
-      //   // startTime: '202106201330',
-      //   // duration: 45,
-      //   complete: false,
-      //   parent: { _id: null },
-      //   rank: 0,
-      // },
-      // original: {
-      //   _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-      //   entrytitle: 'set up vuex',
-      //   startTime: '202106201330',
-      //   // duration: 45,
-      //   complete: false,
-      //   parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
-      //   rank: 0,
-      // },
       parent: {
         _id: '317239000319394384',
         entrytitle: 'setting up',
@@ -90,327 +72,298 @@ export function generateState() {
       },
     },
     blankSpacePosition: null,
-    commitments:
-      // [],
-      [
-        {
-          _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
-          entrytitle: 'scheduler app',
-          duedate: '20211112',
-          // startTime: '202106201330',
-          // duration: 45,
-          complete: false,
-          parent: { _id: '55f5eccd-5fb9-4976-88f7-4376e0af0ac8' },
-          rank: 0,
+    commitments: [
+      {
+        __typename: 'Commitment',
+        _id: '317239000319394384',
+        entrytitle: 'Projects',
+        duration: null,
+        parent: { _id: null },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '317239000329880144',
         },
-        {
-          _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-          entrytitle: 'set up vuex',
-          // startTime: '202106201330',
-          duration: 45,
-          complete: false,
-          parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
-          rank: 0,
-        },
-        {
-          _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
-          entrytitle: 'add dummy data to vuex',
-          // startTime: '202106200430',
-          duration: 45,
-          complete: false,
-          parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
-          rank: 1,
-        },
-        {
-          _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
-          entrytitle: 'display dummy data in list view',
-          // startTime: '202106201530',
-          duration: 45,
-          complete: false,
-          parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
-          rank: 2,
-        },
-        {
-          _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-          entrytitle: 'display dummy data in calendar view',
-          // startTime: '202106201630',
-          duration: 45,
-          complete: false,
-          parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
-          rank: 3,
-        },
-        {
-          entrytitle: 'Watch Videos',
-          duration: 45,
-          parent: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-          _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
-          complete: false,
-          rank: 0,
-        },
-        {
-          entrytitle: 'Install Vuex',
-          duration: 100,
-          parent: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-          _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
-          complete: false,
-          rank: 1,
-        },
-        {
-          entrytitle: 'Make the Store',
-          duration: 45,
-          parent: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-          _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-          complete: false,
-          rank: 2,
-        },
-        {
-          entrytitle: 'Read Docs',
-          duration: 45,
-          parent: { _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9' },
-          _id: '1616ae3d-78be-4180-8870-2bd685b4e224',
-          complete: false,
-          rank: 0,
-        },
-        {
-          entrytitle: 'Download',
-          duration: 45,
-          parent: { _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9' },
-          _id: 'f44660e1-903e-4f5a-ba06-8b6df65bf20a',
-          complete: false,
-          rank: 1,
-        },
-        {
-          entrytitle: 'Install',
-          duration: 45,
-          parent: { _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9' },
-          _id: 'ab95afbb-da68-46bf-af93-3dcf94860078',
-          complete: false,
-          rank: 2,
-        },
-        {
-          entrytitle: 'Read Docs',
-          duration: 45,
-          parent: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-          _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
-          complete: false,
-          rank: 0,
-        },
-        {
-          entrytitle: 'Make Task List',
-          duration: 45,
-          parent: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-          _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
-          complete: false,
-          rank: 1,
-        },
-        {
-          entrytitle: 'Make Format String',
-          duration: 5,
-          parent: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-          _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
-          complete: false,
-          rank: 2,
-        },
-        {
-          entrytitle: 'Make up Data',
-          duration: 45,
-          parent: { _id: 'b018ade0-a120-4d59-8a72-92b2c5072411' },
-          _id: '9e734fe3-2920-4882-a346-e2b37df47c59',
-          complete: false,
-          rank: 0,
-        },
-        {
-          entrytitle: 'Add the Data',
-          duration: 45,
-          parent: { _id: 'b018ade0-a120-4d59-8a72-92b2c5072411' },
-          _id: '516ffce2-4690-4028-89fa-77b9b8e744a3',
-          complete: false,
-          rank: 1,
-        },
-        {
-          _id: '55f5eccd-5fb9-4976-88f7-4376e0af0ac8',
+        duedate: null,
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '318007304478786128',
+        entrytitle: 'Develop Toile',
+        duration: 25,
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239000319394384',
           entrytitle: 'Projects',
-          // startTime: '202106201330',
-          // duration: 45,
-          complete: false,
-          parent: { _id: null },
-          rank: 0,
         },
-        {
-          entrytitle: 'Special Topics Project',
-          duedate: '18/11/2021',
-          parent: { _id: '55f5eccd-5fb9-4976-88f7-4376e0af0ac8' },
-          _id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e',
-          complete: false,
-          rank: 1,
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '318007304478788176',
         },
-        {
-          entrytitle: 'Research',
-          duration: 200,
-          parent: { _id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e' },
-          _id: '584fe4b7-dc93-40b3-8b72-31cccd997df6',
-          complete: false,
-          rank: 0,
-        },
-        {
-          entrytitle: 'Exploratory Analysis',
-          duration: 180,
-          parent: { _id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e' },
-          _id: 'f9dbcdf3-48e9-4ebc-8822-d7991cbbeb4b',
-          complete: false,
-          rank: 1,
-        },
-        {
-          entrytitle: 'Engineer Features',
-          duration: 180,
-          parent: { _id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e' },
-          _id: '472aaa54-b1ab-4172-8a6a-437757025c64',
-          complete: false,
-          rank: 2,
-        },
-        {
-          entrytitle: 'Train And Test Model',
-          duration: 240,
-          parent: { _id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e' },
-          _id: '304c7cb5-41f8-403a-93be-ae3d927e2c23',
-          complete: false,
-          rank: 3,
-        },
-        {
-          entrytitle: 'Make Improvements',
-          duration: 180,
-          parent: { _id: 'c1f48f53-82d8-48d6-bbae-02b0bec7036e' },
-          _id: '39c34ba6-cff1-415b-af18-44d1e8455d7c',
-          complete: false,
-          rank: 4,
-        },
-        {
-          entrytitle: 'Read relevant chapters',
-          duration: 120,
-          parent: { _id: '584fe4b7-dc93-40b3-8b72-31cccd997df6' },
-          _id: 'a682a6fc-3dfb-4a14-a1b5-b7314c50640c',
-          complete: false,
-          rank: 4,
-        },
-        {
-          entrytitle: 'Do Keras Tutorial',
-          duration: 60,
-          parent: { _id: '584fe4b7-dc93-40b3-8b72-31cccd997df6' },
-          _id: '529238bf-d5e1-401c-82ae-1ed24d441e88',
-          complete: false,
-          rank: 4,
-        },
-        {
-          entrytitle: 'Decide on Preliminary Features',
-          duration: 120,
-          parent: { _id: '584fe4b7-dc93-40b3-8b72-31cccd997df6' },
-          _id: '8e39051c-0a7b-4d5e-ab17-691ec7426374',
-          complete: false,
-          rank: 4,
-        },
-      ],
-    decks: [
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
       {
-        _id: '9225c8ed-4ab0-425a-8a88-02335ba51baa',
-        deck: [
-          {
-            _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa',
-            commitments: [
-              {
-                _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-                type: originTypeEnum.TodoCard,
-              },
-              {
-                _id: 'b018ade0-a120-4d59-8a72-92b2c5072411',
-                type: originTypeEnum.TodoCard,
-              },
-              {
-                _id: '601b550c-2c68-4cbe-85b6-a6a61563db1f',
-                type: originTypeEnum.TodoCard,
-              },
-              {
-                _id: '7ece7fc9-0a59-47b2-b87f-2e493bfb4d49',
-                type: originTypeEnum.TodoCard,
-              },
-            ],
-          },
-        ],
+        __typename: 'Commitment',
+        _id: '319703702479831635',
+        entrytitle: 'bug fixes',
+        duration: 45,
+        parent: {
+          __typename: 'Commitment',
+          _id: '318007304478786128',
+          entrytitle: 'Develop Toile',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319703702566863443',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319703814684803666',
+        entrytitle: 'Remove "subtasks" subtitle in projects overview',
+        duration: 20,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319703702479831635',
+          entrytitle: 'bug fixes',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319703814685852242',
+        },
+        duedate: '20210108',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319703874965340756',
+        entrytitle: "Go to today's date on load",
+        duration: 45,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319703702479831635',
+          entrytitle: 'bug fixes',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319703874966389332',
+        },
+        duedate: '20210108',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319703998706745939',
+        entrytitle: 'Click on schedule entry to see task in context',
+        duration: 150,
+        parent: {
+          __typename: 'Commitment',
+          _id: '318007304478786128',
+          entrytitle: 'Develop Toile',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319703998707794515',
+        },
+        duedate: '20210107',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319704193472397907',
+        entrytitle: 'Build hush box',
+        duration: 250,
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239000319394384',
+          entrytitle: 'Projects',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319704193473446483',
+        },
+        duedate: '20220106',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319819390980719185',
+        entrytitle: 'Plan',
+        duration: 50,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319704193472397907',
+          entrytitle: 'Build hush box',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319819390989107793',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319819567103738447',
+        entrytitle: 'General Plan',
+        duration: 25,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319819390980719185',
+          entrytitle: 'Plan',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319819567106884175',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319819585687650895',
+        entrytitle: 'Choose wood',
+        duration: 15,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319819390980719185',
+          entrytitle: 'Plan',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319819585688700495',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319819667616039503',
+        entrytitle: 'Choose fans',
+        duration: 10,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319819390980719185',
+          entrytitle: 'Plan',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319819667617088079',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319821333955347028',
+        entrytitle: 'Buy Materials',
+        duration: 100,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319704193472397907',
+          entrytitle: 'Build hush box',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319821333956395604',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319821373568451155',
+        entrytitle: 'Cut Wood',
+        duration: 50,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319704193472397907',
+          entrytitle: 'Build hush box',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319821373569499731',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319821440143589970',
+        entrytitle: 'Nail together box',
+        duration: 50,
+        parent: {
+          __typename: 'Commitment',
+          _id: '319704193472397907',
+          entrytitle: 'Build hush box',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319821440145687122',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
+      },
+      {
+        __typename: 'Commitment',
+        _id: '319821920153371219',
+        entrytitle: 'Get things back from Larry',
+        duration: 100,
+        parent: {
+          __typename: 'Commitment',
+          _id: '317239000319394384',
+          entrytitle: 'Projects',
+        },
+        selfAsParent: {
+          __typename: 'ParentToChildren',
+          _id: '319821920154419795',
+        },
+        duedate: '',
+        complete: false,
+        rank: null,
       },
     ],
-    schedule: [
-      {
-        _id: '868d1d58-986c-4cd3-98a9-e530d7998228',
-        commitments: [
-          {
-            commitmentId: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
-            duration: 25,
-          },
-        ],
-        sessionStartTime: '202112070430',
-        sessionDuration: 45,
-      },
-      {
-        _id: '2fb878cc-4cf5-4d86-ac97-037d740bd5e3',
-        commitments: [
-          {
-            commitmentId: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
-            duration: 20,
-          },
-          { commitmentId: '1616ae3d-78be-4180-8870-2bd685b4e224', duration: 5 },
-        ],
-        sessionStartTime: '202106201330',
-        sessionDuration: 45,
-      },
-      {
-        _id: '50322481-5b32-4b79-acc5-17677cf0ddea',
-        commitments: [
-          {
-            commitmentId: '1616ae3d-78be-4180-8870-2bd685b4e224',
-            duration: 25,
-          },
-        ],
-        sessionStartTime: '202106201530',
-        sessionDuration: 45,
-      },
-      {
-        _id: '516ffce2-4690-4028-89fa-77b9b8e744a3',
-        commitments: [
-          {
-            commitmentId: '1616ae3d-78be-4180-8870-2bd685b4e224',
-            duration: 15,
-          },
-          {
-            commitmentId: 'f44660e1-903e-4f5a-ba06-8b6df65bf20a',
-            duration: 10,
-          },
-        ],
-        sessionStartTime: '202106201630',
-        sessionDuration: 45,
-      },
-      {
-        _id: 'eab67363-4773-47a0-9661-17253b52d4e8',
-        commitments: [
-          {
-            commitmentId: 'f44660e1-903e-4f5a-ba06-8b6df65bf20a',
-            duration: 25,
-          },
-        ],
-        sessionStartTime: '202106210130',
-        sessionDuration: 45,
-      },
-    ],
+    //deck is for old dummy data
+    decks: [],
+    schedule: [],
   }
 }
 
 export function generateNewCommitment() {
   return {
-    _id: '0766c8ed-4ab0-425a-8a88-02335ba51bac',
-    entrytitle: 'set up vuex again',
-    startTime: '202106201330',
+    __typename: 'Commitment',
+    _id: '321237169430594130',
+    entrytitle: 'new task',
     duration: 45,
+    parent: {
+      __typename: 'Commitment',
+      _id: '318007304478786128',
+      entrytitle: 'Develop Toile',
+    },
+    selfAsParent: {
+      __typename: 'ParentToChildren',
+      _id: '321237169431642706',
+    },
+    duedate: '',
     complete: false,
-    parent: { _id: 'a225c8ed-4ab0-425a-8a88-02335ba51baa' },
-    rank: 5,
+    rank: null,
   }
 }
 
@@ -422,14 +375,351 @@ export function generateAlteredCommitment(oldCommitment) {
   const newFields = generateEntry()
   return {
     ...oldCommitment,
-    newFields,
+    ...newFields,
   }
 }
 
 export function generateEntry() {
   return {
     entrytitle: newTitle,
-    dudate: newDueDate,
+    duedate: newDueDate,
     duration: newDuration,
   }
+}
+
+export function generateDummySchedule() {
+  return [
+    {
+      _id: '33b47de2-33ab-4748-b9aa-050794aecde8',
+      commitments: [{ commitmentId: '319703998706745939', duration: 25 }],
+      sessionStartTime: '202201190930',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '8485fd11-1dcf-4556-b375-cf88342602fe',
+      commitments: [{ commitmentId: '319703998706745939', duration: 25 }],
+      sessionStartTime: '202201191000',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: 'c635db6c-f827-4ce0-b8cc-77cea942c61b',
+      commitments: [{ commitmentId: '319703998706745939', duration: 25 }],
+      sessionStartTime: '202201191045',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: 'bbddf795-2b3f-4aaa-93ad-7288c4eb2a65',
+      commitments: [{ commitmentId: '319703998706745939', duration: 25 }],
+      sessionStartTime: '202201191115',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '2ad297b0-40dd-4f69-8fb1-224603b755aa',
+      commitments: [{ commitmentId: '319703998706745939', duration: 25 }],
+      sessionStartTime: '202201191145',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '41ef030e-dc3a-4af4-bade-c7b890c5d415',
+      commitments: [{ commitmentId: '319703998706745939', duration: 25 }],
+      sessionStartTime: '202201191300',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '88a24559-481f-43b4-a4a9-41f2940e14f8',
+      commitments: [{ commitmentId: '319703874965340756', duration: 25 }],
+      sessionStartTime: '202201191330',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '68e17c66-00eb-4a03-a2ef-248a96169de8',
+      commitments: [
+        { commitmentId: '319703874965340756', duration: 20 },
+        { commitmentId: '319703814684803666', duration: 5 },
+      ],
+      sessionStartTime: '202201191400',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: 'df0fca0f-ca49-4502-a864-3566d02e7eb1',
+      commitments: [
+        { commitmentId: '319703814684803666', duration: 15 },
+        { commitmentId: '319819567103738447', duration: 10 },
+      ],
+      sessionStartTime: '202201191445',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '27196dc7-a915-43b8-88bb-35e82b4b9238',
+      commitments: [
+        { commitmentId: '319819567103738447', duration: 15 },
+        { commitmentId: '319819585687650895', duration: 10 },
+      ],
+      sessionStartTime: '202201191515',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '00900091-cce9-4a35-8e86-83d47e3b7832',
+      commitments: [
+        { commitmentId: '319819585687650895', duration: 5 },
+        { commitmentId: '319819667616039503', duration: 10 },
+        { commitmentId: '319821333955347028', duration: 10 },
+      ],
+      sessionStartTime: '202201191545',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: 'ccee11ca-0042-449b-bd7b-3bf2d4acef69',
+      commitments: [{ commitmentId: '319821333955347028', duration: 25 }],
+      sessionStartTime: '202201191630',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '142e84a1-b457-4c32-ab69-5dfac3751b53',
+      commitments: [{ commitmentId: '319821333955347028', duration: 25 }],
+      sessionStartTime: '202201191700',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '2413456b-c705-499f-98e3-a8c69ae6b71a',
+      commitments: [{ commitmentId: '319821333955347028', duration: 25 }],
+      sessionStartTime: '202201191730',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '815b464e-9ecb-4fe4-8bd1-ee1f42ee0614',
+      commitments: [
+        { commitmentId: '319821333955347028', duration: 15 },
+        { commitmentId: '319821373568451155', duration: 10 },
+      ],
+      sessionStartTime: '202201200900',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '93a60708-853e-443f-b485-6c0bfd6414bb',
+      commitments: [{ commitmentId: '319821373568451155', duration: 25 }],
+      sessionStartTime: '202201200930',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '40399445-174d-497a-a7f0-767984572d90',
+      commitments: [
+        { commitmentId: '319821373568451155', duration: 15 },
+        { commitmentId: '319821920153371219', duration: 10 },
+      ],
+      sessionStartTime: '202201201000',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '06a50ed8-8c22-48cf-a668-67b31b95015a',
+      commitments: [{ commitmentId: '319821920153371219', duration: 25 }],
+      sessionStartTime: '202201201045',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '0690e0f2-d941-4201-a164-fb6f869c8cda',
+      commitments: [{ commitmentId: '319821920153371219', duration: 25 }],
+      sessionStartTime: '202201201115',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: 'f26e2f39-4537-4874-bda6-c7f0960f5fbc',
+      commitments: [{ commitmentId: '319821920153371219', duration: 25 }],
+      sessionStartTime: '202201201145',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '7e3820aa-686f-484b-842a-7501a9084b22',
+      commitments: [
+        { commitmentId: '319821920153371219', duration: 15 },
+        { commitmentId: '319821440143589970', duration: 10 },
+      ],
+      sessionStartTime: '202201201300',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '1cd3bc26-deae-45ba-84e7-c7b510473881',
+      commitments: [{ commitmentId: '319821440143589970', duration: 25 }],
+      sessionStartTime: '202201201330',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '1d952adf-5bfe-4177-a247-08ba4fb278d0',
+      commitments: [{ commitmentId: '319821440143589970', duration: 15 }],
+      sessionStartTime: '202201201400',
+      sessionDuration: 30,
+      type: 'CalendarEntry',
+    },
+    {
+      _id: '1c812623-4080-48b0-8597-397ce5494d67',
+      time: '202111121330',
+      sessionStartTime: '202111121330',
+      sessionDuration: 30,
+      type: 'BlankEntry',
+    },
+    {
+      _id: 'a1c4004e-661d-4642-be21-634cec76e16a',
+      time: '202111121400',
+      sessionStartTime: '202111121400',
+      sessionDuration: 30,
+      type: 'BlankEntry',
+    },
+  ]
+}
+
+export function generateDummyDecks() {
+  return [
+    {
+      deck: [
+        {
+          _id: '317239000319394384',
+          commitments: [
+            { _id: '318007304478786128', type: 'todoCard' },
+            { _id: '319704193472397907', type: 'todoCard' },
+            { _id: '319821920153371219', type: 'todoCard' },
+          ],
+        },
+      ],
+      _id: '62f3b29a-55fb-433f-8469-5ebe740b4bdb',
+    },
+    {
+      deck: [
+        {
+          _id: '317239000319394384',
+          commitments: [
+            { _id: '318007304478786128', type: 'todoCard' },
+            { _id: '319704193472397907', type: 'todoCard' },
+            { _id: '319821920153371219', type: 'todoCard' }, //move this one
+          ],
+        },
+      ],
+      _id: '3507e1c1-2472-4600-839b-cab522030297',
+    },
+    {
+      deck: [
+        {
+          _id: '319704193472397907',
+          commitments: [
+            { _id: '319819390980719185', type: 'todoCard' },
+            { _id: '319821333955347028', type: 'todoCard' },
+            { _id: '319821373568451155', type: 'todoCard' },
+            { _id: '319821440143589970', type: 'todoCard' },
+          ],
+        },
+      ],
+      _id: 'ad319fcb-b0c2-43a7-b587-be991f972c56',
+    },
+  ]
+}
+
+export function generateDummyAlteredDecks() {
+  return [
+    {
+      deck: [
+        {
+          _id: '318007304478786128',
+          commitments: [
+            { _id: '319703702479831635', type: originTypeEnum.todoCard },
+            { _id: '319703998706745939', type: originTypeEnum.todoCard },
+            // { _id: '321237169430594130', type: originTypeEnum.todoCard },
+          ],
+        },
+      ],
+      _id: '92a7919a-c70b-4e85-9d4e-2612bff6f8cd',
+    },
+    {
+      deck: [
+        {
+          _id: '317239000319394384',
+          commitments: [
+            { _id: '318007304478786128', type: originTypeEnum.todoCard },
+            { _id: '319704193472397907', type: originTypeEnum.todoCard },
+            { _id: '319821920153371219', type: originTypeEnum.todoCard },
+          ],
+        },
+      ],
+      _id: '5028ad72-8006-4c9e-82f9-a67a6135e22c',
+    },
+    {
+      deck: [
+        {
+          _id: '317239000319394384',
+          commitments: [
+            { _id: '318007304478786128', type: originTypeEnum.todoCard },
+            { _id: '319704193472397907', type: originTypeEnum.todoCard },
+            { _id: '319821920153371219', type: originTypeEnum.todoCard },
+          ],
+        },
+      ],
+      _id: 'd88d1265-b581-4c11-9760-771473c9de8d',
+    },
+  ]
+}
+
+export function generateDecks_CommitmentMovedBetweenDecks() {
+  return [
+    {
+      deck: [
+        {
+          _id: '317239000319394384',
+          commitments: [
+            { _id: '318007304478786128', type: 'todoCard' },
+            { _id: '319704193472397907', type: 'todoCard' },
+            { _id: '319821920153371219', type: 'todoCard' },
+          ],
+        },
+      ],
+      _id: 'f9700d75-f03a-4e50-9d94-f840ef09c81f',
+    },
+    {
+      deck: [
+        {
+          _id: '317239000319394384',
+          commitments: [
+            { _id: '318007304478786128', type: 'todoCard' },
+            { _id: '319704193472397907', type: 'todoCard' },
+            // { _id: '319821920153371219', type: 'todoCard' }, //move this one (from generateDummyDecks())
+          ],
+        },
+      ],
+      _id: '1fdbcfd4-ec13-4e39-a063-68a6c99d22f5',
+    },
+    {
+      deck: [
+        {
+          _id: '319704193472397907',
+          commitments: [
+            { _id: '319819390980719185', type: 'todoCard' },
+            { _id: '319821333955347028', type: 'todoCard' },
+            { _id: '319821373568451155', type: 'todoCard' },
+            { _id: '319821920153371219', type: 'todoCard' },// to here
+            { _id: '319821440143589970', type: 'todoCard' },
+          ],
+        },
+      ],
+      _id: '347e371b-73b7-4365-9e07-2e33a8bfd03d',
+    },
+  ]
 }

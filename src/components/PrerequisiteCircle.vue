@@ -40,6 +40,7 @@ let details = {
         store.dispatch('addPrerequisite', {
           commitment: { _id: listid },
           prerequisite: commitment,
+          mixpanel,
         })
       }
     }

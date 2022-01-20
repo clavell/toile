@@ -9,6 +9,7 @@ import {
   generateAlteredCommitment,
   generateState,
 } from '@/store/stategenerator.js'
+import { generateDummyDecks } from '../../src/store/stategenerator'
 const {
   addCommitment,
   setAsComplete,
@@ -21,6 +22,9 @@ const {
 let state
 let newCommitment
 const commit = jest.fn()
+const createCommitment = jest.fn()
+const mixpanel = { track: jest.fn() }
+const apolloUpdateCommitment = jest.fn()
 
 describe('actions', () => {
   beforeEach(() => {
@@ -28,10 +32,17 @@ describe('actions', () => {
     state = generateState()
     newCommitment = generateNewCommitment()
     commit.mockClear()
+    createCommitment.mockClear()
+    mixpanel.track.mockClear()
+    apolloUpdateCommitment.mockClear()
   })
   it('commits new entry', () => {
-    addCommitment({ commit }, newCommitment)
-    expect(commit).toHaveBeenCalledWith('ADD_COMMITMENT', newCommitment)
+    addCommitment(
+      { state, getters },
+      { newCommitment, createCommitment, mixpanel }
+    )
+    expect(createCommitment).toHaveBeenCalledTimes(1)
+    // expect(commit).toHaveBeenCalledWith('ADD_COMMITMENT', newCommitment)
   })
 
   it('commits the SET_AS_COMPLETE mutation when complete is false', () => {
@@ -45,45 +56,48 @@ describe('actions', () => {
     expect(commit).toHaveBeenCalledWith('SET_AS_COMPLETE', newCommitment._id)
   })
 
-  it('commits the UPDATE_COMMITMENT mutation when commitment has changed', () => {
+  it('calls the apollo update commitment function when commitment has changed', () => {
     state.commitments.push(newCommitment)
 
     //create editted commitment to add in the orignal's place
-    const edittedCommitment = generateAlteredCommitment()
+    const edittedCommitment = generateAlteredCommitment(newCommitment)
 
     updateCommitment(
-      { state, commit },
-      { newCommitment: edittedCommitment, oldCommitment: newCommitment }
+      { state },
+      {
+        updatedCommitment: edittedCommitment,
+        updateCommitment: apolloUpdateCommitment,
+      }
     )
 
-    const index = getters.indexFromStateArray(
-      newCommitment._id,
-      state,
-      'commitments'
-    )
-    expect(commit).toHaveBeenCalledWith('UPDATE_COMMITMENT', {
-      newCommitment: edittedCommitment,
-      index: index,
-    })
+    // const index = getters.indexFromStateArray(
+    //   newCommitment._id,
+    //   state,
+    //   'commitments'
+    // )
+    expect(apolloUpdateCommitment).toHaveBeenCalledTimes(1)
   })
 
-  it('does not commit the UPDATE_COMMITMENT mutation when commitment has NOT changed', () => {
+  it('does not call the apollo update commitment function when commitment has NOT changed', () => {
     state.commitments.push(newCommitment)
 
     updateCommitment(
-      { state, commit },
-      { newCommitment: newCommitment, oldCommitment: newCommitment }
+      { state },
+      {
+        updatedCommitment: newCommitment,
+        updateCommitment: apolloUpdateCommitment,
+      }
     )
 
-    expect(commit).toHaveBeenCalledTimes(0)
+    expect(apolloUpdateCommitment).toHaveBeenCalledTimes(0)
   })
 
   it('commits the ADD_PREQUISITE mutation when the commitments are NOT decendents of one another', () => {
     //choose two commitments that are not directly related
-    let commitment = state.commitments[1] // set up vuex
-    let prerequisite = state.commitments[2] // add dummy data to vuex
+    let commitment = state.commitments[1] // develop toile
+    let prerequisite = state.commitments[6] // build hush box
 
-    addPrerequisite({ state, commit }, { commitment, prerequisite })
+    addPrerequisite({ state, commit }, { commitment, prerequisite, mixpanel })
 
     expect(commit).toHaveBeenCalledTimes(1)
     expect(commit).toHaveBeenCalledWith('ADD_PREREQUISITE', {
@@ -93,27 +107,26 @@ describe('actions', () => {
   })
 
   it('does not commit the ADD_PREQUISITE mutation when the commitments ARE parents of one another', () => {
-    //choose two commitments that are not directly related
-    let commitment = state.commitments[1] // set up vuex
-    let prerequisite = state.commitments[5] // watch videos (direct decendent of set up vuex)
+    let commitment = state.commitments[1] // develop toile
+    let prerequisite = state.commitments[2] // bug fixes
 
     //try one way
-    addPrerequisite({ state, commit }, { commitment, prerequisite })
+    addPrerequisite({ state, commit }, { commitment, prerequisite, mixpanel })
     //try the other
-    addPrerequisite({ state, commit }, { prerequisite, commitment })
+    addPrerequisite({ state, commit }, { prerequisite, commitment, mixpanel })
 
     expect(commit).toHaveBeenCalledTimes(0)
   })
 
   it('does not commit the ADD_PREQUISITE mutation when the commitments ARE grandparents of one another', () => {
     //choose two commitments that are not directly related
-    let commitment = state.commitments[0] // setting up (very bottom task)
-    let prerequisite = state.commitments[5] // watch videos ( grandchild of setting up)
+    let commitment = state.commitments[0] // Projects (very bottom)
+    let prerequisite = state.commitments[2] // bug fixes
 
     //try one way
-    addPrerequisite({ state, commit }, { commitment, prerequisite })
+    addPrerequisite({ state, commit }, { commitment, prerequisite, mixpanel })
     //try the other
-    addPrerequisite({ state, commit }, { prerequisite, commitment })
+    addPrerequisite({ state, commit }, { prerequisite, commitment, mixpanel })
 
     expect(commit).toHaveBeenCalledTimes(0)
   })
@@ -124,14 +137,16 @@ describe('actions', () => {
     let prerequisite = state.commitments[5] // watch videos ( grandchild of setting up)
 
     //try one way
-    addPrerequisite({ state, commit }, { commitment, prerequisite })
+    addPrerequisite({ state, commit }, { commitment, prerequisite, mixpanel })
     //try the other
-    addPrerequisite({ state, commit }, { prerequisite, commitment })
+    addPrerequisite({ state, commit }, { prerequisite, commitment, mixpanel })
 
     expect(commit).toHaveBeenCalledTimes(0)
   })
 
   it('fires the SET_DECK_AS_SINGLE_PARENT mutation the appropriate number of times when resetting the decks after non-drop area drop', () => {
+    state.decks = generateDummyDecks()
+
     const numberOfFirings = state.decks.length
 
     //fire the action

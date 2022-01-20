@@ -8,10 +8,6 @@ import { DateTime } from 'luxon'
 // import { setContext } from '@apollo/client/link/context';
 
 import { useQuery, useResult } from '@vue/apollo-composable'
-import allCrouleursQuery from '@/graphql/allCrouleurs.query.gql'
-import allCommitmentsQuery from '@/graphql/allCommitments.query.gql'
-
-import mixpanel from 'mixpanel-browser'
 
 import {
   createSchedule,
@@ -20,7 +16,7 @@ import {
 } from '@/store/helpers.js'
 
 export const actions = {
-  setCrouleur({ commit }) {
+  setCrouleur({ commit }, { allCrouleursQuery }) {
     try {
       const { result, onResult } = useQuery(allCrouleursQuery)
       const crouleurs = useResult(result, [], (data) => data.allCrouleurs.data)
@@ -34,7 +30,7 @@ export const actions = {
     }
   },
 
-  getCommitments({ commit, state }) {
+  getCommitments({ commit, state }, { allCommitmentsQuery }) {
     try {
       const { result, onResult } = useQuery(allCommitmentsQuery)
       // console.log(result)
@@ -56,7 +52,6 @@ export const actions = {
         commit('SET_COMMITMENTS', { commitments: mappedCommitments })
         // console.log(state)
 
-        console.log(state.commitments)
         commit('SET_DECK_AS_SINGLE_PARENT', {
           commitment: {
             _id: state.initializing
@@ -94,16 +89,15 @@ export const actions = {
       commit('UPDATE_START_TIME', { newStartTime, _id })
     }
   },
-  addCommitment({ state, getters }, { newCommitment, createCommitment }) {
+
+  addCommitment({ state }, { newCommitment, createCommitment, mixpanel }) {
     if (newCommitment && newCommitment.entrytitle) {
       // newCommitment._id = uuidv4()
       console.log('adding commitment')
       // newCommitment.complete = false
       // commit('ADD_COMMITMENT', newCommitment)
-      const parent = getters.commitmentById(newCommitment.parent._id)
+      const parent = getters.commitmentById2(state, newCommitment.parent._id)
 
-      state
-      createCommitment
       createCommitment({
         commitment: {
           entrytitle: newCommitment.entrytitle,
@@ -128,36 +122,44 @@ export const actions = {
       mixpanel.track('added task', { user: state.crouleur._id })
     }
   },
+
   setAsComplete({ commit }, _id) {
     commit('SET_AS_COMPLETE', _id)
   },
 
-  updateCommitment(
-    { state, getters },
-    { updatedCommitment, updateCommitment }
-  ) {
-    updateCommitment
-    const parent = getters.commitmentById(updatedCommitment.parent._id)
-    console.log(parent)
+  updateCommitment({ state }, { updatedCommitment, updateCommitment }) {
+    const originalCommitment = getters.commitmentById2(
+      state,
+      updatedCommitment._id
+    )
 
-    updateCommitment({
-      id: updatedCommitment._id,
-      commitmentData: {
-        entrytitle: updatedCommitment.entrytitle,
-        parent: {
-          connect: parent.selfAsParent._id,
+    if (
+      JSON.stringify(originalCommitment) !== JSON.stringify(updatedCommitment)
+    ) {
+      const parent = getters.commitmentById2(
+        state,
+        updatedCommitment.parent._id
+      )
+
+      updateCommitment({
+        id: updatedCommitment._id,
+        commitmentData: {
+          entrytitle: updatedCommitment.entrytitle,
+          parent: {
+            connect: parent.selfAsParent._id,
+          },
+          complete: false,
+          selfAsParent: {
+            connect: updatedCommitment.selfAsParent._id,
+          },
+          duedate: updatedCommitment.duedate,
+          duration: parseInt(updatedCommitment.duration),
+          crouleur: {
+            connect: state.crouleur._id,
+          },
         },
-        complete: false,
-        selfAsParent: {
-          connect: updatedCommitment.selfAsParent._id,
-        },
-        duedate: updatedCommitment.duedate,
-        duration: parseInt(updatedCommitment.duration),
-        crouleur: {
-          connect: state.crouleur._id,
-        },
-      },
-    })
+      })
+    }
   },
   // updateCommitment({ state, commit }, { newCommitment, oldCommitment }) {
   //   if (JSON.stringify(newCommitment) !== JSON.stringify(oldCommitment)) {
@@ -176,7 +178,7 @@ export const actions = {
     deleteCommitment(commitmentToDelete)
   },
 
-  addPrerequisite({ state, commit }, { commitment, prerequisite }) {
+  addPrerequisite({ state, commit }, { commitment, prerequisite, mixpanel }) {
     let fullCommitment = getters.commitmentById2(state, commitment._id)
     let commitmentAncestors = getters.ancestorsById(state, commitment._id)
     let prerequisiteAncestors = getters.ancestorsById(state, prerequisite._id)
@@ -253,7 +255,6 @@ export const actions = {
       orderedSessions,
       timeOfCallToSchedule,
     })
-
     commit('SET_SCHEDULE', { schedule })
   },
   removeFromDontScheduleAtArray({ state, commit }, { time }) {

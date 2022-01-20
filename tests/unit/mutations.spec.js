@@ -5,6 +5,10 @@ import {
   generateNewCommitment,
   generateAlteredCommitment,
   generateState,
+  generateDummySchedule,
+  generateDummyDecks,
+  generateDummyAlteredDecks,
+  generateDecks_CommitmentMovedBetweenDecks,
 } from '@/store/stategenerator.js'
 const {
   UPDATE_CURRENT_DATE,
@@ -73,6 +77,9 @@ describe('mutations', () => {
   })
 
   it('updates start time', () => {
+    // first generate the schedule and put it in the state
+    state.schedule = generateDummySchedule()
+
     // let's change the first schedule entry
     const entryIndex = 0
     const newStartTime = '202506201630'
@@ -111,29 +118,8 @@ describe('mutations', () => {
     expect(state.commitments[index]).toBe(edittedCommitment)
   })
 
-  it('updates the decks array', () => {
-    //the entry in the commitmentsdisplayorder will be slightly different
-    const expectedEntry = {
-      _id: newCommitment._id,
-      type: originTypeEnum.todoCard,
-    }
-
-    //add a new commitment with that parent _id
-    state.commitments.push(newCommitment)
-
-    //run the mutation
-    UPDATE_DISPLAY(state)
-    //does the new display array contain the new element?
-
-    const newTopParentDisplay = state.decks[0].deck.filter((el) => {
-      return el._id === state.topParent[0]._id && typeof el._id !== 'undefined'
-    })[0].commitments
-    expect(newTopParentDisplay[newTopParentDisplay.length - 1]).toStrictEqual(
-      expectedEntry
-    )
-  })
-
-  it('updates the decks array', () => {
+  it.skip('updates the decks array', () => {
+    //tests a currently unused mutation
     //the entry in the commitmentsdisplayorder will be slightly different
     const expectedEntry = {
       _id: newCommitment._id,
@@ -170,11 +156,14 @@ describe('mutations', () => {
 
   //UPDATE_DISPLAY_LIST
   it('updates the display list order when the new position is below the old one', () => {
+
+    state.decks = generateDummyDecks()
     //choose an _id from the list to move
     const oldPosition = 0
     //choose a place to move it to
     let newPositionIdentifier = 2
-    const parent = state.topParent[0]
+    const parent = state.decks[0].deck[0]
+
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
       oldPosition,
       newPositionIdentifier,
@@ -189,22 +178,22 @@ describe('mutations', () => {
       newParent: parent,
     })
 
-    //get the list and expect the commitment _id to be at the new position
-    const { topParentCommitments: updatedTopParentCommitments } =
-      getters.topParentCommitments(state)
-    expect(
-      updatedTopParentCommitments.findIndex((el) => {
-        return el._id === commitment._id
-      })
-    ).toBe(newPosition)
+      //expect the commitment _id to be at the new position
+      expect(
+        state.decks[0].deck[0].commitments.findIndex((el) => {
+          return el._id === commitment._id
+        })
+      ).toBe(newPosition)
   })
 
   it('updates the display list order when the new position is above the old one (and first in the list)', () => {
+
+    state.decks = generateDummyDecks()
     //choose an _id from the list to move
     const oldPosition = 2
     //choose a place to move it to
     let newPositionIdentifier = 0
-    const parent = state.topParent[0]
+    const parent = state.decks[0].deck[0]
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
       oldPosition,
       newPositionIdentifier,
@@ -220,21 +209,23 @@ describe('mutations', () => {
     })
 
     //get the list and expect the commitment _id to be at the new position
-    const { topParentCommitments: updatedTopParentCommitments } =
-      getters.topParentCommitments(state)
+   
     expect(
-      updatedTopParentCommitments.findIndex((el) => {
+      state.decks[0].deck[0].commitments.findIndex((el) => {
         return el._id === commitment._id
       })
     ).toBe(newPosition)
   })
 
   it('updates the display list order when the new position is at the end of the list', () => {
+
+    state.decks = generateDummyDecks()
+
     //choose an _id from the list to move
     const oldPosition = 2
     //choose a place to move it to
     let newPositionIdentifier = -1
-    const parent = state.topParent[0]
+    const parent = state.decks[0].deck[0]
     let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
       oldPosition,
       newPositionIdentifier,
@@ -248,11 +239,10 @@ describe('mutations', () => {
       newParent: parent,
     })
 
-    //get the list and expect the commitment _id to be at the new position
-    const { topParentCommitments: updatedTopParentCommitments } =
-      getters.topParentCommitments(state)
+    //expect the commitment _id to be at the new position
+   
     expect(
-      updatedTopParentCommitments.findIndex((el) => {
+      state.decks[0].deck[0].commitments.findIndex((el) => {
         return el._id === commitment._id
       })
     ).toBe(newPosition)
@@ -347,7 +337,8 @@ describe('mutations', () => {
     expect(JSON.stringify(newStack)).toBe(JSON.stringify(expectedStack))
   })
 
-  it('updates the ranks of the commitments when they changed in the top parent', () => {
+  it.skip('updates the ranks of the commitments when they changed in the top parent', () => {
+    // not currently using the top parent for moving commitments
     //get the display array for the current parent
     //choose an _id from the list to move
     const oldPosition = 2
@@ -385,7 +376,8 @@ describe('mutations', () => {
     ).toBe(newPosition)
   })
 
-  it('updates the ranks of the commitments when they are in different parents of the same deck', () => {
+  it.skip('updates the ranks of the commitments when they are in different parents of the same deck', () => {
+    //this test is currently irrelevant for functioning of the app
     //get the display array for the current parent
     //choose an _id from the list to move
     //move from "Make the store" the first entry to one level up to "set up vuex"
@@ -479,140 +471,6 @@ describe('mutations', () => {
     expect(
       fullNewParentCommitments.filter((el) => el._id == commitment._id)[0].rank
     ).toBe(newPosition)
-  })
-
-  it('sets ranks if the ', () => {
-    //still need to update this
-    const expectedDecks = [
-      {
-        deck: [
-          {
-            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-            commitments: [
-              {
-                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
-                type: originTypeEnum.todoCard,
-              },
-            ],
-          },
-        ],
-        _id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
-      },
-      {
-        deck: [
-          {
-            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-            commitments: [
-              // { _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
-              {
-                _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-                type: originTypeEnum.todoCard,
-              },
-            ],
-          },
-        ],
-        _id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
-      },
-      {
-        deck: [
-          {
-            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-            commitments: [
-              {
-                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
-                type: originTypeEnum.todoCard,
-              }, //to here
-              {
-                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
-                type: originTypeEnum.todoCard,
-              },
-            ],
-          },
-        ],
-        _id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
-      },
-    ]
-
-    // const deckParents = [
-    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    //   { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    // ]
-
-    //create the desired stack
-    SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-      deckIndex: 0,
-    })
-    SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-      deckIndex: 1,
-    })
-    SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-      deckIndex: 2,
-    })
-
-    //choose an _id from the list to move
-    const oldPosition = 0
-    const oldParent = {
-      _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-    }
-    const oldDeckIndex = 1
-
-    // //choose a place to move it to
-    let newPositionIdentifier = 1
-    const newParent = {
-      _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-    }
-    const newDeckIndex = 2
-
-    //get the commitment based on the parent and which position it was at
-    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
-      oldPosition,
-      newPositionIdentifier,
-      oldParent,
-      oldDeckIndex
-    )
-    // // perform the mutation
-    UPDATE_DISPLAY_LIST_POSITIONS(state, {
-      commitment,
-      newPosition,
-      oldParent,
-      newParent,
-      oldDeckIndex,
-      newDeckIndex,
-    })
-
-    expect(JSON.stringify(state.decks[0].deck)).toBe(
-      JSON.stringify(expectedDecks[0].deck)
-    )
-    expect(JSON.stringify(state.decks[1].deck)).toBe(
-      JSON.stringify(expectedDecks[1].deck)
-    )
-    expect(JSON.stringify(state.decks[2].deck)).toBe(
-      JSON.stringify(expectedDecks[2].deck)
-    )
   })
 
   it.skip('adds ancestors to stack (2 ancestors)', () => {
@@ -776,122 +634,31 @@ describe('mutations', () => {
   })
 
   it('moves task between decks that are one commitment deep', () => {
-    //still need to update this
-    const expectedDecks = [
-      {
-        deck: [
-          {
-            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-            commitments: [
-              {
-                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
-                type: originTypeEnum.todoCard,
-              },
-            ],
-          },
-        ],
-        _id: 'db32e04b-d336-4b67-8b47-a24328a3630b',
-      },
-      {
-        deck: [
-          {
-            _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-            commitments: [
-              // { _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006', type: originTypeEnum.todoCard },//this one is moving
-              {
-                _id: '9f8161c0-5a9c-4eec-a9c8-19229fbfc8c9',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-                type: originTypeEnum.todoCard,
-              },
-            ],
-          },
-        ],
-        _id: '5c3be2e4-3c32-4de7-abb6-b577caadc124',
-      },
-      {
-        deck: [
-          {
-            _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-            commitments: [
-              {
-                _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: '7c7f45b0-4ee1-438c-9884-6f481ca39006',
-                type: originTypeEnum.todoCard,
-              }, //to here
-              {
-                _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
-                type: originTypeEnum.todoCard,
-              },
-              {
-                _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
-                type: originTypeEnum.todoCard,
-              },
-            ],
-          },
-        ],
-        _id: '96ad71ce-e1b3-4859-815f-415fe199a67f',
-      },
-    ]
-
-    // const deckParents = [
-    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    //   { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-    //   { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    // ]
+    // generate the rearranged decks (after moving the commitment)
+    // - use the app to generate it
+    // - create a function in stategenerator that creates this altered deck
+    //
+    const expectedDecks = generateDecks_CommitmentMovedBetweenDecks()
 
     //create the desired stack
-    SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-      deckIndex: 0,
-    })
-    SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-      deckIndex: 1,
-    })
-    SET_DECK_AS_SINGLE_PARENT(state, {
-      commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-      deckIndex: 2,
-    })
+    state.decks = generateDummyDecks()
 
     //choose an _id from the list to move
-    const oldPosition = 0
-    const oldParent = {
-      _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa',
-    }
+    const oldPosition = 2
     const oldDeckIndex = 1
+    const oldParent = state.decks[oldDeckIndex].deck[0]
 
     // //choose a place to move it to
-    let newPositionIdentifier = 1
-    const newParent = {
-      _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428',
-    }
+    let newPositionIdentifier = 3
     const newDeckIndex = 2
+    const newParent = state.decks[newDeckIndex].deck[0]
 
-    //get the commitment based on the parent and which position it was at
-    let { commitment, newPosition } = setup_UPDATE_DISPLAY_LIST_test_reuse(
-      oldPosition,
-      newPositionIdentifier,
-      oldParent,
-      oldDeckIndex
-    )
+    const commitment = oldParent.commitments[oldPosition]
+
     // // perform the mutation
     UPDATE_DISPLAY_LIST_POSITIONS(state, {
       commitment,
-      newPosition,
+      newPosition: newPositionIdentifier,
       oldParent,
       newParent,
       oldDeckIndex,
@@ -910,31 +677,16 @@ describe('mutations', () => {
   })
 
   it('sets the zeroth deck as the desired deck', () => {
-    const commitment = { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' }
+    //generate a dummy deck
+    state.decks = generateDummyDecks()
+    //set the commitment that is to be the root of the current deck
+    const commitment = state.commitments[1] //this should be the develop toile commitment ('318007304478786128')
     const deckIndex = 0
-    const expectedStack = [
-      {
-        ...commitment,
-        commitments: [
-          {
-            _id: 'e9902504-737d-4195-9168-355d40cdb5b8',
-            type: originTypeEnum.todoCard,
-          },
-          {
-            _id: 'd4de237f-1f1b-4a8c-a9f2-6a3466e24157',
-            type: originTypeEnum.todoCard,
-          },
-          {
-            _id: 'ebeab534-3364-4109-bd67-fe68bf6c5611',
-            type: originTypeEnum.todoCard,
-          },
-        ],
-      },
-    ]
+    const expectedDecks = generateDummyAlteredDecks()
     //set the commitment
     SET_DECK_AS_SINGLE_PARENT(state, { deckIndex, commitment })
-    expect(JSON.stringify(state.decks[deckIndex].deck)).toBe(
-      JSON.stringify(expectedStack)
+    expect(state.decks[deckIndex].deck[0].commitments).toStrictEqual(
+      expectedDecks[deckIndex].deck[0].commitments
     )
     expect(state.decks[deckIndex]._id).toBeDefined()
   })
