@@ -1,19 +1,11 @@
-import { mount } from '@vue/test-utils' // we'll use this soon!
+import { mount } from '@vue/test-utils'
 import AddEntry from '@/components/AddEntry.vue'
 
 describe.skip('Add Entry', () => {
   const wrapper = mount(AddEntry)
   const wrapperHtml = wrapper.html()
   it(`renders the form`, () => {
-    // const event = {
-    //   _id: 1,
-    //   time: '12:00PM',
-    //   date: 'September 29th, 2022',
-    //   title: 'Coaching Little League'
-    // }
     expect(wrapperHtml).toContain('<form>')
-    // expect(wrapperHtml).toContain(event.time)
-    // expect(wrapperHtml).toContain(event.title)
   })
 
   it(`submits form with correct payload`, async () => {
