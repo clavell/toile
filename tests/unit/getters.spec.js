@@ -1,5 +1,5 @@
 import { getters } from '@/store/getters.js'
-import { generateState, generateDummySchedule } from '@/store/stategenerator.js'
+import { generateState, generateDummySchedule, generateCommitments } from '@/store/stategenerator.js'
 import { originTypeEnum } from '@/use/enums'
 
 const { commitmentsSortedByCompletedStatus, commitmentsOnCurrentDate } = getters
@@ -7,6 +7,7 @@ let state
 describe('getters', () => {
   beforeEach(() => {
     state = generateState()
+    state.commitments = generateCommitments()
   })
 
   it('returns a sorted list based on whether task is completed or not', () => {

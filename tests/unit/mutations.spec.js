@@ -2,6 +2,7 @@ import { mutations } from '@/store/mutations.js'
 import { getters } from '@/store/getters.js'
 import { originTypeEnum } from '@/use/enums.js'
 import {
+  generateCommitments,
   generateNewCommitment,
   generateAlteredCommitment,
   generateState,
@@ -51,6 +52,7 @@ function setup_UPDATE_DISPLAY_LIST_test_reuse(
 describe('mutations', () => {
   beforeEach(() => {
     state = generateState()
+    state.commitments = generateCommitments()
     newCommitment = generateNewCommitment()
   })
 

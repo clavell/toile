@@ -6,6 +6,7 @@
         v-model="entrytitle"
         placeholder="Add Entry"
         class="field"
+        data-testid=title
       />
       <div>
         <label for="duration">Duration (minutes)</label>
@@ -14,11 +15,16 @@
           v-model="duration"
           placeholder="Add duration"
           class="field"
+          data-testid=duration
         />
       </div>
       <div>
         <label>Due Date (yyyymmdd)</label>
-        <input type="text" v-model="duedate" class="field" />
+        <input type="text" 
+          v-model="duedate" 
+          class="field" 
+          data-testid=duedate
+        />
       </div>
       <button v-if="entryToEdit._id" type="submit">Update</button>
       <button v-else type="submit">Add</button>
@@ -56,7 +62,7 @@ export default {
         ? ref(entryToEdit.duedate)
         : ref('')
     const duration =
-      entryToEdit._id && entryToEdit.duration
+      entryToEdit._id
         ? ref(entryToEdit.duration)
         : ref(45)
 

@@ -8,6 +8,7 @@ import {
   generateNewCommitment,
   generateAlteredCommitment,
   generateState,
+  generateCommitments,
 } from '@/store/stategenerator.js'
 import { generateDummyDecks } from '../../src/store/stategenerator'
 const {
@@ -30,6 +31,7 @@ describe('actions', () => {
   beforeEach(() => {
     //create a dummy state
     state = generateState()
+    state.commitments = generateCommitments()
     newCommitment = generateNewCommitment()
     commit.mockClear()
     createCommitment.mockClear()

@@ -50,7 +50,7 @@ export const actions = {
           return { ...el, parent: { _id: null } }
         })
         commit('SET_COMMITMENTS', { commitments: mappedCommitments })
-        // console.log(state)
+        console.log(state.commitments)
 
         commit('SET_DECK_AS_SINGLE_PARENT', {
           commitment: {
