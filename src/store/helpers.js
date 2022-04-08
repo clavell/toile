@@ -8,23 +8,6 @@ export const blankSpace = {
   type: 'EmptyListSpace',
 }
 
-export function removeBlankHelper(state) {
-  let { topParentCommitments, parentIndex } =
-    getters.topParentCommitments(state)
-  //set the type of the former blank space to old
-  let oldBlankPosition = topParentCommitments.findIndex(
-    (el) => el.type === 'EmptyListSpace'
-  )
-  topParentCommitments.splice(oldBlankPosition, 1, {
-    ...blankSpace,
-    type: 'old',
-  })
-  //remove the blank from the old position
-  oldBlankPosition = topParentCommitments.findIndex((el) => el.type === 'old')
-  topParentCommitments.splice(oldBlankPosition, 1)
-  return { parentIndex, topParentCommitments }
-}
-
 export function createSchedule({
   state,
   orderedSessions,
@@ -36,12 +19,14 @@ export function createSchedule({
     state.timeFormat
   )
   const dayOfCall = timeOfCallObject.toFormat(state.dateFormat)
+  // the state contains a list of times that are acceptable to be scheduled at
   const possibleTimesObjects = state.scheduleTimes.map((el) => {
     return DateTime.fromFormat(dayOfCall + el, state.timeFormat)
   })
 
   let sessionDuration = 30
   let firstTimeToScheduleIndex
+  //find the time in the list of "acceptable times" that is just after the time that the function was called.
   for (let i = 0; i < possibleTimesObjects.length; i++) {
     if (possibleTimesObjects[i] > timeOfCallObject) {
       firstTimeToScheduleIndex = i
@@ -49,7 +34,7 @@ export function createSchedule({
     }
   }
 
-  //if no times work then schedule for the next day (schedule set after work day)
+  //if the function is called after the last "acceptable time" then schedule for the next day
   if (firstTimeToScheduleIndex == undefined) {
     timeOfCallObject = timeOfCallObject.plus({
       days: 1,
@@ -75,13 +60,16 @@ export function createSchedule({
     let currentDateString = timeOfCallObjectCurrent.toFormat(state.dateFormat)
     let startTime = currentDateString + state.scheduleTimes[timeIndex]
 
-    //while there are times that shouldn't be scheduled at push back the start time
+    //while there are times that shouldn't be scheduled at, push back the start time
     while (
       state.dontScheduleAt.find((el) => {
         return el.time == startTime
       })
     ) {
       noOfDelayOffsets++
+
+      //the times set to not be scheduled at result in needing to offset the start time by units of time in a day and then by days as well
+
       dayOffSet = Math.floor(
         (index + firstTimeToScheduleIndex + noOfDelayOffsets) /
           noOfSchedulingTimesPerDay
