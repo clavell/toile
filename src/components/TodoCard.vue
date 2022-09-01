@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { inject } from '@vue/runtime-core'
+import { inject } from 'vue'
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import currentDisplayPositionReuse from '@/use/currentDisplayPositionReuse.js'

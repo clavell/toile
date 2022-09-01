@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref } from '@vue/reactivity'
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useMutation } from '@vue/apollo-composable'
 import createCommitmentMutation from '@/graphql/createCommitment.mutation.gql'
