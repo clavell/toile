@@ -195,10 +195,7 @@ export default {
   height: 500px;
   background-color: theme('colors.pink.900');
   border-radius: 20px;
-  /* color: var(--list-font-colour); */
   gap: 2px;
-  /* padding-left: 40px;
-  padding-right: 0px; */
 }
 
 #wrapper {

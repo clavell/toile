@@ -9,8 +9,6 @@
 <style>
 :root {
   --main-background-colour: #171a1d;
-  --list-background-colour: #ad1448;
-  --entry-background-colour: #c41751;
   --entry-addition-colour: #96123e;
   --entry-size: 75px;
   --list-font-colour: white;

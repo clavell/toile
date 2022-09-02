@@ -129,17 +129,18 @@ export default {
     }
   },
   computed: {
+    //create a tag for each line on the calendar to place calendar entries using css-grid
     lineNames() {
       var lineNames = []
       var dt = DateTime.fromFormat(this.$store.state.currentDate, 'yyyyMMdd')
       var endDt = dt.plus({ days: 1 })
       var x = 0
-      while (dt < endDt) {
+      while (dt <= endDt) {
         lineNames.push(dt.toFormat(this.$store.state.timeFormat))
 
         dt = dt.plus({ minute: 15 })
 
-        //here to keep runaway while loops at bay
+        //keep runaway while loops at bay
         x++
         if (x > 200) {
           console.log(
@@ -148,11 +149,10 @@ export default {
           break
         }
       }
-      lineNames.push(endDt.toFormat(this.$store.state.timeFormat))
       return lineNames
     },
     gridTemplateRows() {
-      //this names the rows in the upper level calendar grid
+      //name the rows in the upper level calendar grid. these are used to place the timesegments using css-grid
       var rowLinesStyle = ''
       for (var lineName of this.lineNames) {
         rowLinesStyle += `[d${lineName}] 1fr `
@@ -160,7 +160,8 @@ export default {
       return rowLinesStyle
     },
     gridRows() {
-      //this gives all of the time grid elements start and end lines in the grid defined in gredtemplateRows()
+      //give all of the time grid elements start and end lines in the grid defined in gridtemplateRows()
+      //This is used in the TimeGridUnits component
       var rows = []
       for (var i = 0; i < this.lineNames.length - 1; i++) {
         rows.push({
@@ -317,14 +318,10 @@ body {
 }
 
 .commitment {
-  /* grid-row: 9 / span 3; */
   background-color: #02494d;
-  /* height: calc(var(--timesegment-height) - 4px); */
   width: 98%;
   margin: 4px auto;
-  /* top:calc(6 * (var(--timesegment-height) + var(--timesegment-separator-thickness)) + 1px); */
   left: 5px;
-  /* padding: 5px 0 0 5px; */
   border-radius: 5px;
   font-weight: bold;
   border: 0.5px solid #ffffff;

@@ -1,5 +1,9 @@
 import { getters } from '@/store/getters.js'
-import { generateState, generateDummySchedule, generateCommitments } from '@/store/stategenerator.js'
+import {
+  generateState,
+  generateDummySchedule,
+  generateCommitments,
+} from '@/store/stategenerator.js'
 import { originTypeEnum } from '@/use/enums'
 
 const { commitmentsSortedByCompletedStatus, commitmentsOnCurrentDate } = getters

@@ -16,7 +16,7 @@ const defaultStoreConfig = {
 
 const defaultOverrides = {}
 
-export function createStore(storeOverrides = defaultOverrides){
+export function createStore(storeOverrides = defaultOverrides) {
   const store = vuexCreateStore({
     ...defaultStoreConfig,
     ...storeOverrides,

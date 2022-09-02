@@ -4,9 +4,6 @@ import { currentDateChangeEnum } from '@/use/enums.js'
 
 import { DateTime } from 'luxon'
 
-// import { ApolloClient, createHttpLink, InMemoryCache, } from '@apollo/client'
-// import { setContext } from '@apollo/client/link/context';
-
 import { useQuery, useResult } from '@vue/apollo-composable'
 
 import {
@@ -22,7 +19,6 @@ export const actions = {
       const crouleurs = useResult(result, [], (data) => data.allCrouleurs.data)
 
       onResult(() => {
-        // console.log(crouleurs)
         commit('SET_CROULEUR', { _id: crouleurs.value[0]._id })
       })
     } catch (err) {
@@ -33,16 +29,13 @@ export const actions = {
   getCommitments({ commit, state }, { allCommitmentsQuery }) {
     try {
       const { result, onResult } = useQuery(allCommitmentsQuery)
-      // console.log(result)
       const commitments = useResult(
         result,
         [],
         (data) => data.allCommitments.data
       )
-      // console.log(commitments.value)
 
       onResult(() => {
-        // console.log(result)
         const mappedCommitments = commitments.value.map((el) => {
           if (el.parent !== null) {
             return { ...el, parent: el.parent.link }
@@ -263,9 +256,4 @@ export const actions = {
     })
     commit('REMOVE_FROM_DONT_SCHEDULE_ARRAY', { index })
   },
-  // updateDisplayOrder({state, commit},{commitment, newPosition}){
-
-  // }
-
-  // updateRanks({ state,commit },{  })
 }

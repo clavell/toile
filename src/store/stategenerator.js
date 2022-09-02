@@ -718,7 +718,7 @@ export function generateDecks_CommitmentMovedBetweenDecks() {
             { _id: '319819390980719185', type: 'todoCard' },
             { _id: '319821333955347028', type: 'todoCard' },
             { _id: '319821373568451155', type: 'todoCard' },
-            { _id: '319821920153371219', type: 'todoCard' },// to here
+            { _id: '319821920153371219', type: 'todoCard' }, // to here
             { _id: '319821440143589970', type: 'todoCard' },
           ],
         },

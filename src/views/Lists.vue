@@ -32,22 +32,6 @@ export default {
     store.dispatch('setCrouleur', { allCrouleursQuery })
     store.dispatch('getCommitments', { allCommitmentsQuery })
 
-    //   store.commit('SET_DECK_AS_SINGLE_PARENT', {
-    //   commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    //   deckIndex: 0,
-    // })
-    // store.commit('SET_DECK_AS_SINGLE_PARENT', {
-    //   commitment: { _id: '0766c8ed-4ab0-425a-8a88-02335ba51baa' },
-    //   deckIndex: 1,
-    // })
-    // store.commit('SET_DECK_AS_SINGLE_PARENT', {
-    //   commitment: { _id: '91f281f4-b8dc-429a-8e21-6b9d72ce8428' },
-    //   deckIndex: 2,
-    // })
-
-    // store.dispatch('setSchedule')
-    // console.log(store.state.schedule)
-    // store.commit('ADD_ANCESTORS_TO_STACK')
     const decks = computed(() => store.state.decks)
     const deckIndices = computed(() => {
       let deckIndices = Array(decks.value.length)

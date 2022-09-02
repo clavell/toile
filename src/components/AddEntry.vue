@@ -6,7 +6,7 @@
         v-model="entrytitle"
         placeholder="Add Entry"
         class="field"
-        data-testid=title
+        data-testid="title"
       />
       <div>
         <label for="duration">Duration (minutes)</label>
@@ -15,15 +15,16 @@
           v-model="duration"
           placeholder="Add duration"
           class="field"
-          data-testid=duration
+          data-testid="duration"
         />
       </div>
       <div>
         <label>Due Date (yyyymmdd)</label>
-        <input type="text" 
-          v-model="duedate" 
-          class="field" 
-          data-testid=duedate
+        <input
+          type="text"
+          v-model="duedate"
+          class="field"
+          data-testid="duedate"
         />
       </div>
       <button v-if="entryToEdit._id" type="submit">Update</button>
@@ -61,10 +62,7 @@ export default {
       entryToEdit._id && entryToEdit.duedate
         ? ref(entryToEdit.duedate)
         : ref('')
-    const duration =
-      entryToEdit._id
-        ? ref(entryToEdit.duration)
-        : ref(45)
+    const duration = entryToEdit._id ? ref(entryToEdit.duration) : ref(45)
 
     const { mutate: createCommitment } = useMutation(
       createCommitmentMutation,

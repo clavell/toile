@@ -1,27 +1,29 @@
 import { mount } from '@vue/test-utils'
 import AddEntry from '@/components/AddEntry.vue'
 import { createStore } from '@/store'
-import { generateState,generateCommitments } from '@/store/stategenerator.js'
+import { generateState, generateCommitments } from '@/store/stategenerator.js'
 
-const mountAddEntryForm = ({commitmentIndex, parentIndex}, override = {}) => {
+const mountAddEntryForm = ({ commitmentIndex, parentIndex }, override = {}) => {
   const state = generateState()
   state.commitments = generateCommitments()
 
-  const store = createStore({state})
+  const store = createStore({ state })
 
   const parent = store.state.commitments[parentIndex]
-  const entryToEdit = commitmentIndex ? store.state.commitments[commitmentIndex] : {}
+  const entryToEdit = commitmentIndex
+    ? store.state.commitments[commitmentIndex]
+    : {}
 
   return {
     wrapper: mount(AddEntry, {
-      props:{
+      props: {
         parent,
         entryToEdit,
         ...override,
       },
       global: {
-          plugins: [store]
-      }
+        plugins: [store],
+      },
     }),
     entryToEdit,
     parent,
@@ -30,15 +32,11 @@ const mountAddEntryForm = ({commitmentIndex, parentIndex}, override = {}) => {
 
 describe('Add Entry', () => {
   it(`renders the form`, () => {
-    const {wrapper} = mountAddEntryForm({parentIndex:1})
-    
-  
+    const { wrapper } = mountAddEntryForm({ parentIndex: 1 })
+
     const wrapperHtml = wrapper.html()
     expect(wrapperHtml).toContain('<form>')
   })
-
-
-
 
   it(`submits form with correct payload`, async () => {
     // const wrapper = mount(AddEntry)
@@ -57,8 +55,11 @@ describe('Add Entry', () => {
 })
 
 describe('Editting a commitment', () => {
-  it(`populates form fields correctly when duration is set`,() => {
-    const {wrapper,entryToEdit} = mountAddEntryForm({parentIndex:2,commitmentIndex:3})
+  it(`populates form fields correctly when duration is set`, () => {
+    const { wrapper, entryToEdit } = mountAddEntryForm({
+      parentIndex: 2,
+      commitmentIndex: 3,
+    })
     const title = wrapper.find('[data-testid=title]')
     expect(title.element.value).toBe(entryToEdit.entrytitle)
     const duration = wrapper.find('[data-testid=duration]')
@@ -67,14 +68,16 @@ describe('Editting a commitment', () => {
     expect(duedate.element.value).toBe(entryToEdit.duedate)
   })
 
-  it(`populates form fields correctly when duration is NOT set`,() => {
-    const {wrapper,entryToEdit} = mountAddEntryForm({parentIndex:1,commitmentIndex:2})
+  it(`populates form fields correctly when duration is NOT set`, () => {
+    const { wrapper, entryToEdit } = mountAddEntryForm({
+      parentIndex: 1,
+      commitmentIndex: 2,
+    })
     const title = wrapper.find('[data-testid=title]')
     expect(title.element.value).toBe(entryToEdit.entrytitle)
     const duration = wrapper.find('[data-testid=duration]')
     expect(duration.element.value).toBe('')
     const duedate = wrapper.find('[data-testid=duedate]')
     expect(duedate.element.value).toBe(entryToEdit.duedate)
-    
   })
 })

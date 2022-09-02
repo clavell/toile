@@ -30,7 +30,6 @@ import mixpanel from 'mixpanel-browser'
 export default {
   setup() {
     const router = useRouter()
-    // const store = useStore()
 
     const data = reactive({
       username: '',
@@ -43,9 +42,6 @@ export default {
         method: 'POST',
       })
 
-      // console.log(response)
-
-      // console.log(sessionStorage.token)
       if (response.ok) {
         //store token so that apollo can access it
         sessionStorage.token = await response.text()
@@ -54,7 +50,7 @@ export default {
           source: 'Toile Web App',
           'logged in': true,
         })
-        console.log(sessionStorage.token)
+
         router.push({ name: 'HomeRoute' })
       } else {
         console.log('please try again')
@@ -93,7 +89,6 @@ input {
   display: inline-flex;
   font-family: 'Open sans', sans-serif;
   font-size: 100%;
-  /* line-height: 1.15; */
   margin-right: 5px;
 }
 
@@ -101,19 +96,6 @@ label {
   color: whitesmoke;
   font-weight: 200;
   opacity: 0.5;
-}
-
-/* removing the buttons on the number input */
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
 }
 
 button,

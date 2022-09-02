@@ -158,7 +158,6 @@ describe('mutations', () => {
 
   //UPDATE_DISPLAY_LIST
   it('updates the display list order when the new position is below the old one', () => {
-
     state.decks = generateDummyDecks()
     //choose an _id from the list to move
     const oldPosition = 0
@@ -180,16 +179,15 @@ describe('mutations', () => {
       newParent: parent,
     })
 
-      //expect the commitment _id to be at the new position
-      expect(
-        state.decks[0].deck[0].commitments.findIndex((el) => {
-          return el._id === commitment._id
-        })
-      ).toBe(newPosition)
+    //expect the commitment _id to be at the new position
+    expect(
+      state.decks[0].deck[0].commitments.findIndex((el) => {
+        return el._id === commitment._id
+      })
+    ).toBe(newPosition)
   })
 
   it('updates the display list order when the new position is above the old one (and first in the list)', () => {
-
     state.decks = generateDummyDecks()
     //choose an _id from the list to move
     const oldPosition = 2
@@ -211,7 +209,7 @@ describe('mutations', () => {
     })
 
     //get the list and expect the commitment _id to be at the new position
-   
+
     expect(
       state.decks[0].deck[0].commitments.findIndex((el) => {
         return el._id === commitment._id
@@ -220,7 +218,6 @@ describe('mutations', () => {
   })
 
   it('updates the display list order when the new position is at the end of the list', () => {
-
     state.decks = generateDummyDecks()
 
     //choose an _id from the list to move
@@ -242,7 +239,7 @@ describe('mutations', () => {
     })
 
     //expect the commitment _id to be at the new position
-   
+
     expect(
       state.decks[0].deck[0].commitments.findIndex((el) => {
         return el._id === commitment._id
